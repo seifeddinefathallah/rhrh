@@ -183,6 +183,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
         Berkayk\OneSignal\OneSignalServiceProvider::class,
+        Livewire\LivewireServiceProvider::class,
 
         /*
          * Package Service Providers...

@@ -10,7 +10,7 @@ class LoanRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'type', 'amount', 'status', 'comments'
+        'user_id', 'type', 'amount', 'status', 'comments','employee_id',
     ];
 
     public function user()
@@ -21,5 +21,9 @@ class LoanRequest extends Model
     public function approvals()
     {
         return $this->hasMany(ApprovalHistory::class);
+    }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 }

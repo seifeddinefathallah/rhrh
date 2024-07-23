@@ -1,76 +1,100 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Liste des demandes administratives') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+@section('content')
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-lg sm:rounded-lg border border-gray-200">
+            <div class="p-6 bg-white border-b border-gray-200">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                    {{ __('Liste des demandes administratives') }}
+                </h2>
+
+                <!-- Success and Error Messages -->
+                @if(session('success'))
+                <div class="alert alert-success mb-4">
+                    <strong class="font-bold">Success!</strong>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
+
+                @if(session('error'))
+                <div class="alert alert-error mb-4">
+                    <strong class="font-bold">Error!</strong>
+                    <span>{{ session('error') }}</span>
+                </div>
+                @endif
+
+                <!-- SweetAlert2 Notification -->
+                @push('scripts')
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
                     @if(session('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('success') }}
-                    </div>
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: "{{ session('success') }}",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                    @elseif(session('error'))
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "{{ session('error') }}",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        });
                     @endif
-                    <div class="mb-4">
-                        <a href="{{ route('requests.create') }}" class="btn btn-success">Create Demandes</a>
-                    </div>
-                    @if ($requests->count() > 0)
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Employé
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Type
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Statut
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Action
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($requests as $request)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $request->employee->prenom }} {{ $request->employee->nom }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $request->type }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($request->status === 'En attente'|| $request->status === 'en_attente')
-                                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">{{ ucfirst($request->status) }}</span>
-                                @elseif ($request->status === 'approuvé')
-                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">{{ ucfirst($request->status) }}</span>
-                                @elseif ($request->status === 'rejeté')
-                                <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">{{ ucfirst($request->status) }}</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('requests.edit', $request->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Modifier</a>
-                                <form action="{{ route('requests.destroy', $request->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{ $requests->links() }}
-                    @else
-                    <p>Aucune demande trouvée.</p>
-                    @endif
+                    });
+                </script>
+                @endpush
+
+                <!-- Actions and Search -->
+                <div class="mb-4 flex justify-between items-center">
+                    <a href="{{ route('requests.create') }}" class="btn btn-primary">Créer Demande</a>
+                    <livewire:search-administrative-requests />
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
+
+@push('styles')
+<style>
+    .alert {
+        padding: 1rem;
+        border-radius: 0.375rem;
+        margin-bottom: 1rem;
+        border-width: 1px;
+    }
+    .alert-success {
+        background-color: #d1fae5;
+        border-color: #bbf7d0;
+        color: #065f46;
+    }
+    .alert-error {
+        background-color: #fee2e2;
+        border-color: #fda4af;
+        color: #b91c1c;
+    }
+    .btn {
+        display: inline-block;
+        font-weight: 600;
+        text-align: center;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .btn-primary {
+        background-color: #4f46e5;
+        color: white;
+        border: 1px solid transparent;
+        transition: background-color 0.2s;
+    }
+    .btn-primary:hover {
+        background-color: #3730a3;
+    }
+</style>
+@endpush

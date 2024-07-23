@@ -10,7 +10,7 @@ class AddAuthorizationBalancesToEmployees extends Migration
     {
         Schema::table('employees', function (Blueprint $table) {
             $table->decimal('sortie_balance', 8, 2)->default(2.00)->after('image'); // 2 hours
-            $table->integer('teletravail_days_balance', 8, 2)->default(5)->after('sortie_balance'); // 5 days
+            $table->decimal('teletravail_days_balance', 8, 2)->default(5)->after('sortie_balance'); // 5 days
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Employee;
+use App\Models\DefaultBalance;
 
 class ResetAuthorizationBalances extends Command
 {
@@ -17,7 +18,7 @@ class ResetAuthorizationBalances extends Command
 
     public function handle()
     {
-        Employee::query()->update([
+        DefaultBalance::query()->update([
             'sortie_balance' => 2.00, // 2 hours
             'teletravail_days_balance' => 5 // 5 days
         ]);

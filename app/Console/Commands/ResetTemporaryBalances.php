@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\TemporaryBalance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ResetTemporaryBalances extends Command
 {
@@ -15,10 +16,18 @@ class ResetTemporaryBalances extends Command
     {
         $now = Carbon::now();
 
-        // Réinitialiser les soldes temporaires en fonction de la période spécifiée
-        $this->resetBalancesForPeriod($now);
+        Log::info('ResetTemporaryBalances command started at ' . $now);
 
-        $this->info('Les soldes temporaires ont été réinitialisés.');
+        try {
+            // Réinitialiser les soldes temporaires en fonction de la période spécifiée
+            $this->resetBalancesForPeriod($now);
+
+            $this->info('Les soldes temporaires ont été réinitialisés.');
+            Log::info('Les soldes temporaires ont été réinitialisés.');
+        } catch (\Exception $e) {
+            $this->error('Error resetting temporary balances: ' . $e->getMessage());
+            Log::error('Error resetting temporary balances: ' . $e->getMessage());
+        }
     }
 
     private function resetBalancesForPeriod(Carbon $now)
@@ -27,6 +36,7 @@ class ResetTemporaryBalances extends Command
         $periods = ['day', 'month', 'year'];
 
         foreach ($periods as $period) {
+            Log::info("Resetting balances for period: $period");
             if ($period === 'day') {
                 $this->resetDailyBalances($now);
             } elseif ($period === 'month') {
@@ -39,22 +49,28 @@ class ResetTemporaryBalances extends Command
 
     private function resetDailyBalances(Carbon $now)
     {
-        TemporaryBalance::where('period', 'day')
-            ->whereDate('end_date', '<=', $now->endOfDay())
+        Log::info('Resetting daily balances');
+        TemporaryBalance::whereHas('periodDefinition', function($query) {
+            $query->where('name', 'day');
+        })->whereDate('end_date', '<=', $now->endOfDay())
             ->delete();
     }
 
     private function resetMonthlyBalances(Carbon $now)
     {
-        TemporaryBalance::where('period', 'month')
-            ->whereDate('end_date', '<=', $now->endOfMonth())
+        Log::info('Resetting monthly balances');
+        TemporaryBalance::whereHas('periodDefinition', function($query) {
+            $query->where('name', 'month');
+        })->whereDate('end_date', '<=', $now->endOfMonth())
             ->delete();
     }
 
     private function resetYearlyBalances(Carbon $now)
     {
-        TemporaryBalance::where('period', 'year')
-            ->whereDate('end_date', '<=', $now->endOfYear())
+        Log::info('Resetting yearly balances');
+        TemporaryBalance::whereHas('periodDefinition', function($query) {
+            $query->where('name', 'year');
+        })->whereDate('end_date', '<=', $now->endOfYear())
             ->delete();
     }
 }

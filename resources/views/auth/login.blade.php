@@ -1,68 +1,120 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.auth')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Login') }}</div>
 
-        <!-- Email or Username -->
-        <div>
-            <x-input-label for="input_type" :value="__('Email/Username')" />
-            <x-text-input id="input_type" class="block mt-1 w-full" type="text" name="input_type" :value="old('input_type')"  autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                <div class="card-body">
+                    <!-- Session Status -->
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
+
+                    <form method="POST" action="{{ route('login') }}" id="login-form">
+                        @csrf
+
+                        <!-- Email or Username -->
+                        <div class="form-group">
+                            <x-input-label for="input_type" :value="__('Email/Username')" />
+                            <x-text-input id="input_type" class="form-control {{ session('input_type_status') }}" type="text" name="input_type" :value="old('input_type')" autofocus />
+                            @if(session('input_type_status'))
+                            <x-input-error :messages="session('input_type_errors')" class="mt-2" />
+                            @endif
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mt-4">
+                            <x-input-label for="password" :value="__('Password')" />
+                            <x-text-input id="password" class="form-control {{ session('password_status') }}" type="password" name="password" autocomplete="current-password" />
+                            @if(session('password_status'))
+                            <x-input-error :messages="session('password_errors')" class="mt-2" />
+                            @endif
+                        </div>
+                        <input type="hidden" id="onesignal_player_id" name="onesignal_player_id">
+
+                        <!-- Remember Me -->
+                        <div class="form-group form-check mt-4">
+                            <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
+                            <label for="remember_me" class="form-check-label">{{ __('Remember me') }}</label>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {!! NoCaptcha::renderJs() !!}
+                            {!! NoCaptcha::display() !!}
+                            @if(session('captcha_status'))
+                            <x-input-error :messages="session('captcha_errors')" class="mt-2" />
+                            @endif
+                        </div>
+
+                        <div class="form-group mt-4">
+                            @if (Route::has('password.request'))
+                            <a class="btn btn-link" href="{{ route('password.request') }}">
+                                {{ __('Forgot your password?') }}
+                            </a>
+                            @endif
+
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Log in') }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.js" async></script>
+                    <script>
+                        window.OneSignal = window.OneSignal || [];
+                        OneSignal.push(function() {
+                            OneSignal.init({
+                                appId: "f815d9fe-2803-44f4-886d-0ede2d40ba52",
+                            });
+
+                            const form = document.getElementById('login-form');
+                            form.onsubmit = function(event) {
+                                event.preventDefault(); // Prevent the form from submitting immediately
+
+                                OneSignal.getUserId().then(function(userId) {
+                                    console.log("OneSignal User ID:", userId);
+
+                                    // Send push notification via OneSignal's REST API
+                                    fetch('https://onesignal.com/api/v1/notifications', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Basic N2M4Njg5MjgtNGQxMi00NmQyLWJjNDUtNDU0MDNlODU4ZmMw' // Replace with your OneSignal REST API key
+                                        },
+                                        body: JSON.stringify({
+                                            app_id: "f815d9fe-2803-44f4-886d-0ede2d40ba52", // Your OneSignal App ID
+                                            include_player_ids: [userId], // Send notification to this user
+                                            contents: { en: "Welcome back! You have logged in successfully." }, // Notification content
+                                            headings: { en: "Login Notification" }, // Notification title
+                                            url: "https://127.0.0.1:8000/dashboard" // URL to open when notification is clicked
+                                        })
+                                    }).then(response => {
+                                        console.log('Notification sent:', response);
+                                        // Optionally, redirect user after successful login
+                                        window.location.href = "{{ route('dashboard') }}";
+                                    }).catch(error => {
+                                        console.error('Error sending notification:', error);
+                                    });
+                                });
+                            };
+                        });
+
+                        @if (session('login_success'))
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Login successful!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        @endif
+                    </script>
+                    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                </div>
+            </div>
         </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                             autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-        <input type="hidden" id="onesignal_player_id" name="onesignal_player_id">
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-        <div class="form-group mb-3">
-
-            {!! NoCaptcha::renderJs() !!}
-            {!! NoCaptcha::display() !!}
-            <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
-        </div>
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-            <input type="hidden" name="onesignal_player_id" id="onesignal_player_id">
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-    <script>
-        var OneSignal = window.OneSignal || [];
-        OneSignal.push(function() {
-            OneSignal.init({
-                appId: "{{ config('services.onesignal.app_id') }}", // Assurez-vous d'utiliser votre propre appId OneSignal
-            });
-
-            OneSignal.getUserId(function(playerId) {
-                document.getElementById('onesignal_player_id').value = playerId;
-            });
-        });
-    </script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</x-guest-layout>
+    </div>
+</div>
+@endsection

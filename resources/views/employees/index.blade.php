@@ -1,81 +1,76 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Employees') }}
-        </h2>
-    </x-slot>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <a href="{{ route('employees.create') }}" class="btn btn-success mb-3">Create Employee</a>
-                </div>
-                    @if ($message = Session::get('success'))
-                    <div class="alert alert-success mt-2">
-                        {{ $message }}
-                    </div>
-                    @endif
-                    <div class="mb-4">
-                        <form action="{{ route('employees.import') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Choose Excel File</label>
-                                <input type="file" class="form-control-file" id="file" name="file">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Import Employees</button>
-                        </form>
-                    </div>
+@extends('layouts.app') <!-- Adjust to your base layout -->
 
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Nom
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Prénom
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Email professionnel
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Matricule
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($employees as $employee)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $employee->nom }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $employee->prenom }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $employee->email_professionnel }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ $employee->matricule }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('employees.show', $employee->id) }}" class="text-blue-600 hover:text-blue-900 mr-2">Show</a>
-                                <a href="{{ route('employees.edit', $employee->id) }}" class="text-blue-600 hover:text-blue-900 mr-2">Edit</a>
-                                <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure?')">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+@section('content')
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 bg-white border-b border-gray-200">
+
+                <!-- Success Message -->
+                @if(session('success'))
+                <div class="bg-green-200 border border-green-200 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
                 </div>
+                @endif
+
+                <!-- Error message -->
+                @if(session('error'))
+                <div class="bg-red-200 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+                @endif
+
+                <!-- SweetAlert2 Notification -->
+                @push('scripts')
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                    @if(session('success'))
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: "{{ session('success') }}",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                    @elseif(session('error'))
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "{{ session('error') }}",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        });
+                    @endif
+                    });
+                </script>
+                @endpush
+
+                <!-- Create Employee Button -->
+                <a href="{{ route('employees.create') }}" class="btn btn-success mb-3">Create Employee</a>
+
+                <!-- Import Employees Form -->
+                <div class="mb-4">
+                    <form action="{{ route('employees.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="file">Choose Excel File</label>
+                            <input type="file" class="form-control-file" id="file" name="file">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Import Employees</button>
+                    </form>
+                </div>
+
+                <!-- Livewire Component and Pagination -->
+                <div>
+                    <!-- Include Livewire Component Here -->
+                    @livewire('employee-search')
+                    {{ $employees->links() }}
+                </div>
+
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

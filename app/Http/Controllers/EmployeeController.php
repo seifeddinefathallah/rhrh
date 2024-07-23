@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DefaultBalance;
 use App\Models\DepartementEntite;
 use App\Models\Employee;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmployeeCreated;
 use App\Mail\EmployeeUpdated;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\EmployeesImport;
 use App\Exports\EmployeesExport;
@@ -21,15 +23,36 @@ use Nnjeim\World\Models\State;
 use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 use App\Notifications\NewEmployeeNotification;
 use Illuminate\Support\Facades\Notification;
+use App\Http\Livewire\EmployeeSearch;
+use Livewire\Livewire;
+use App\Events\EmployeeNotification;
+use App\Http\Livewire\EmployeeNotifications;
+use App\Events\MessageSent;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    /*public function index()
     {
-        $employees = Employee::with('poste.departement.entites')->get();
+        /*$employees = Employee::with('poste.departement.entites')->get();
+        return view('employees.index', compact('employees'));
+
+    }*/
+    public function index(Request $request)
+    {
+        $searchTerm = $request->input('searchTerm');
+
+        $employees = Employee::when($searchTerm, function ($query) use ($searchTerm) {
+            $query->where('nom', 'like', '%' . $searchTerm . '%')
+                ->orWhere('prenom', 'like', '%' . $searchTerm . '%');
+
+        })
+            ->latest()
+            ->with('poste.departement.entites')
+            ->paginate(10);
+            //->get();
+
         return view('employees.index', compact('employees'));
     }
-
     public function create()
     {
         $entites = Entite::with('departements.postes')->get();
@@ -127,6 +150,7 @@ class EmployeeController extends Controller
                 },
             ],
             'passeport_delai_validite' => 'nullable|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $email_professionnel = $request->input('email_professionnel');
@@ -192,18 +216,29 @@ class EmployeeController extends Controller
             $employeeData['passeport_date_expiration'] = $request->passeport_date_expiration;
             $employeeData['passeport_delai_validite'] = $request->passeport_delai_validite;
         }
-        if($request->hasfile('image'))
-        {
-            $file = $request->file('image');
-            $extenstion = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extenstion;
-            $file->move('uploads/employees/', $filename);
-            $employeeData->image = $filename;
-        }
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('employees', 'public');
+            $request->image = $imagePath;
+            $employeeData['image'] = $request->image;
+        }
+        //unset($employeeData['autre_situation_familiale']);
+        //$employeeData->image = $imagePath;
         \Log::info('Données d\'employé: ', $employeeData);
         // Create the employee
         $employee = Employee::create($employeeData);
+        $defaultBalance = new DefaultBalance();
+        $defaultBalance->employee_id = $employee->id;
+        $defaultBalance->sortie_balance = 2; // Default sortie_balance value
+        $defaultBalance->teletravail_days_balance = 5; // Default teletravail_days_balance value
+        $defaultBalance->period = "month";
+        $defaultBalance->save();
+        /*$defaultBalance = [
+            'employee_id' => $employee->id,
+            'sortie_balance' => 2, // Default value for sortie_balance
+            'teletravail_days_balance' => 5,
+        ];
+        DefaultBalance::create($defaultBalance);*/
         $existingEmployees = Employee::where('id', '!=', $employee->id)->get();
         foreach ($existingEmployees as $existingEmployee) {
            /* Mail::to($existingEmployee->email)
@@ -237,6 +272,7 @@ class EmployeeController extends Controller
 
     public function update(Request $request, Employee $employee)
     {
+        //dd($request->all());
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
@@ -347,21 +383,26 @@ class EmployeeController extends Controller
             $employee->passeport_date_expiration = $request->passeport_date_expiration;
             $employee->passeport_delai_validite = $request->passeport_delai_validite;
         }
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($employee->image && Storage::disk('public')->exists($employee->image)) {
+                Storage::disk('public')->delete($employee->image);
+            }
 
-        if($request->hasfile('image'))
-        {
-            $file = $request->file('image');
-            $extenstion = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extenstion;
-            $file->move('uploads/employees/', $filename);
-            $employee->image = $filename;
+            // Enregistrer la nouvelle image téléchargée
+            $imagePath = $request->file('image')->store('employees', 'public');
+            $employee->image = $imagePath;
         }
+
+
 
         $employee->save();
 
         // Send email to the employee with the changes
         Mail::to($employee->email_professionnel)->send(new EmployeeUpdated($employee));
-
+        event(new EmployeeNotification('Employee details updated successfully'));
+        $this->emitNotificationToEmployee($employee->user_id, 'Your profile has been updated.');
+        notify()->success('Success message!', 'Success Title');
         // Send OneSignal notification to the employee
         \Log::info('Employee updated:', $employee->toArray());
 
@@ -384,8 +425,14 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             \Log::error('Failed to send OneSignal notification: ' . $e->getMessage());
         }
-
+        broadcast(new MessageSent($employee));
         return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
+    }
+    protected function emitNotificationToEmployee($userId, $message)
+    {
+        // You can dispatch a browser event or use another method to notify the Livewire component
+        Livewire::test(EmployeeNotifications::class)
+            ->emit('notifyEmployee', $message);
     }
 
     public function destroy(Employee $employee)

@@ -20,6 +20,7 @@ class Entite extends Model
         'code_ape_naf',
         'convention_collective',
         'identifiant_etablissement',
+        'image',
     ];
     public function departements()
     {

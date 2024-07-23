@@ -43,7 +43,7 @@ class AdministrativeRequestController extends Controller
                 'type' => 'required|in:' . implode(',', AdministrativeRequest::TYPES),
             ]);
 
-            $request->merge(['employee_id' => Auth::id()]);
+            $request->merge(['employee_id' => Auth::user()->employee->id]);
 
             $administrativeRequest = AdministrativeRequest::create($request->all());
 

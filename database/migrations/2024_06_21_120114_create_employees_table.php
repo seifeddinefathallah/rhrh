@@ -20,7 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->string('telephone');
             $table->string('code_postal');
             $table->string('ville');
-            $table->string('pays');
+            $table->string('pays')->change();
             $table->string('adresse');
             $table->string('situation_familiale');
             $table->integer('nombre_enfants');

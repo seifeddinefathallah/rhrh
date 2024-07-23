@@ -17,6 +17,9 @@
                         <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Employé
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Type
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -39,6 +42,13 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($loanRequests as $loanRequest)
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if ($loanRequest->employee)
+                                {{ $loanRequest->employee->prenom }} {{ $loanRequest->employee->nom }}
+                                @else
+                                N/A <!-- Display N/A or handle as per your design if employee is null -->
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $loanRequest->type }}
                             </td>

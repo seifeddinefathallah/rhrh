@@ -19,6 +19,7 @@ class ProcessAuthorizations extends Command
 
     public function handle()
     {
+        try {
         $now = Carbon::now();
 
         $authorizations = AuthorizationRequest::where('status', 'approved')
@@ -56,5 +57,10 @@ class ProcessAuthorizations extends Command
         }
 
         \Log::info("Processed authorizations at " . $now->toDateTimeString());
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+            return 1;
+        }
     }
+
 }

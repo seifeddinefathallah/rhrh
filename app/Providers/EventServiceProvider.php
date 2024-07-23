@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\SendLoginNotification',
         ],
+        EmployeeNotification::class => [
+            'App\Listeners\NotifyEmployee',
+        ],
     ];
 
 
