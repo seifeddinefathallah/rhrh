@@ -6,12 +6,55 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             @if(session('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
+                <div class="bg-green-200 border border-green-200 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
             @endif
+
+            <!-- Error message -->
+            @if(session('error'))
+                <div class="bg-red-200 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            <!-- SweetAlert2 Notification -->
+            @push('scripts')
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        @if(session('success'))
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: "{{ session('success') }}",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        @elseif(session('error'))
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "{{ session('error') }}",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        });
+                        @endif
+                    });
+                </script>
+            @endpush
 
             <form method="POST" action="{{ route('employees.store') }}" enctype="multipart/form-data">
                 @csrf
@@ -27,26 +70,51 @@
                         <div class="mb-3">
                             <label for="nom" class="form-label">Nom</label>
                             <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom') }}" required>
+                            @error('nom')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="prenom" class="form-label">Prénom</label>
                             <input type="text" class="form-control" id="prenom" name="prenom" value="{{ old('prenom')}}" required>
+                            @error('prenom')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="date_naissance" class="form-label">Date de Naissance</label>
                             <input type="date" class="form-control" id="date_naissance" name="date_naissance" value="{{ old('date_naissance') }}" required>
+                            @error('date_naissance')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="email_personnel" class="form-label">Email Personnel</label>
                             <input type="email" class="form-control" id="email_personnel" name="email_personnel" value="{{ old('email_personnel') }}">
+                            @error('email_personnel')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3 phone-input">
                             <label for="telephone" class="form-label">Téléphone</label>
                             <input type="tel" class="form-control" id="telephone" name="telephone" value="{{ old('telephone') }}" required>
+                            @error('telephone')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -67,6 +135,11 @@
                         <div class="mb-3">
                             <label for="nombre_enfants" class="form-label">Nombre d'Enfants</label>
                             <input type="number" class="form-control" id="nombre_enfants" name="nombre_enfants" value="{{ old('nombre_enfants') }}" required>
+                            @error('nombre_enfants')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
 
@@ -80,11 +153,21 @@
                         <div class="mb-3">
                             <label for="email_professionnel" class="form-label">Email Professionnel</label>
                             <input type="email" class="form-control" id="email_professionnel" name="email_professionnel" value="{{ old('email_professionnel') }}" required>
+                            @error('email_professionnel')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="matricule" class="form-label">Matricule</label>
                             <input type="text" class="form-control" id="matricule" name="matricule" value="{{ old('matricule') }}" required>
+                            @error('matricule')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -163,11 +246,21 @@
                         <div class="mb-3">
                             <label for="cin_numero" class="form-label">Numéro de CIN</label>
                             <input type="text" class="form-control" id="cin_numero" name="cin_numero" value="{{ old('cin_numero') }}">
+                            @error('cin_numero')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="cin_date_delivrance" class="form-label">Date de Délivrance de CIN</label>
                             <input type="date" class="form-control" id="cin_date_delivrance" name="cin_date_delivrance" value="{{ old('cin_date_delivrance') }}">
+                            @error('cin_date_delivrance')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -178,23 +271,43 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label for="passeport_numero" class="block text-sm font-medium text-gray-700">Passeport Numéro</label>
+                            <label for="passeport_numero" class="form-label">Passeport Numéro</label>
                             <input type="text" name="passeport_numero" id="passeport_numero" class="form-control" value="{{ old('passeport_numero') }}">
+                            @error('passeport_numero')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="passeport_date_delivrance" class="block text-sm font-medium text-gray-700">Passeport Date Délivrance</label>
+                            <label for="passeport_date_delivrance" class="form-label">Passeport Date Délivrance</label>
                             <input type="date" name="passeport_date_delivrance" id="passeport_date_delivrance" class="form-control" value="{{ old('passeport_date_delivrance') }}">
+                            @error('passeport_date_delivrance')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="passeport_date_expiration" class="block text-sm font-medium text-gray-700">Passeport Date Expiration</label>
+                            <label for="passeport_date_expiration" class="form-label">Passeport Date Expiration</label>
                             <input type="date" name="passeport_date_expiration" id="passeport_date_expiration" class="form-control" value="{{ old('passeport_date_expiration') }}">
+                            @error('passeport_date_expiration')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="passeport_delai_validite" class="form-label">Passport Délai de Validité (jours)</label>
-                            <input type="number"  id="passeport_delai_validite" name="passeport_delai_validite" class="form-control" value="{{ old('passeport_delai_validite') }}" readonly>
+                            <label for="passeport_delai_validite" class="form-label">Passport Délai de Validité</label>
+                            <input type="text" id="passeport_delai_validite" name="passeport_delai_validite" class="form-control" value="{{ old('passeport_delai_validite') }}" readonly>
+                            @error('passeport_delai_validite')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
 
                     </div>
@@ -206,23 +319,43 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="mb-4">
-                            <label for="carte_sejour_numero" class="block text-sm font-medium text-gray-700">Carte de Séjour Numéro</label>
+                            <label for="carte_sejour_numero" class="form-label">Carte de Séjour Numéro</label>
                             <input type="text" name="carte_sejour_numero" id="carte_sejour_numero" class="form-control" value="{{ old('carte_sejour_numero') }}">
+                            @error('carte_sejour_numero')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="carte_sejour_date_delivrance" class="block text-sm font-medium text-gray-700">Carte de Séjour Date Délivrance</label>
+                            <label for="carte_sejour_date_delivrance" class="form-label">Carte de Séjour Date Délivrance</label>
                             <input type="date" name="carte_sejour_date_delivrance" id="carte_sejour_date_delivrance" class="form-control" value="{{ old('carte_sejour_date_delivrance') }}">
+                            @error('carte_sejour_date_delivrance')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="carte_sejour_date_expiration" class="block text-sm font-medium text-gray-700">Carte de Séjour Date Expiration</label>
+                            <label for="carte_sejour_date_expiration" class="form-label">Carte de Séjour Date Expiration</label>
                             <input type="date" name="carte_sejour_date_expiration" id="carte_sejour_date_expiration" class="form-control" value="{{ old('carte_sejour_date_expiration') }}">
+                            @error('carte_sejour_date_expiration')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="carte_sejour_type" class="block text-sm font-medium text-gray-700">Carte de Séjour Type</label>
+                            <label for="carte_sejour_type" class="form-label">Carte de Séjour Type</label>
                             <input type="text" name="carte_sejour_type" id="carte_sejour_type" class="form-control" value="{{ old('carte_sejour_type') }}">
+                            @error('carte_sejour_type')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -431,29 +564,7 @@
         document.getElementById('telephone').value = dialCode + ' '; // Add space after dial code
     });
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const selectSituationFamiliale = document.getElementById('situation_familiale');
-        const autreSituationFamilialeDiv = document.getElementById('autreSituationFamiliale');
-        const autreSituationFamilialeInput = document.getElementById('autre_situation_familiale');
 
-        function updateDisplay() {
-            if (selectSituationFamiliale.value === 'Autre') {
-                autreSituationFamilialeDiv.style.display = 'block';
-                autreSituationFamilialeInput.setAttribute('required', 'required');
-            } else {
-                autreSituationFamilialeDiv.style.display = 'none';
-                autreSituationFamilialeInput.removeAttribute('required');
-            }
-        }
-
-        // Ajouter l'événement 'change' pour mettre à jour l'affichage
-        selectSituationFamiliale.addEventListener('change', updateDisplay);
-
-        // Vérifiez l'état initial au chargement de la page
-        updateDisplay();
-    });
-</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const dateDelivranceInput = document.getElementById('passeport_date_delivrance');
@@ -463,9 +574,24 @@
         function calculateValidity() {
             const dateDelivrance = new Date(dateDelivranceInput.value);
             const dateExpiration = new Date(dateExpirationInput.value);
-            const timeDiff = dateExpiration.getTime() - dateDelivrance.getTime();
-            const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            delaiValiditeInput.value = isNaN(dayDiff) ? '' : dayDiff;
+
+            // Calculate years
+            let yearsDiff = dateExpiration.getFullYear() - dateDelivrance.getFullYear();
+            let monthsDiff = dateExpiration.getMonth() - dateDelivrance.getMonth();
+            let daysDiff = dateExpiration.getDate() - dateDelivrance.getDate();
+
+            if (daysDiff < 0) {
+                monthsDiff--;
+                const lastMonth = new Date(dateExpiration.getFullYear(), dateExpiration.getMonth() - 1, dateDelivrance.getDate());
+                daysDiff = Math.floor((dateExpiration - lastMonth) / (1000 * 3600 * 24));
+            }
+
+            if (monthsDiff < 0) {
+                yearsDiff--;
+                monthsDiff += 12;
+            }
+
+            delaiValiditeInput.value = `${yearsDiff} year(s) ${monthsDiff} month(s) ${daysDiff} day(s)`;
         }
 
         dateDelivranceInput.addEventListener('change', calculateValidity);
@@ -473,50 +599,4 @@
     });
 </script>
 @endsection
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/country-state-city@3.0.0/dist/index.min.js"></script>
-<script>
 
-
-
-
-
-    // Handle form submission with AJAX
-    $('#employeeForm').submit(function(e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: $(this).attr('action'),
-            method: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Votre travail a été sauvegardé',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    window.location.href = response.redirect; // Redirect after success if needed
-                });
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Quelque chose a mal tourné!',
-                    footer: '<a href="#">Pourquoi ai-je ce problème ?</a>'
-                });
-            }
-        });
-    });
-    });
-</script>
-@endsection
