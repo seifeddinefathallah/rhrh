@@ -598,5 +598,7 @@
         dateExpirationInput.addEventListener('change', calculateValidity);
     });
 </script>
+
+
 @endsection
 

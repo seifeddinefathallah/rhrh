@@ -469,6 +469,8 @@ class EmployeeController extends Controller
         return back()->with('success', 'Employees imported successfully.');
     }
 
+
+
     public function getPostesByDepartement(Departement $departement)
     {
         $postes = Poste::where('departement_id', $departement->id)->get();
