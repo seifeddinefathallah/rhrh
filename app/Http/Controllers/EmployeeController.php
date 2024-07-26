@@ -90,7 +90,12 @@ class EmployeeController extends Controller
                     }
                 },
             ],
-            'matricule' => 'required|string|numeric',
+            'matricule' => [
+                'required',
+                'string',
+                'numeric',
+                'unique:employees,matricule'
+            ],
             'telephone' => 'required|string|numeric',
             'code_postal' => 'required|string|numeric',
             'ville' => 'required|string',
@@ -102,7 +107,11 @@ class EmployeeController extends Controller
             'entite_id' => 'required|exists:entites,id',
             'departement_id' => 'required|exists:departements,id',
             'poste_id' => 'required|exists:postes,id',
-            'cin_numero' => 'nullable|string',
+            'cin_numero' => [
+                'nullable',
+                'string',
+                'unique:employees,cin_numero'
+            ],
             'cin_date_delivrance' => [
                 'nullable',
                 'date',
@@ -112,8 +121,8 @@ class EmployeeController extends Controller
                     $pays = $request->input('pays');
                     if ($cin_date_delivrance && $date_naissance && $pays == 'TN') {
                         $diff = date_diff(date_create($date_naissance), date_create($cin_date_delivrance));
-                        if ($diff->y < 15) {
-                            $fail("The $attribute must be at least 15 years after the date of birth");
+                        if ($diff->y < 18) {
+                            $fail("The $attribute must be at least 18 years after the date of birth");
                         }
                     }
                 },
@@ -133,7 +142,11 @@ class EmployeeController extends Controller
                 },
             ],
             'carte_sejour_type' => 'nullable|string',
-            'passeport_numero' => 'nullable|string',
+            'passeport_numero' => [
+                'nullable',
+                'string',
+                'unique:employees,passeport_numero'
+            ],
             'passeport_date_delivrance' => 'nullable|date',
             'passeport_date_expiration' => [
                 'nullable',
@@ -169,11 +182,8 @@ class EmployeeController extends Controller
                 'password' => Hash::make($defaultPassword),
             ]);
         }
-        $situation_familiale = $request->input('situation_familiale');
-        // Si "Autre" est sélectionné, utilisez la valeur du champ "autre_situation_familiale"
-        if ($situation_familiale === 'Autre') {
-            $situation_familiale = $request->input('autre_situation_familiale');
-        }
+
+
         $employeeData = [
             'user_id' => $user->id,
             'nom' => $nom,
@@ -188,7 +198,7 @@ class EmployeeController extends Controller
             'pays' => $request->pays,
             'state' => $request->state,
             'adresse' => $request->adresse,
-            'situation_familiale' => $situation_familiale,
+            'situation_familiale' => $request->situation_familiale,
             'nombre_enfants' => $request->nombre_enfants,
             'entite_id' => $request->entite_id,
             'departement_id' => $request->departement_id,
@@ -458,6 +468,8 @@ class EmployeeController extends Controller
 
         return back()->with('success', 'Employees imported successfully.');
     }
+
+
 
     public function getPostesByDepartement(Departement $departement)
     {

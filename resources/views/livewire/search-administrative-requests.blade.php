@@ -26,11 +26,11 @@
             <td>{{ $request->type }}</td>
             <td>
                 @if ($request->status === 'En attente' || $request->status === 'en_attente')
-                <span class="badge bg-warning text-dark">{{ ucfirst($request->status) }}</span>
+                    <span style="color: orange;">{{ ucfirst($request->status) }}</span>
                 @elseif ($request->status === 'approuvé')
-                <span class="badge bg-success text-light">{{ ucfirst($request->status) }}</span>
+                    <span style="color: green;">{{ ucfirst($request->status) }}</span>
                 @elseif ($request->status === 'rejeté')
-                <span class="badge bg-danger text-light">{{ ucfirst($request->status) }}</span>
+                    <span style="color: red;">{{ ucfirst($request->status) }}</span>
                 @endif
             </td>
             <td>

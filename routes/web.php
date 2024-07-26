@@ -18,6 +18,8 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\LoanRequestController;
 use App\Http\Controllers\ApprovalHistoryController;
 use App\Http\Controllers\PlayerIdController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\InterventionRequestController;
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -140,7 +142,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('loan_requests', LoanRequestController::class);
     Route::post('/loan_requests/{loanRequest}/update-status', [ApprovalHistoryController::class, 'update'])->name('loan_requests.update_status');
 });
-use App\Http\Controllers\SubscriptionController;
+
+
+Route::get('/intervention-requests', [InterventionRequestController::class, 'index'])->name('intervention-requests.index');
+Route::get('/intervention-requests/create', [InterventionRequestController::class, 'create'])->name('intervention-requests.create');
+Route::post('/intervention-requests', [InterventionRequestController::class, 'store'])->name('intervention-requests.store');
+Route::get('/intervention-requests/{interventionRequest}', [InterventionRequestController::class, 'show'])->name('intervention-requests.show');
+Route::put('/intervention-requests/{interventionRequest}', [InterventionRequestController::class, 'update'])->name('intervention-requests.update');
+Route::delete('/intervention-requests/{interventionRequest}', [InterventionRequestController::class, 'destroy'])->name('intervention-requests.destroy');
+Route::get('/intervention-requests/{interventionRequest}/edit', [InterventionRequestController::class, 'edit'])->name('intervention-requests.edit');
 
 Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 require __DIR__.'/auth.php';
