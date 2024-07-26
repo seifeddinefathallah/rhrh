@@ -67,6 +67,8 @@ class DepartementController extends Controller
 
         // Synchroniser les entités avec le département
         $departement->entites()->sync($request->entites);
+        //$departement->entites()->sync($request->input('entites'));
+        //\Log::info('Updated Department Entites:', $departement->entites()->pluck('id'));
 
         return redirect()->route('departements.index')
             ->with('success', 'Entités assignées avec succès au département.');

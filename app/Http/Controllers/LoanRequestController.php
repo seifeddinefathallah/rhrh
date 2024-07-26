@@ -14,6 +14,8 @@ class LoanRequestController extends Controller
 {
     public function index()
     {
+        // Retrieve all loan requests
+        $loanRequests = LoanRequest::all();
 
         // Return the view with the retrieved loan requests
         return view('loan_requests.index', compact('loanRequests'));
@@ -31,25 +33,25 @@ class LoanRequestController extends Controller
             'amount' => 'required|numeric|min:0'
         ]);
 
-
+        $employee = Auth::user()->employee;
         // Determine currency based on employee's location
-        if ($employee->country === 'TN') {
-            $currency = 'TND';
-        } else {
-            $currency = 'EUR';
-        }
+        $currency = $employee->country === 'TN' ? 'TND' : 'EUR';
 
         $loanRequest = LoanRequest::create([
             'type' => $request->type,
             'amount' => $request->amount,
             'currency' => $currency,
             'status' => 'En attente',
+            'user_id' => Auth::id(), // Add this line to include the user_id
+             'employee_id' => $employee->id,
         ]);
+
         // Notify approvers
         // Notification::send(User::role(['DG', 'FINANCE'])->get(), new LoanRequestNotification($loanRequest));
 
         return redirect()->route('loan_requests.index')->with('success', 'Demande soumise avec succès.');
     }
+
 
     public function show($id)
     {
@@ -82,6 +84,7 @@ class LoanRequestController extends Controller
 
         return redirect()->route('loan_requests.index')->with('success', 'Demande mise à jour avec succès.');
     }
+
     public function approve(Request $request, LoanRequest $loanRequest)
     {
         // Logique d'approbation
@@ -90,7 +93,7 @@ class LoanRequestController extends Controller
         // Envoyer une notification au demandeur
         $loanRequest->user->notify(new LoanRequestApproved($loanRequest));
 
-        return redirect()->route('loan-requests.index')->with('success', 'La demande a été approuvée.');
+        return redirect()->route('loan_requests.index')->with('success', 'La demande a été approuvée.');
     }
 
     public function reject(Request $request, LoanRequest $loanRequest)
@@ -101,8 +104,9 @@ class LoanRequestController extends Controller
         // Envoyer une notification au demandeur
         $loanRequest->user->notify(new LoanRequestRejected($loanRequest));
 
-        return redirect()->route('loan-requests.index')->with('success', 'La demande a été rejetée.');
+        return redirect()->route('loan_requests.index')->with('success', 'La demande a été rejetée.');
     }
+
     public function updateStatus(Request $request, LoanRequest $loanRequest)
     {
         // Validez les données reçues du formulaire, si nécessaire
@@ -123,4 +127,3 @@ class LoanRequestController extends Controller
         return redirect()->route('loan_requests.index')->with('success', 'Demande supprimée avec succès.');
     }
 }
-

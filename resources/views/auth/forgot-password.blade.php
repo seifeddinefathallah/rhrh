@@ -44,7 +44,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             @if (session('status'))
             Swal.fire({
-                title: 'Success! 🎉',
+                title: 'Check Your Email! 📧',
                 text: "Link sent successfully! Please check your emails! ",
                 icon: 'success',
                 confirmButtonText: 'OK'

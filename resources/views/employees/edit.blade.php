@@ -22,7 +22,7 @@
         <livewire:employee-notifications />
                     <div class="form-group">
                         <label for="image">Image de l'employee</label>
-                        <input type="file" class="form-control-file" id="image" name="image">
+                        <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
                     </div>
                     <!-- Personal Information Section -->
                     <div class="border mb-4 p-4">
@@ -31,32 +31,32 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="mb-3">
                                 <label for="nom" class="form-label">Nom</label>
-                                <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom', $employee->nom) }}" required>
+                                <input type="text" class="form-control @error('nom') is-invalid @enderror" id="nom" name="nom" value="{{ old('nom', $employee->nom) }}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="prenom" class="form-label">Prénom</label>
-                                <input type="text" class="form-control" id="prenom" name="prenom" value="{{ old('prenom', $employee->prenom )}}" required>
+                                <input type="text" class="form-control @error('prenom') is-invalid @enderror" id="prenom" name="prenom" value="{{ old('prenom', $employee->prenom )}}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="date_naissance" class="form-label">Date de Naissance</label>
-                                <input type="date" class="form-control" id="date_naissance" name="date_naissance" value="{{ old('date_naissance', $employee->date_naissance) }}" required>
+                                <input type="date" class="form-control @error('date_naissance') is-invalid @enderror" id="date_naissance" name="date_naissance" value="{{ old('date_naissance', $employee->date_naissance) }}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="email_personnel" class="form-label">Email Personnel</label>
-                                <input type="email" class="form-control" id="email_personnel" name="email_personnel" value="{{ old('email_personnel', $employee->email_personnel) }}">
+                                <input type="email" class="form-control @error('email_personnel') is-invalid @enderror" id="email_personnel" name="email_personnel" value="{{ old('email_personnel', $employee->email_personnel) }}">
                             </div>
 
                             <div class="mb-3 phone-input">
                                 <label for="telephone" class="form-label">Téléphone</label>
-                                <input type="tel" class="form-control" id="telephone" name="telephone" value="{{ old('telephone', $employee->telephone) }}" required>
+                                <input type="tel" class="form-control @error('telephone') is-invalid @enderror" id="telephone" name="telephone" value="{{ old('telephone', $employee->telephone) }}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="situation_familiale" class="form-label">Situation Familiale</label>
-                                <select class="form-control" id="situation_familiale" name="situation_familiale" required>
+                                <select class="form-control @error('situation_familiale') is-invalid @enderror" id="situation_familiale" name="situation_familiale" required>
                                     <option value="">Choisir la situation familiale</option>
                                     @foreach(['Célibataire', 'Marié(e)', 'Divorcé(e)', 'Veuf/Veuve'] as $situation)
                                     <option value="{{ $situation }}" {{ old('situation_familiale', $employee->situation_familiale) == $situation ? 'selected' : '' }}>
@@ -71,7 +71,7 @@
 
                             <div class="mb-3">
                                 <label for="nombre_enfants" class="form-label">Nombre d'Enfants</label>
-                                <input type="number" class="form-control" id="nombre_enfants" name="nombre_enfants" value="{{ old('nombre_enfants', $employee->nombre_enfants) }}" required>
+                                <input type="number" class="form-control @error('nombre_enfants') is-invalid @enderror" id="nombre_enfants" name="nombre_enfants" value="{{ old('nombre_enfants', $employee->nombre_enfants) }}" required>
                             </div>
                         </div>
 
@@ -84,17 +84,17 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="mb-3">
                                 <label for="email_professionnel" class="form-label">Email Professionnel</label>
-                                <input type="email" class="form-control" id="email_professionnel" name="email_professionnel" value="{{ old('email_professionnel', $employee->email_professionnel) }}" required>
+                                <input type="email" class="form-control @error('email_professionnel') is-invalid @enderror" id="email_professionnel" name="email_professionnel" value="{{ old('email_professionnel', $employee->email_professionnel) }}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="matricule" class="form-label">Matricule</label>
-                                <input type="text" class="form-control" id="matricule" name="matricule" value="{{ old('matricule', $employee->matricule) }}" required>
+                                <input type="text" class="form-control @error('matricule') is-invalid @enderror" id="matricule" name="matricule" value="{{ old('matricule', $employee->matricule) }}" required>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label for="entite_id" class="form-label">Entité</label>
-                                <select class="form-control" id="entite_id" name="entite_id" required>
+                                <select class="form-control @error('entite_id') is-invalid @enderror" id="entite_id" name="entite_id" required>
                                     <option value="">Select Entity</option>
                                     @foreach($entites as $entite)
                                     <option value="{{ $entite->id }}" {{ old('entite_id', $employee->entite_id) == $entite->id ? 'selected' : '' }}>{{ $entite->nom }}</option>
@@ -150,12 +150,12 @@
 
                             <div class="mb-3">
                                 <label for="code_postal" class="form-label">Code Postal</label>
-                                <input type="text" class="form-control" id="code_postal" name="code_postal" value="{{ old('code_postal') }}">
+                                <input type="text" class="form-control @error('code_postal') is-invalid @enderror" id="code_postal" name="code_postal" value="{{ old('code_postal') }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="adresse" class="form-label">Adresse</label>
-                                <input type="text" class="form-control" id="adresse" name="adresse" value="{{ old('adresse') }}" required>
+                                <input type="text" class="form-control @error('adresse') is-invalid @enderror" id="adresse" name="adresse" value="{{ old('adresse') }}" required>
                             </div>
                         </div>
                     </div>
@@ -167,12 +167,12 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="mb-3">
                                 <label for="cin_numero" class="form-label">Numéro de CIN</label>
-                                <input type="text" class="form-control" id="cin_numero" name="cin_numero" value="{{ old('cin_numero',$employee->cin_numero) }}">
+                                <input type="text" class="form-control @error('cin_numero') is-invalid @enderror" id="cin_numero" name="cin_numero" value="{{ old('cin_numero',$employee->cin_numero) }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="cin_date_delivrance" class="form-label">Date de Délivrance de CIN</label>
-                                <input type="date" class="form-control" id="cin_date_delivrance" name="cin_date_delivrance" value="{{ old('cin_date_delivrance',$employee->cin_date_delivrance) }}">
+                                <input type="date" class="form-control @error('cin_date_delivrance') is-invalid @enderror" id="cin_date_delivrance" name="cin_date_delivrance" value="{{ old('cin_date_delivrance',$employee->cin_date_delivrance) }}">
                             </div>
                         </div>
                     </div>
@@ -183,18 +183,18 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="mb-4">
-                                <label for="passeport_numero" class="block text-sm font-medium text-gray-700">Passeport Numéro</label>
-                                <input type="text" name="passeport_numero" id="passeport_numero" class="form-control" value="{{ old('passeport_numero',$employee->passeport_numero) }}">
+                                <label for="passeport_numero" class="form-label">Passeport Numéro</label>
+                                <input type="text" name="passeport_numero" id="passeport_numero" class="form-control @error('passeport_numero') is-invalid @enderror" value="{{ old('passeport_numero',$employee->passeport_numero) }}">
                             </div>
 
                             <div class="mb-4">
-                                <label for="passeport_date_delivrance" class="block text-sm font-medium text-gray-700">Passeport Date Délivrance</label>
-                                <input type="date" name="passeport_date_delivrance" id="passeport_date_delivrance" class="form-control" value="{{ old('passeport_date_delivrance',$employee->passeport_date_delivrance) }}">
+                                <label for="passeport_date_delivrance" class="form-label">Passeport Date Délivrance</label>
+                                <input type="date" name="passeport_date_delivrance" id="passeport_date_delivrance" class="form-control @error('passeport_date_delivrance') is-invalid @enderror" value="{{ old('passeport_date_delivrance',$employee->passeport_date_delivrance) }}">
                             </div>
 
                             <div class="mb-4">
-                                <label for="passeport_date_expiration" class="block text-sm font-medium text-gray-700">Passeport Date Expiration</label>
-                                <input type="date" name="passeport_date_expiration" id="passeport_date_expiration" class="form-control" value="{{ old('passeport_date_expiration',$employee->passeport_date_expiration) }}">
+                                <label for="passeport_date_expiration" class="form-label">Passeport Date Expiration</label>
+                                <input type="date" name="passeport_date_expiration" id="passeport_date_expiration" class="form-control @error('passeport_date_expiration') is-invalid @enderror" value="{{ old('passeport_date_expiration',$employee->passeport_date_expiration) }}">
                             </div>
 
                             <div class="mb-4">
@@ -211,23 +211,23 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="mb-4">
-                                <label for="carte_sejour_numero" class="block text-sm font-medium text-gray-700">Carte de Séjour Numéro</label>
-                                <input type="text" name="carte_sejour_numero" id="carte_sejour_numero" class="form-control" value="{{ old('carte_sejour_numero',$employee->carte_sejour_numero) }}">
+                                <label for="carte_sejour_numero" class="form-label">Carte de Séjour Numéro</label>
+                                <input type="text" name="carte_sejour_numero" id="carte_sejour_numero" class="form-control @error('carte_sejour_numero') is-invalid @enderror" value="{{ old('carte_sejour_numero',$employee->carte_sejour_numero) }}">
                             </div>
 
                             <div class="mb-4">
-                                <label for="carte_sejour_date_delivrance" class="block text-sm font-medium text-gray-700">Carte de Séjour Date Délivrance</label>
-                                <input type="date" name="carte_sejour_date_delivrance" id="carte_sejour_date_delivrance" class="form-control" value="{{ old('carte_sejour_date_delivrance',$employee->carte_sejour_date_delivrance) }}">
+                                <label for="carte_sejour_date_delivrance" class="form-label">Carte de Séjour Date Délivrance</label>
+                                <input type="date" name="carte_sejour_date_delivrance" id="carte_sejour_date_delivrance" class="form-control @error('carte_sejour_date_delivrance') is-invalid @enderror" value="{{ old('carte_sejour_date_delivrance',$employee->carte_sejour_date_delivrance) }}">
                             </div>
 
                             <div class="mb-4">
-                                <label for="carte_sejour_date_expiration" class="block text-sm font-medium text-gray-700">Carte de Séjour Date Expiration</label>
-                                <input type="date" name="carte_sejour_date_expiration" id="carte_sejour_date_expiration" class="form-control" value="{{ old('carte_sejour_date_expiration',$employee->carte_sejour_date_expiration) }}">
+                                <label for="carte_sejour_date_expiration" class="form-label">Carte de Séjour Date Expiration</label>
+                                <input type="date" name="carte_sejour_date_expiration" id="carte_sejour_date_expiration" class="form-control @error('carte_sejour_date_expiration') is-invalid @enderror" value="{{ old('carte_sejour_date_expiration',$employee->carte_sejour_date_expiration) }}">
                             </div>
 
                             <div class="mb-4">
-                                <label for="carte_sejour_type" class="block text-sm font-medium text-gray-700">Carte de Séjour Type</label>
-                                <input type="text" name="carte_sejour_type" id="carte_sejour_type" class="form-control" value="{{ old('carte_sejour_type',$employee->carte_sejour_type) }}">
+                                <label for="carte_sejour_type" class="form-label">Carte de Séjour Type</label>
+                                <input type="text" name="carte_sejour_type" id="carte_sejour_type" class="form-control @error('carte_sejour_type') is-invalid @enderror" value="{{ old('carte_sejour_type',$employee->carte_sejour_type) }}">
                             </div>
                         </div>
                     </div>
@@ -513,14 +513,14 @@
                 title: 'Do you want to save the changes?',
                 showDenyButton: true,
                 showCancelButton: true,
-                confirmButtonText: 'Save',
-                denyButtonText: `Don't save`
+                confirmButtonText: 'Save 💾',
+                denyButtonText: `Don't save ❌`
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.querySelector('form').submit(); // Submit the form if confirmed
-                    Swal.fire('Saved!', '', 'success');
+                    Swal.fire('Saved! 💾', '', 'success');
                 } else if (result.isDenied) {
-                    Swal.fire('Changes are not saved', '', 'info');
+                    Swal.fire('Changes are not saved ❌', '', 'info');
                 }
             });
         });
