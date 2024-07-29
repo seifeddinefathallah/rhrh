@@ -70,6 +70,28 @@
                         <p>Demandes Prêts et avances</p>
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a id="demandesDiversDropdown" href="#" class="nav-link dropdown-toggle {{ request()->is('demandes-divers/*') ? 'active' : '' }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="nav-icon fas fa-tasks"></i>
+                            <p>Demandes Divers</p>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="demandesDiversDropdown">
+                        <a href="{{ route('intervention-requests.index') }}" class="dropdown-item {{ request()->routeIs('intervention-requests.index') ? 'active' : '' }}">
+                                Demandes d'Interventions
+                        </a>
+                        <a href="{{ route('supply_requests.index') }}" class="dropdown-item {{ request()->routeIs('supply_requests.index') ? 'active' : '' }}">
+                                Demandes de Fournitures
+                        </a>
+                        <a href="{{ route('material_requests.index') }}" class="dropdown-item {{ request()->routeIs('materiel_requests.index') ? 'active' : '' }}">
+                                Demandes de Matériels Informatiques
+                        </a>
+                        <a href="{{ route('specific_requests.index') }}" class="dropdown-item {{ request()->routeIs('specific_requests.index') ? 'active' : '' }}">
+                                Autres Demandes Spécifiques
+                        </a>
+                    </div>
+                </li>
+
+
             </ul>
         </nav>
     </div>

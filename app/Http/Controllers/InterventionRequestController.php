@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Mail\InterventionRequestCreated;
+use App\Mail\InterventionRequestApproved;
+use App\Mail\InterventionRequestRejected;
+use Illuminate\Support\Facades\Mail;
+
 
 class InterventionRequestController extends Controller
 {
@@ -40,13 +45,13 @@ class InterventionRequestController extends Controller
             $requestDate = Carbon::parse($request->input('request_date'));
 
             // Create a new intervention request
-            InterventionRequest::create([
+            $interventionRequest = InterventionRequest::create([
                 'employee_id' => Auth::user()->employee->id,
                 'description' => $request->input('description'),
                 'request_date' => $requestDate->format('Y-m-d'), // Format to Y-m-d
                 'status' => $request->input('status'),
             ]);
-
+            Mail::to($interventionRequest->employee->email_professionnel)->send(new InterventionRequestCreated($interventionRequest));
             return redirect()->route('intervention-requests.index')
                 ->with('success', 'Demande d\'intervention créée avec succès.');
         } catch (\Exception $e) {
@@ -65,7 +70,7 @@ class InterventionRequestController extends Controller
         $validator = Validator::make($request->all(), [
             'description' => 'required|string',
             'request_date' => 'required|date',
-            'status' => 'required|in:pending,approved,rejected',
+
         ]);
 
         if ($validator->fails()) {
@@ -82,7 +87,7 @@ class InterventionRequestController extends Controller
             $interventionRequest->update([
                 'description' => $request->input('description'),
                 'request_date' => $requestDate->format('Y-m-d'),
-                'status' => $request->input('status'),
+
             ]);
 
             return redirect()->route('intervention-requests.index')
@@ -99,5 +104,30 @@ class InterventionRequestController extends Controller
 
         return redirect()->route('intervention-requests.index')
             ->with('success', 'Demande d\'intervention supprimée avec succès.');
+    }
+    public function approve(InterventionRequest $interventionRequest)
+    {
+        try {
+            $interventionRequest->update(['status' => 'approved']);
+            Mail::to($interventionRequest->employee->email_professionnel)->send(new InterventionRequestApproved($interventionRequest));
+            return redirect()->route('intervention-requests.index')
+                ->with('success', 'Demande d\'intervention approuvée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->route('intervention-requests.index')
+                ->with('error', 'Une erreur est survenue lors de l\'approbation de la demande: ' . $e->getMessage());
+        }
+    }
+
+    public function reject(InterventionRequest $interventionRequest)
+    {
+        try {
+            $interventionRequest->update(['status' => 'rejected']);
+            Mail::to($interventionRequest->employee->email_professionnel)->send(new InterventionRequestRejected($interventionRequest));
+            return redirect()->route('intervention-requests.index')
+                ->with('success', 'Demande d\'intervention rejetée avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->route('intervention-requests.index')
+                ->with('error', 'Une erreur est survenue lors du rejet de la demande: ' . $e->getMessage());
+        }
     }
 }

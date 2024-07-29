@@ -1,11 +1,10 @@
-<!-- resources/views/intervention-requests/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
     <div class="container">
         <h1>Modifier la Demande d'Intervention</h1>
 
-        <form action="{{ route('intervention-requests.update', $interventionRequest) }}" method="POST">
+        <form id="intervention-form" action="{{ route('intervention-requests.update', $interventionRequest) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -25,20 +24,31 @@
                 @enderror
             </div>
 
-            <div class="form-group">
-                <label for="status">Statut</label>
-                <select name="status" id="status" class="form-control" required>
-                    <option value="pending" {{ old('status', $interventionRequest->status) == 'pending' ? 'selected' : '' }}>En attente</option>
-                    <option value="approved" {{ old('status', $interventionRequest->status) == 'approved' ? 'selected' : '' }}>Approuvée</option>
-                    <option value="rejected" {{ old('status', $interventionRequest->status) == 'rejected' ? 'selected' : '' }}>Rejetée</option>
-                </select>
-                @error('status')
-                <div class="alert alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
             <button type="submit" class="btn btn-primary">Sauvegarder</button>
             <a href="{{ route('intervention-requests.index') }}" class="btn btn-secondary">Retour</a>
         </form>
     </div>
+
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('intervention-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            Swal.fire({
+                title: "🔄 Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "💾 Save",
+                denyButtonText: `❌ Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("✅ Saved!", "", "success");
+                    this.submit(); // Submit the form if confirmed
+                } else if (result.isDenied) {
+                    Swal.fire("⚠️ Changes are not saved", "", "info");
+                }
+            });
+        });
+    </script>
 @endsection

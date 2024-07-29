@@ -39,7 +39,7 @@ class LoginRequest extends FormRequest
             'username' => ['required_without:email', 'string', 'exists:users,username'],
             'password' => ['required', 'string'],
             'onesignal_player_id' => ['nullable', 'string'],
-
+            'g-recaptcha-response' => 'required|captcha',
         ];
     }
 

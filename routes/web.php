@@ -20,6 +20,9 @@ use App\Http\Controllers\ApprovalHistoryController;
 use App\Http\Controllers\PlayerIdController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\InterventionRequestController;
+use App\Http\Controllers\SupplyRequestController;
+use App\Http\Controllers\MaterialRequestController;
+use App\Http\Controllers\SpecificRequestController;
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -151,6 +154,42 @@ Route::get('/intervention-requests/{interventionRequest}', [InterventionRequestC
 Route::put('/intervention-requests/{interventionRequest}', [InterventionRequestController::class, 'update'])->name('intervention-requests.update');
 Route::delete('/intervention-requests/{interventionRequest}', [InterventionRequestController::class, 'destroy'])->name('intervention-requests.destroy');
 Route::get('/intervention-requests/{interventionRequest}/edit', [InterventionRequestController::class, 'edit'])->name('intervention-requests.edit');
+Route::patch('intervention-requests/{intervention_request}/approve', [InterventionRequestController::class, 'approve'])->name('intervention-requests.approve');
+Route::patch('intervention-requests/{intervention_request}/reject', [InterventionRequestController::class, 'reject'])->name('intervention-requests.reject');
+
+// Routes pour les demandes de fournitures
+Route::get('/supply-requests', [SupplyRequestController::class, 'index'])->name('supply_requests.index');
+Route::get('/supply-requests/create', [SupplyRequestController::class, 'create'])->name('supply_requests.create');
+Route::post('/supply-requests', [SupplyRequestController::class, 'store'])->name('supply_requests.store');
+Route::get('/supply-requests/{supplyRequest}', [SupplyRequestController::class, 'show'])->name('supply_requests.show');
+Route::put('/supply-requests/{supplyRequest}', [SupplyRequestController::class, 'update'])->name('supply_requests.update');
+Route::delete('/supply-requests/{supplyRequest}', [SupplyRequestController::class, 'destroy'])->name('supply_requests.destroy');
+Route::get('/supply-requests/{supplyRequest}/edit', [SupplyRequestController::class, 'edit'])->name('supply_requests.edit');
+Route::put('/supply_requests/{supplyRequest}/approve', [SupplyRequestController::class, 'approve'])->name('supply_requests.approve');
+Route::put('/supply_requests/{supplyRequest}/reject', [SupplyRequestController::class, 'reject'])->name('supply_requests.reject');
+
+
+Route::get('/material-requests', [MaterialRequestController::class, 'index'])->name('material_requests.index');
+Route::get('/material-requests/create', [MaterialRequestController::class, 'create'])->name('material_requests.create');
+Route::post('/material-requests', [MaterialRequestController::class, 'store'])->name('material_requests.store');
+Route::get('/material-requests/{materialRequest}', [MaterialRequestController::class, 'show'])->name('material_requests.show');
+Route::put('/material-requests/{materialRequest}', [MaterialRequestController::class, 'update'])->name('material_requests.update');
+Route::delete('/material-requests/{materialRequest}', [MaterialRequestController::class, 'destroy'])->name('material_requests.destroy');
+Route::get('/material-requests/{materialRequest}/edit', [MaterialRequestController::class, 'edit'])->name('material_requests.edit');
+Route::put('/material-requests/{materialRequest}/approve', [MaterialRequestController::class, 'approve'])->name('material_requests.approve');
+Route::put('/material-requests/{materialRequest}/reject', [MaterialRequestController::class, 'reject'])->name('material_requests.reject');
+
+
+
+Route::get('/specific-requests', [SpecificRequestController::class, 'index'])->name('specific_requests.index');
+Route::get('/specific-requests/create', [SpecificRequestController::class, 'create'])->name('specific_requests.create');
+Route::post('/specific-requests', [SpecificRequestController::class, 'store'])->name('specific_requests.store');
+Route::get('/specific-requests/{specificRequest}', [SpecificRequestController::class, 'show'])->name('specific_requests.show');
+Route::put('/specific-requests/{specificRequest}', [SpecificRequestController::class, 'update'])->name('specific_requests.update');
+Route::delete('/specific-requests/{specificRequest}', [SpecificRequestController::class, 'destroy'])->name('specific_requests.destroy');
+Route::get('/specific-requests/{specificRequest}/edit', [SpecificRequestController::class, 'edit'])->name('specific_requests.edit');
+Route::put('/specific-requests/{specificRequest}/approve', [SpecificRequestController::class, 'approve'])->name('specific_requests.approve');
+Route::put('/specific-requests/{specificRequest}/reject', [SpecificRequestController::class, 'reject'])->name('specific_requests.reject');
 
 Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 require __DIR__.'/auth.php';

@@ -45,11 +45,11 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         @if ($authorization->status === 'pending')
-                            <span style="color: orange;">{{ ucfirst($request->status) }}</span>
+                            <span style="color: orange;">{{ ucfirst($authorization->status) }}</span>
                         @elseif ($authorization->status === 'approved')
-                            <span style="color: green;">{{ ucfirst($request->status) }}</span>
+                            <span style="color: green;">{{ ucfirst($authorization->status) }}</span>
                         @elseif ($authorization->status === 'rejected')
-                            <span style="color: red;">{{ ucfirst($request->status) }}</span>
+                            <span style="color: red;">{{ ucfirst($authorization->status) }}</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
