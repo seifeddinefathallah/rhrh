@@ -7,10 +7,10 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- User Profile -->
                 <li class="nav-item">
-                    <img src="" class="img-fluid">
-                    <a href="" class="nav-link">
+                    <img src="{{ asset('storage/' . Auth::user()->employee->image) }}" class="img-fluid">
+                    <a href="{{ route('employees.show', Auth::user()->employee->id) }}" class="nav-link">
                         <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                        <p></p>
+                        <p>{{ Auth::user()->name }}</p>
                     </a>
                 </li>
 

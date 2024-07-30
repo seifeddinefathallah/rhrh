@@ -407,6 +407,13 @@ class EmployeeController extends Controller
 
 
         $employee->save();
+        $user = $employee->user;
+        if ($user) {
+            $user->name = strtolower($request->input('prenom') . ' ' . $request->input('nom'));
+            $user->username = strtolower($request->input('prenom') . '.' . $request->input('nom'));
+            $user->email = $request->input('email_professionnel');
+            $user->save();
+        }
 
         // Send email to the employee with the changes
         Mail::to($employee->email_professionnel)->send(new EmployeeUpdated($employee));
