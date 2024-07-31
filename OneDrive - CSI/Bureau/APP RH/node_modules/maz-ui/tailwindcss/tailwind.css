@@ -1,0 +1,10 @@
+@import './../css/index.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .maz-cap-f {
+    @apply first-letter:maz-capitalize;
+  }
+}
