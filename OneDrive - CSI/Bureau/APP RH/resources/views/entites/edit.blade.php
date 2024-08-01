@@ -9,10 +9,14 @@
             Modifier l'entité
         </h2>
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('entites.update', $entite) }}" method="POST">
+                    <form id="edit-entite-form" action="{{ route('entites.update', $entite) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
+                        <div class="form-group mb-4">
+                            <label for="image" class="block text-sm font-medium text-gray-700">Image de l'entité</label>
+                            <input type="file" class="form-control-file mt-1 block w-full border-gray-300 rounded-md shadow-sm" id="image" name="image">
+                        </div>
                         <div class="mb-4">
                             <label for="nom" class="block text-sm font-medium text-gray-700">Nom :</label>
                             <input type="text" name="nom" id="nom" value="{{ old('nom', $entite->nom) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">

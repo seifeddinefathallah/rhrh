@@ -16,6 +16,9 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <h3 class="card-header" style="color: #03428e;">Informations de l'Employé</h3>
+                               
+                                <img src="{{ asset('storage/' . $employee->image) }}" class="img-thumbnail" style="width: 80px; height: 80px;" alt="{{ $employee->nom }}">
+                               
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Nom:</strong></label>
                                     <p>{{ $employee->nom }}</p>

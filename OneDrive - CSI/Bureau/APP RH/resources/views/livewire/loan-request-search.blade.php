@@ -3,7 +3,7 @@
         <div class="col-md-12">
     <input type="text" wire:model.debounce.300ms="search" placeholder="Rechercher par nom d'employé..." class="form-control form-control-navbar" aria-label="Search" />
             <div class="table-responsive">
-
+                @if ($loanRequests && count($loanRequests) > 0)
                 <table class="table table-striped">
                     <thead class="bg-gray-50">
                     <tr>

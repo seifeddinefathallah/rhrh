@@ -21,17 +21,33 @@ use Nnjeim\World\Facades\World;
 use Nnjeim\World\Models\Country; // Import the Country model from the package
 use Nnjeim\World\Models\State; 
 use Illuminate\Support\Facades\Log;
-
+use App\Models\DefaultBalance;
+use Illuminate\Support\Facades\Storage;
 use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 use App\Notifications\NewEmployeeNotification;
 use Illuminate\Support\Facades\Notification;
+use Livewire\Livewire;
+use App\Events\EmployeeNotification;
+use App\Http\Livewire\EmployeeNotifications;
+use App\Events\MessageSent;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
-        
+        $searchTerm = $request->input('searchTerm');
+
+        $employees = Employee::when($searchTerm, function ($query) use ($searchTerm) {
+            $query->where('nom', 'like', '%' . $searchTerm . '%')
+                ->orWhere('prenom', 'like', '%' . $searchTerm . '%');
+
+        })
+            ->latest()
+            ->with('poste.departement.entites')
+            ->paginate(10);
+            //->get();
+
         $employees = Employee::with('poste.departement.entites','contractType')->get();
         return view('employees.index', compact('employees'));
     }
@@ -149,6 +165,7 @@ public function store(Request $request)
         'fin_contrat' => 'nullable|date|after:debut_contrat',
         'duree_contrat' => 'nullable|string',
         'contract_type_id' => 'required|integer|exists:contract_types,id',
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
     // Create or update the user
@@ -196,6 +213,8 @@ public function store(Request $request)
         'duree_contrat' => $request->duree_contrat,
         'fin_contrat' => $request->fin_contrat,
         'contract_type_id' => $request->contract_type_id,
+        'sortie_balance' => 2, // Default value for sortie_balance
+        'teletravail_days_balance' => 5,
     ];
 
     // Adding additional fields for identity documents if provided
@@ -218,27 +237,49 @@ public function store(Request $request)
         $employeeData['passeport_delai_validite'] = $request->passeport_delai_validite;
     }
 
-    // Create the employee
-    $employee = Employee::create($employeeData);
-
-    // Send notifications to existing employees
-    $existingEmployees = Employee::where('id', '!=', $employee->id)->get();
-    foreach ($existingEmployees as $existingEmployee) {
-        Notification::send($existingEmployee, new NewEmployeeNotification($existingEmployee, $employee));
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('employees', 'public');
+        $employeeData['image'] = $imagePath;
+    } else {
+        // Gérer le cas où l'image n'est pas fournie, si nécessaire
+        $employeeData['image'] = null;
     }
 
+
+    
+    //unset($employeeData['autre_situation_familiale']);
+    //$employeeData->image = $imagePath;
+    Log::info('Données d\'employé: ', $employeeData);
+    // Create the employee
+    $employee = Employee::create($employeeData);
+    $defaultBalance = new DefaultBalance();
+    $defaultBalance->employee_id = $employee->id;
+    $defaultBalance->sortie_balance = 2; // Default sortie_balance value
+    $defaultBalance->teletravail_days_balance = 5; // Default teletravail_days_balance value
+    $defaultBalance->period = "month";
+    $defaultBalance->save();
+    /*$defaultBalance = [
+        'employee_id' => $employee->id,
+        'sortie_balance' => 2, // Default value for sortie_balance
+        'teletravail_days_balance' => 5,
+    ];
+    DefaultBalance::create($defaultBalance);*/
+    $existingEmployees = Employee::where('id', '!=', $employee->id)->get();
+    foreach ($existingEmployees as $existingEmployee) {
+       /* Mail::to($existingEmployee->email)
+            ->send(new NewEmployeeNotification($existingEmployee, $employee));*/
+        Notification::send($existingEmployee, new NewEmployeeNotification($existingEmployee, $employee));
+    }
+    //dd($employee->errors());
     // Send email to the new employee
     Mail::to($employee->email_professionnel)->send(new EmployeeCreated($employee, $defaultPassword));
-
-    // Send OneSignal notification
     Log::info('Trying to send notification...');
     try {
-        OneSignal::sendNotificationToAll("New employee registered: {$employee->nom} {$employee->prenom} They will be working as a {$employee->poste->titre} in {$employee->departement->nom} department");
+        OneSignal::sendNotificationToAll("New employee registered: {$employee->nom} {$employee->prenom} They will be working as a {$employee->poste->titre} in {$employee->departement->nom} department ");
         Log::info('Notification sent successfully.');
     } catch (\Exception $e) {
         Log::error('Failed to send OneSignal notification: ' . $e->getMessage());
     }
-
     return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
 }
 
@@ -377,6 +418,17 @@ public function store(Request $request)
             $employee->passeport_date_expiration = $request->passeport_date_expiration;
             $employee->passeport_delai_validite = $request->passeport_delai_validite;
         }
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($employee->image && Storage::disk('public')->exists($employee->image)) {
+                Storage::disk('public')->delete($employee->image);
+            }
+
+            // Enregistrer la nouvelle image téléchargée
+            $imagePath = $request->file('image')->store('employees', 'public');
+            $employee->image = $imagePath;
+        }
+
 
         $employee->save();
 

@@ -89,7 +89,9 @@ class Employee extends Model
         'duree_contrat',
         'fin_contrat' ,
         'contract_type_id', 
-        'image',
+       'image',
+        'sortie_balance',
+        'teletravail_days_balance',
 
     ];
 }

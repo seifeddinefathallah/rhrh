@@ -6,14 +6,25 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 
                 <h1 class="text-2xl font-bold text-center my-6">Ajouter une nouvelle entité</h1>
-                <form action="{{ route('entites.store') }}" method="POST" class="p-6">
+                <form id="entity-form" action="{{ route('entites.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+              
                  
                    
                     @csrf
-                    <div>
-                        <label>Nom </label>
-                        <input class="form-control" type="text" name="nom" required>
+                    <div class="form-group">
+                        <label for="image">Image de l'entité</label>
+                        <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
                     </div>
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input type="text" id="nom" name="nom" class="form-control {{ $errors->has('nom') ? 'input-invalid' : '' }}" required>
+                        @if($errors->has('nom'))
+                            <div class="error-message">
+                                {{ $errors->first('nom') }}
+                            </div>
+                        @endif
+                    </div>
+                    
                     <div>
                         <label>Numéro Fiscal </label>
                         <input class="form-control"type="text" name="numero_fiscal" required>
@@ -62,3 +73,28 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('entity-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                Swal.fire({
+                    title: '⚠️ Vous êtes sûr ?',
+                    icon: 'question',
+                    iconHtml: '❓',
+                    confirmButtonText: 'Oui, continuer !',
+                    cancelButtonText: 'Non, annuler !',
+                    showCancelButton: true,
+                    showCloseButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit(); // Submit the form if the user confirms
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

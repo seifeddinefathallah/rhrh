@@ -97,7 +97,9 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   line-height: 1.1;
   color: #566a7f;
 }
-
+.font-weight-bold-custom {
+  font-weight: bold;
+}
 h1, .h1 {
   font-size: calc(1.3625rem + 1.35vw);
 }
@@ -145,6 +147,18 @@ h6, .h6 {
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+
+.input-invalid {
+  border: 2px solid #dc3545; /* Bordure rouge pour l'erreur */
+  background-color: #f8d7da; /* Fond légèrement rose */
+}
+.input-invalid::placeholder {
+  color: #dc3545; /* Couleur du texte du placeholder */
+}
+.error-message {
+  color: #dc3545; /* Couleur du texte du message d'erreur */
+  font-size: 0.875em; /* Taille de police pour le message d'erreur */
 }
 
 abbr[title],

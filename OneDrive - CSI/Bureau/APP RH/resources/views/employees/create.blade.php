@@ -5,13 +5,58 @@
     <div class=" container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
-                @if(session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                @endif
+            @endif
+
+            @if(session('success'))
+                <div class="bg-green-200 border border-green-200 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            @endif
+
+            <!-- Error message -->
+            @if(session('error'))
+                <div class="bg-red-200 border border-red-200 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            <!-- SweetAlert2 Notification -->
+            @push('scripts')
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        @if(session('success'))
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: "{{ session('success') }}",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        @elseif(session('error'))
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "{{ session('error') }}",
+                            footer: '<a href="#">Why do I have this issue?</a>'
+                        });
+                        @endif
+                    });
+                </script>
+            @endpush
+
     <div class="border mb-4 p-4">
-                <form method="POST" action="{{ route('employees.store') }}">
+        <form id="employee-form" method="POST" action="{{ route('employees.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <h4 class="mb-2 font-semibold">Photo</h4>
@@ -573,45 +618,45 @@ if (countrySelect && stateSelect && citySelect) {
                 dateExpirationInput.addEventListener('change', calculateValidity);
             });
         </script>
-     <script>
-            // Calculate contract duration
-            function calculateContractDuration() {
+  <script>
+    function getTodayDate() {
+        var today = new Date();
+        var day = ("0" + today.getDate()).slice(-2);
+        var month = ("0" + (today.getMonth() + 1)).slice(-2);
+        var year = today.getFullYear();
+        return year + "-" + month + "-" + day;
+    }
+    
+    // Calculate contract duration
+    function calculateContractDuration() {
         var debutContrat = new Date(document.getElementById('debut_contrat').value);
         var finContrat = new Date(document.getElementById('fin_contrat').value);
         if (debutContrat && finContrat && finContrat > debutContrat) {
-            var duration = new Date(finContrat - debutContrat);
-            var years = duration.getUTCFullYear() - 1970;
-            var months = duration.getUTCMonth();
+            var years = finContrat.getFullYear() - debutContrat.getFullYear();
+            var months = finContrat.getMonth() - debutContrat.getMonth();
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
             document.getElementById('duree_contrat').value = years + ' ans, ' + months + ' mois';
         } else {
             document.getElementById('duree_contrat').value = '';
         }
     }
-    function getTodayDate() {
-    var today = new Date();
-    var day = ("0" + today.getDate()).slice(-2);
-    var month = ("0" + (today.getMonth() + 1)).slice(-2);
-    var year = today.getFullYear();
-    return year + "-" + month + "-" + day;
-}
-
-function updateMinDateForFinContrat() {
-    var debutContrat = document.getElementById('debut_contrat').value;
-    document.getElementById('fin_contrat').setAttribute('min', debutContrat);
-}
-
-// Set the initial min date for debut_contrat
-document.getElementById('debut_contrat').setAttribute('min', getTodayDate());
-
-// Add an event listener to update min date for fin_contrat when debut_contrat changes
-document.getElementById('debut_contrat').addEventListener('change', updateMinDateForFinContrat);
-
-// Optionally add an event listener for fin_contrat changes to calculate the contract duration
-// document.getElementById('fin_contrat').addEventListener('change', calculateContractDuration);
-
-  
-        
+    
+    function updateMinDateForFinContrat() {
+        var debutContrat = document.getElementById('debut_contrat').value;
+        document.getElementById('fin_contrat').setAttribute('min', debutContrat);
+    }
+    
+    // Set the initial min date for debut_contrat
+    document.getElementById('debut_contrat').setAttribute('min', getTodayDate());
+    
+    // Add event listeners
+    document.getElementById('debut_contrat').addEventListener('change', updateMinDateForFinContrat);
+    document.getElementById('fin_contrat').addEventListener('change', calculateContractDuration);
     </script>
+    
     <!-- Include intl-tel-input CSS and JS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>

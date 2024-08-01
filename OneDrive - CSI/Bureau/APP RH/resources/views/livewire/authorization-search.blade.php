@@ -5,75 +5,114 @@
 
     @if($authorizations->count())
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead class="table-light">
-                <tr>
-                    <th >Employé</th>
-                    <th >Type</th>
-                    <th >Start Date</th>
-                    <th >End Date</th>
-                    <th >Duration Type</th>
-                    <th >Duration</th>
-                    <th >Status</th>
-                    <th >Actions</th>
-                </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                @foreach ($authorizations as $authorization)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($authorization->employee)
-                        {{ $authorization->employee->prenom }} {{ $authorization->employee->nom }}
-                        @else
-                        N/A <!-- Display N/A or handle as per your design if employee is null -->
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ $authorization->type }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ \Carbon\Carbon::parse($authorization->start_date)->format('Y-m-d') }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ \Carbon\Carbon::parse($authorization->end_date)->format('Y-m-d') }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ ucfirst($authorization->duration_type) }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ $authorization->duration }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($authorization->status === 'pending')
-                            <span class="badge bg-label-warning me-1">{{ ucfirst($authorization->status) }}</span>
-                        @elseif ($authorization->status === 'approved')
-                            <span class="badge bg-label-success me-1">{{ ucfirst($authorization->status) }}</span>
-                        @elseif ($authorization->status === 'rejected')
-                            <span class="badge bg-label-danger">{{ ucfirst($authorization->status) }}</span>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="{{ route('authorizations.show', $authorization->id) }}" class="btn btn-outline-primary btn-sm" title="View"><i class="fas fa-eye"></i></a>
-                        <a href="{{ route('authorizations.edit', $authorization->id) }}" class="btn btn-outline-success btn-sm" title="Edit"><i class="fas fa-edit"></i></a>
-                        <form action="{{ route('authorizations.destroy', $authorization->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm delete-btn"  title="Delete"><i class="fas fa-trash-alt"></i></button>
-                        </form>
-                        <form action="{{ route('authorizations.approve', $authorization->id) }}" method="POST" class="approve-form">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-success btn-sm approve-btn"  title="Approve"><i class="fas fa-check-circle"></i></button>
-                        </form>
-                        <form method="POST" action="{{ route('authorizations.reject', $authorization->id) }}" class="reject-form">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn btn-outline-danger btn-sm reject-btn" title="Reject"><i class="fas fa-times-circle"></i></button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-                </tbody>
-            </table>
+                <table class="table table-striped">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Type
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Start Date
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                End Date
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Duration Type
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Duration
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach ($authorizations as $authorization)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $authorization->type }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ \Carbon\Carbon::parse($authorization->start_date)->format('Y-m-d') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ \Carbon\Carbon::parse($authorization->end_date)->format('Y-m-d') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ ucfirst($authorization->duration_type) }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ $authorization->duration }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if ($authorization->status === 'pending')
+                                <span class="badge bg-label-warning me-1">{{ ucfirst($authorization->status) }}</span>
+                                @elseif ($authorization->status === 'approved')
+                                <span class="badge bg-label-success me-1">{{ ucfirst($authorization->status) }}</span>
+                                @elseif ($authorization->status === 'rejected')
+                                <span class="badge bg-label-danger">{{ ucfirst($authorization->status) }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded text-primary"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                   
+                                        <a class="dropdown-item" href="{{ route('authorizations.show', $authorization->id) }}">
+                                            <i class="bx bx-show me-1 text-success"></i> Show
+                                        </a>
+                               
+                                        <a class="dropdown-item" href="{{ route('authorizations.edit', $authorization->id) }}">
+                                            <i class="bx bx-edit-alt me-1 text-warning"></i> Edit
+                                        </a>
+                               
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $authorization->id }}">
+                                            <i class="bx bx-trash me-1 text-danger"></i> Delete
+                                        </a>
+                                 
+                                    </div>
+                                </div>
+                            
+                                <!-- Modal de confirmation pour la suppression -->
+                                <div class="modal fade" id="deleteModal{{ $authorization->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $authorization->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel{{ $authorization->id }}">Confirmer la suppression</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="alert alert-danger alert-dismissible">
+                                                Êtes-vous sûr de vouloir supprimer cette autorisation ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                <form action="{{ route('authorizations.destroy', $authorization->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="mb-3">
+                    <a href="{{ route('authorizations.create') }}" class="btn btn-primary float-end">
+                        {{ __('Créer une autorization') }}
+                    </a>
+                </div>
             <div class="mt-3">
             {{ $authorizations->links('pagination::bootstrap-4') }}
             </div>

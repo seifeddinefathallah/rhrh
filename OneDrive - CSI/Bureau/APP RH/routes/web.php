@@ -116,6 +116,14 @@ Route::delete('/authorizations/{authorization}', [AuthorizationRequestController
 Route::put('/authorizations/{authorization}/approve', [AuthorizationRequestController::class, 'approve'])->name('authorizations.approve');
 Route::put('/authorizations/{authorization}/reject', [AuthorizationRequestController::class, 'reject'])->name('authorizations.reject');
 Route::get('/authorizations/{authorization}/edit', [AuthorizationRequestController::class, 'edit'])->name('authorizations.edit');
+Route::get('/temporary-balances/update', function () {
+    return view('authorizations.update-temporary-balances'); // Ensure this view file exists
+})->name('authorizations.update-temporary-balances');
+
+Route::post('/temporary-balances/update', [AuthorizationRequestController::class, 'updateTemporaryBalances'])->name('temporary-balances.update');
+
+//Rou
+
 
 Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
 

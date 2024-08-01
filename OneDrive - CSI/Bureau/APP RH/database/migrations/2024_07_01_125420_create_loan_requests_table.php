@@ -20,6 +20,7 @@ class CreateLoanRequestsTable extends Migration
             $table->decimal('amount', 15, 2);
             $table->enum('status', ['En attente', 'Approuvé', 'Rejeté'])->default('En attente');
             $table->text('comments')->nullable();
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
