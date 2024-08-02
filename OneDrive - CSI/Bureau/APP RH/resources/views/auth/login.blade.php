@@ -77,12 +77,7 @@
                                 <x-input-label for="remember_me" :value="__('Remember me')" class="form-check-label" />
                             </div>
 
-                            <!-- Recaptcha -->
-                            <div class="form-group mb-3">
-                                {!! NoCaptcha::renderJs() !!}
-                                {!! NoCaptcha::display() !!}
-                                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="invalid-feedback" />
-                            </div>
+                           
 
                             <div class="d-flex justify-content-between align-items-center">
                                 @if (Route::has('password.request'))
@@ -163,8 +158,7 @@
         @endif
     </script>
 
-    <!-- reCaptcha Script -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -24,6 +24,7 @@ use App\Http\Controllers\InterventionRequestController;
 use App\Http\Controllers\SupplyRequestController;
 use App\Http\Controllers\MaterialRequestController;
 use App\Http\Controllers\SpecificRequestController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -33,7 +34,9 @@ Route::get('/pusher', function () {
     ;
     return view('pusher');
 });
-
+// Route pour gérer la déconnexion
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
 Route::get('/auth/{provider}/redirect', [ProviderController::class, 'redirect']);
 Route::get('/auth/{provider}/callback', [ProviderController::class, 'callback']);
 

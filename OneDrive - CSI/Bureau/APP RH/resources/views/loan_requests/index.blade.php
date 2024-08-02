@@ -27,11 +27,13 @@
                  
             
                 </div>
+               
+                
+                @livewire('loan-request-search')
+                
                 <div class="mb-4">
                     <a href="{{ route('loan_requests.create') }}" class="btn btn-primary float-end">Create Loan</a>
                 </div>
-                
-                @livewire('loan-request-search')
             </div>
         </div>
     </div>

@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+     
 <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class=" container-xxl flex-grow-1 container-p-y">  
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
             {{ __('Liste des demandes administratives') }}
         </h2>
@@ -24,8 +26,9 @@
                     });
                 </script>
                 @endif
-                <table class="table table-striped">
-                    <thead>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="bg-gray-50">
                         <tr>
                             <th>Employé</th>
                             <th>Type</th>
@@ -36,7 +39,12 @@
                     <tbody>
                         @foreach($requests as $request)
                         <tr>
-                            <td>{{ $request->employee->prenom }} {{ $request->employee->nom }}</td>
+                            <td>@if ($request->employee)
+                                {{ $request->employee->prenom }} {{ $request->employee->nom }}
+                                @else
+                                N/A
+                                @endif
+                            </td>
                             <td>{{ $request->type }}</td>
                             <td>
                                 @if ($request->status === 'En attente')
@@ -59,6 +67,15 @@
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                             <i class="bx bx-trash me-1 text-danger"></i> Supprimer
                                         </a>
+                                        @if ($request->status === 'En attente')
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
+                                            <i class="bx bx-check-circle me-1 text-success" ></i> Approve
+                                        </a>
+                            
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
+                                            <i class="bx bx-x-circle me-1 text-danger"></i> Reject
+                                        </a>
+                                        @endif
                                     </div>
                                 </div>
                             
@@ -95,6 +112,7 @@
     <a href="{{ route('requests.create') }}" class="btn btn-primary float-end">
         {{ __('Créer la demande') }}
     </a>
+</div>
 </div>
                 {{ $requests->links() }}
             </div>

@@ -4,7 +4,7 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg">
-    <h1>Edit Supply Request</h1>
+    <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Edit Supply Request</h2>
         <form id="editSupplyRequestForm" action="{{ route('supply_requests.update', $supplyRequest->id) }}" method="POST">
             @csrf
             @method('PUT')

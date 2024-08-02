@@ -1,11 +1,11 @@
-<div>
+<div class="container my-4">
     <div class="row">
         <div class="col-md-12">
     <input type="text" wire:model.debounce.300ms="search" placeholder="Rechercher par nom d'employé..." class="form-control form-control-navbar" aria-label="Search" />
             <div class="table-responsive">
                 @if ($loanRequests && count($loanRequests) > 0)
                 <table class="table table-striped">
-                    <thead class="bg-gray-50">
+                    <thead>
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Type
@@ -27,10 +27,10 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody >
                     @foreach ($loanRequests as $loanRequest)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td >
                             {{ $loanRequest->type }}
                         </td>
                         <td>
@@ -73,6 +73,17 @@
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $loanRequest->id }}">
                                         <i class="bx bx-trash me-1 text-danger"></i> Delete
                                     </a>
+                                    @if($loanRequest->status === 'En attente')
+                                    <!-- Approve Action -->
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $loanRequest->id }}').submit();">
+                                        <i class="bx bx-check-circle me-1 text-success"></i> Approve
+                                    </a>
+                               
+                                    <!-- Reject Action -->
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $loanRequest->id }}').submit();">
+                                        <i class="bx bx-x-circle me-1 text-danger"></i> Reject
+                                    </a>
+                                    @endif
                                 </div>
                             </div>
                         

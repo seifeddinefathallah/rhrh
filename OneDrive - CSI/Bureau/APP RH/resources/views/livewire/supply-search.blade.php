@@ -51,6 +51,7 @@
                                 <i class="bx bx-trash me-1 text-danger"></i> Delete
                             </a>
                 
+                            @if($request->status === 'pending')
                             <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
                                 <i class="bx bx-check-circle me-1 text-success" ></i> Approve
                             </a>
@@ -58,6 +59,7 @@
                             <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
                                 <i class="bx bx-x-circle me-1 text-danger"></i> Reject
                             </a>
+                            @endif
                         </div>
                     </div>
                 
