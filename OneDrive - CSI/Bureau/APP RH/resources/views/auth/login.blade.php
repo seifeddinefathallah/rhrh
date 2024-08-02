@@ -54,83 +54,54 @@
                         <p class="mb-4"    style="text-align: center;">Please sign-in to your account and start the adventure</p>
 
                         <!-- Login Form -->
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login') }}" id="login-form">
                             @csrf
 
                             <!-- Email or Username -->
-                            <div class="mb-3">
-                       
-                            
-                                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                <x-input-error :messages="$errors->get('username')" class="mt-2" />
+                            <div class="form-group mb-3">
+                                <x-input-label for="input_type" :value="__('Email/Username')" />
+                                <x-text-input id="input_type" class="form-control {{ $errors->has('input_type') ? 'is-invalid' : '' }}" type="text" name="input_type" :value="old('input_type')" autofocus />
+                                <x-input-error :messages="$errors->get('input_type')" class="invalid-feedback" />
                             </div>
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email or Username</label>
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                id="input_type"
-                                  name="email-username"
-                                  placeholder="Enter your email or username"
-                                  autofocus
-                                />
-                              </div>
 
                             <!-- Password -->
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input
-                                  type="password"
-                                  class="form-control"
-                                id="input_type"
-                                  name="password"
-                                  placeholder="Enter your password"
-                                  autofocus
-                                  autocomplete="current-password"
-                                />
-                              </div>
-                              <div class="flex items-center justify-end mt-4">
-                                <label for="remember_me" class="inline-flex items-center">
-                                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                                </label>
-                                @if (Route::has('password.request'))
-                                    <a href="{{ route('password.request') }}" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500  float-end">
-                                        {{ __('Forgot your password?') }}
-                                    </a>
-                                @endif
-                               
+                            <div class="form-group mb-3">
+                                <x-input-label for="password" :value="__('Password')" />
+                                <x-text-input id="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="password" name="password" autocomplete="current-password" />
+                                <x-input-error :messages="$errors->get('password')" class="invalid-feedback" />
                             </div>
-                            <div class="mb-3 form-password-toggle">
-                             
-                                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                            </div>
-
-                            <!-- OneSignal Player ID -->
-                            <input type="hidden" id="onesignal_player_id" name="onesignal_player_id">
 
                             <!-- Remember Me -->
-                         
-                            <!-- reCaptcha -->
+                            <div class="form-check mb-3">
+                                <x-text-input id="remember_me" type="checkbox" class="form-check-input" name="remember" />
+                                <x-input-label for="remember_me" :value="__('Remember me')" class="form-check-label" />
+                            </div>
+
+                            <!-- Recaptcha -->
                             <div class="form-group mb-3">
                                 {!! NoCaptcha::renderJs() !!}
                                 {!! NoCaptcha::display() !!}
-                                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('g-recaptcha-response')" class="invalid-feedback" />
                             </div>
-                            <button class="btn btn-primary d-grid w-100"   href="http://127.0.0.1:8000/login" type="submit">Sign in</button>
-                            <!-- Submit Button -->
-                            
-                        </form>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                @if (Route::has('password.request'))
+                                    <a class="btn btn-link p-0" href="{{ route('password.request') }}">
+                                        {{ __('Forgot your password?') }}
+                                    </a>
+                                @endif
+                                <x-primary-button class="btn btn-primary">
+                                    {{ __('Log in') }}
+                                </x-primary-button>
+                            </div>
                         <!-- /Login Form-->
 
                         <!-- Register Link -->
                         <p class="text-center">
                             <span>New on our platform?</span>
-                            <a  href="http://127.0.0.1:8000/register">
-                                <span>Create an account</span> 
-                            
+                            <a  href="{{  route('register') }}">
+                                <span>Create an account</span>
+
                             </a>
                         </p>
                         <!-- /Register Link -->
@@ -194,6 +165,26 @@
 
     <!-- reCaptcha Script -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('status'))
+            Swal.fire({
+                title: 'Success! 🎉',
+                text: "{{ session('status') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            @elseif ($errors->any())
+            Swal.fire({
+                title: 'Oops! 😓',
+                text: "{{ implode(' ', $errors->all()) }}",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            @endif
+        });
+    </script>
 </body>
 </html>
 

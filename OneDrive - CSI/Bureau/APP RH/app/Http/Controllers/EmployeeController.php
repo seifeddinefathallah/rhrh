@@ -19,7 +19,7 @@ use App\Imports\EmployeesImport;
 use App\Exports\EmployeesExport;
 use Nnjeim\World\Facades\World;
 use Nnjeim\World\Models\Country; // Import the Country model from the package
-use Nnjeim\World\Models\State; 
+use Nnjeim\World\Models\State;
 use Illuminate\Support\Facades\Log;
 use App\Models\DefaultBalance;
 use Illuminate\Support\Facades\Storage;
@@ -48,11 +48,11 @@ class EmployeeController extends Controller
             ->paginate(10);
             //->get();
 
-        $employees = Employee::with('poste.departement.entites','contractType')->get();
+       // $employees = Employee::with('poste.departement.entites','contractType')->get();
         return view('employees.index', compact('employees'));
     }
 
-    
+
 
     public function create()
 {
@@ -61,7 +61,7 @@ class EmployeeController extends Controller
 
     // Récupérez tous les types de contrat
     $contractTypes = ContractType::all();
-    
+
 
     // Passez les données à la vue
     return view('employees.create', [
@@ -246,7 +246,7 @@ public function store(Request $request)
     }
 
 
-    
+
     //unset($employeeData['autre_situation_familiale']);
     //$employeeData->image = $imagePath;
     Log::info('Données d\'employé: ', $employeeData);
@@ -283,7 +283,7 @@ public function store(Request $request)
     return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
 }
 
-    
+
     public function edit(Employee $employee)
     {
         $postes = Poste::with('departement')->get();
@@ -292,8 +292,8 @@ public function store(Request $request)
         $contractTypes = ContractType::all();
 
     // Créez un tableau de descriptions de type de contrat avec l'ID comme clé
-   
-      
+
+
          return view('employees.edit', compact('employee', 'postes', 'departements', 'entites', 'contractTypes'));
     }
 
@@ -391,10 +391,10 @@ public function store(Request $request)
             'fin_contrat' => 'nullable|date',
             'contract_type_id' => 'nullable|exists:contract_types,id',
         ]);
-      
+
 
         $employee->fill($request->all());
-      
+
         $employee->debut_contrat = $request->debut_contrat;
         $employee->duree_contrat = $request->duree_contrat;
         $employee->fin_contrat = $request->fin_contrat;
@@ -431,7 +431,13 @@ public function store(Request $request)
 
 
         $employee->save();
-
+        $user = $employee->user;
+        if ($user) {
+            $user->name = strtolower($request->input('prenom') . ' ' . $request->input('nom'));
+            $user->username = strtolower($request->input('prenom') . '.' . $request->input('nom'));
+            $user->email = $request->input('email_professionnel');
+            $user->save();
+        }
         // Send email to the employee with the changes
         Mail::to($employee->email_professionnel)->send(new EmployeeUpdated($employee));
 
@@ -509,7 +515,7 @@ public function store(Request $request)
             return response()->json(['error' => 'Unable to fetch countries.'], 500);
         }
     }
-    
+
 
     public function getCitiesByCountry($country_id)
     {
@@ -520,16 +526,16 @@ public function store(Request $request)
     public function show($id)
     {
         $employee = Employee::with('contractType')->findOrFail($id);
-        
+
         // Additional logic for show method
         if ($employee->contractType) {
             $contractDescription = $employee->contractType->description;
         } else {
             $contractDescription = 'No contract type assigned';
         }
-    
+
         return view('employees.show', compact('employee', 'contractDescription'));
     }
-    
+
 }
 

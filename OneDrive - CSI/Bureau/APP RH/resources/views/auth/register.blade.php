@@ -120,7 +120,7 @@
 
     <p class="text-center">
         <span>Already have an account?</span>
-        <a  href="http://127.0.0.1:8000/login">
+        <a  href="{{ route('auth.login') }}">
           <span>Login</span> 
         
         </a>

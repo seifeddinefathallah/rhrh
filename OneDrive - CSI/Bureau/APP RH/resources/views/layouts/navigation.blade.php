@@ -171,12 +171,12 @@
                           </a>
                           <ul class="menu-sub">
                             <li class="menu-item {{ request()->is('entites') ? 'active' : '' }}">
-                              <a href="http://127.0.0.1:8000/entites" class="menu-link">
+                              <a href="{{ route('entites.index') }} " class="menu-link">
                                   <div data-i18n="Connections">List entites</div>
                               </a>
                           </li>
                               <li class="menu-item {{ request()->is('entites/create') ? 'active' : '' }}">
-                                  <a href="http://127.0.0.1:8000/entites/create" class="menu-link">
+                                  <a href="{{ route('entites.create') }}" class="menu-link">
                                       <div data-i18n="Error">Create Entites</div>
                                   </a>
                               </li>
@@ -191,12 +191,12 @@
                           </a>
                           <ul class="menu-sub">
                               <li class="menu-item {{ request()->is('departements') ? 'active' : '' }}">
-                                  <a href="http://127.0.0.1:8000/departements" class="menu-link">
+                                  <a href="{{ route('departements.index') }}" class="menu-link">
                                       <div data-i18n="Notifications">List Departements</div>
                                   </a>
                               </li>
                               <li class="menu-item {{ request()->is('departements/create') ? 'active' : '' }}">
-                                  <a href="http://127.0.0.1:8000/departements/create" class="menu-link">
+                                  <a href="{{ route('departements.create') }}" class="menu-link">
                                       <div data-i18n="Error">Create Departements</div>
                                   </a>
                               </li>
@@ -209,12 +209,12 @@
                           </a>
                           <ul class="menu-sub">
                               <li class="menu-item {{ request()->is('postes') ? 'active' : '' }}">
-                                  <a href="http://127.0.0.1:8000/postes" class="menu-link">
+                                  <a href="{{ route('postes.index') }}" class="menu-link">
                                       <div data-i18n="Connections">List Postes</div>
                                   </a>
                               </li>
                               <li class="menu-item {{ request()->is('postes/create') ? 'active' : '' }}">
-                                  <a href="http://127.0.0.1:8000/postes/create" class="menu-link">
+                                  <a href="{{ route('postes.create') }}" class="menu-link">
                                       <div data-i18n="Error">Create Postes</div>
                                   </a>
                               </li>
@@ -237,7 +237,7 @@
          
               <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('requests') ? 'active' : ''}}">
-                    <a href="http://127.0.0.1:8000/requests" class="menu-link" target="_blank">
+                    <a href="{{ route('requests.index') }}" class="menu-link" target="_blank">
                       <div data-i18n="Basic">Administrative Documents</div>
                     </a>
                   </li>
@@ -250,7 +250,7 @@
             </span></li>
               <!-- Authorizations-->
               <li class="menu-item {{ request()->is('authorizations') ? 'active' : ''}}">
-                <a href="http://127.0.0.1:8000/authorizations" class="menu-link">
+                <a href="{{ route('authorizations.index') }}" class="menu-link">
                   <i class="menu-icon tf-icons bx bx-collection"></i>
                   <div data-i18n="Basic">Authorizations
                 </div>
@@ -261,14 +261,14 @@
                 <span class="menu-header-text" style="display: block; text-align: center;">Mes demandes </span>
               </li> 
               <li class="menu-item {{ request()->is('loan_requests') ? 'active' : ''}}">
-                <a href="http://127.0.0.1:8000/loan_requests" class="menu-link menu-toggle">
+                <a href="{{ route('loan_requests.index') }}" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-collection"style="color: white;"></i>
                   <div data-i18n="Boxicons" style="display: block; text-align: center;">Mes demandes</div>
                 </a>
 
                 <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('loan_requests') ? 'active' : ''}}">
-                    <a href="http://127.0.0.1:8000/loan_requests" class="menu-link" >
+                    <a href="{{ route('loan_requests.index') }}" class="menu-link" >
                       <div data-i18n="Error">Demandes Prêt Avances </div>
                     </a>
                   </li> 
@@ -282,19 +282,19 @@
               </li>
               <!-- Forms -->
               <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
-                <a href="http://127.0.0.1:8000/contract-types" class="menu-link menu-toggle">
+                <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-credit-card"style="color: white;"></i>
                   <div data-i18n="Boxicons"style="color: white;">Types Contrats</div>
                 </a>
                 <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
-                    <a href="http://127.0.0.1:8000/contract-types/" class="menu-link" >
+                    <a href="{{ route('contract-types.index') }}" class="menu-link" >
                       <div data-i18n="Error">List Type Contrat </div>
                     </a>
                   </li> 
 
                   <li class="menu-item {{ request()->is('contract-types/create') ? 'active' : ''}}">
-                    <a href="http://127.0.0.1:8000/contract-types/create" class="menu-link" >
+                    <a href="{{ route('contract-types.create') }}" class="menu-link" >
                       <div data-i18n="Error">Create Type Contrat </div>
                     </a>
                   </li> 
