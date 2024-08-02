@@ -48,7 +48,7 @@
                                 <img src="{{ asset('../backend/csi_maghreb_logo1.jpg') }}" alt="CSI Maghreb Logo" width="150" />
                             </a>
                         </div>
-                       
+
                         <!-- Main Content -->
                         <div class="mt-4 flex items-center justify-center text-l text-gray-600" style="text-align: center;">
                             {{ __('Thanks for signing up! Before getting started.') }}
@@ -78,7 +78,7 @@
                             </form>
                         </div>
 
-                        
+
                     </div>
                 </div>
                 <!-- /Card -->
@@ -86,7 +86,48 @@
         </div>
     </div>
     <!-- /Content -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('status') == 'verification-link-sent')
+            Swal.fire({
+                title: 'Check Your Email! 📧',
+                text: "{{ __('A new verification link has been sent to the email address you provided during registration.') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            @endif
 
+            document.getElementById('resend-verification-button').addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent the form from submitting immediately
+
+                Swal.fire({
+                    title: 'Sending Verification Email... ⏳',
+                    text: "We are sending you a new verification email.",
+                    icon: 'info',
+                    showConfirmButton: false
+                });
+
+                // Submit the form after showing the SweetAlert2
+                document.getElementById('resend-verification-form').submit();
+            });
+
+            document.getElementById('logout-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the form from submitting immediately
+
+                Swal.fire({
+                    title: 'Logging Out... 👋',
+                    text: "You are about to log out.",
+                    icon: 'warning',
+                    showConfirmButton: false,
+                    timer: 1500 // Wait for 1.5 seconds
+                }).then(() => {
+                    // Submit the form after showing the SweetAlert2
+                    document.getElementById('logout-form').submit();
+                });
+            });
+        });
+    </script>
     <!-- Core JS -->
     <script src="{{ asset('../backend/assets/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('../backend/assets/vendor/libs/popper/popper.js') }}"></script>

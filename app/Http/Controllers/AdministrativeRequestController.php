@@ -125,21 +125,44 @@ class AdministrativeRequestController extends Controller
     {
         $administrativeRequest = AdministrativeRequest::findOrFail($id);
 
-        if ($administrativeRequest->status == 'approuvé') {
-            $employee = $administrativeRequest->employee;  // Assurez-vous que cette relation est définie dans votre modèle AdministrativeRequest
+        if ($administrativeRequest->status != 'approuvé') {
+            $administrativeRequest->status = 'approuvé';
+            $administrativeRequest->save();
+
+            $employee = $administrativeRequest->employee;
 
             $data = [
                 'title' => 'Document approuvé',
                 'content' => 'Votre document a été approuvé.',
             ];
 
-            $pdf = $this->pdfService->generatePdf($data);
+            $viewName = $this->getViewNameForRequestType($administrativeRequest->type, $employee->pays, $employee->id);
+            $pdf = $this->pdfService->generatePdf($data, $viewName);
 
-            Mail::to($employee->email_professionnel)->send(new DocumentMail($data, $pdf));
+            Mail::to($employee->email_professionnel)->send(new DocumentMail($employee, $administrativeRequest, $pdf));
 
-            return response()->json(['message' => 'E-mail envoyé avec succès.']);
+            return redirect()->route('requests.index')->with('success', 'Demande approuvée avec succès.');
         }
 
-        return response()->json(['message' => 'La demande n\'est pas approuvée.'], 400);
+        return redirect()->route('requests.index')->with('error', 'La demande est déjà approuvée.');
     }
+
+    public function rejectRequest($id)
+    {
+        $administrativeRequest = AdministrativeRequest::findOrFail($id);
+
+        if ($administrativeRequest->status != 'rejeté') {
+            $administrativeRequest->status = 'rejeté';
+            $administrativeRequest->save();
+
+            $employee = $administrativeRequest->employee;
+
+            Mail::to($employee->email_professionnel)->send(new UpdateAdministrativeRequestStatusNotification($employee, $administrativeRequest));
+
+            return redirect()->route('requests.index')->with('success', 'Demande rejetée avec succès.');
+        }
+
+        return redirect()->route('requests.index')->with('error', 'La demande est déjà rejetée.');
+    }
+
 }

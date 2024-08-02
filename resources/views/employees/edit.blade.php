@@ -4,7 +4,7 @@
 
     @section('content')
     <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
-            <div class=" container-xxl flex-grow-1 container-p-y">  
+            <div class=" container-xxl flex-grow-1 container-p-y">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Edit Employee') }}
@@ -22,11 +22,10 @@
         @method('PUT')
 
         <livewire:employee-notifications />
-        <div class="mb-3">
-            
-            <label for="image">Image</label>
-            <input type="file" class="form-control" id="image" name="image">
-        </div>
+                    <div class="form-group">
+                            <label for="image">Image de l'employee</label>
+                            <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
+                    </div>
                     <!-- Personal Information Section -->
                     <div class="border mb-4 p-4">
                         <h3 class="text-lg font-semibold mb-2">Informations Personnelles</h3>
@@ -234,32 +233,7 @@
                             </div>
                         </div>
                     </div>
- <!-- Contact Section -->
- <div class="border mb-4 p-4">
-    <h3 class="text-lg font-semibold mb-2">Carte de Séjour</h3>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="mb-4">
-            <label for="carte_sejour_numero" class="block text-sm font-medium text-gray-700">Carte de Séjour Numéro</label>
-            <input type="text" name="carte_sejour_numero" id="carte_sejour_numero" class="form-control" value="{{ old('carte_sejour_numero') }}">
-        </div>
-
-        <div class="mb-4">
-            <label for="carte_sejour_date_delivrance" class="block text-sm font-medium text-gray-700">Carte de Séjour Date Délivrance</label>
-            <input type="date" name="carte_sejour_date_delivrance" id="carte_sejour_date_delivrance" class="form-control" value="{{ old('carte_sejour_date_delivrance') }}">
-        </div>
-
-        <div class="mb-4">
-            <label for="carte_sejour_date_expiration" class="block text-sm font-medium text-gray-700">Carte de Séjour Date Expiration</label>
-            <input type="date" name="carte_sejour_date_expiration" id="carte_sejour_date_expiration" class="form-control" value="{{ old('carte_sejour_date_expiration') }}">
-        </div>
-
-        <div class="mb-4">
-            <label for="carte_sejour_type" class="block text-sm font-medium text-gray-700">Carte de Séjour Type</label>
-            <input type="text" name="carte_sejour_type" id="carte_sejour_type" class="form-control" value="{{ old('carte_sejour_type') }}">
-        </div>
-    </div>
-</div>
 
 <!-- Contract Information Section -->
 <div class="border mb-4 p-4">
@@ -325,7 +299,7 @@
 
                     <!-- Submit Button -->
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-primary"  id="modify-employee-button">Modifier Employé</button>
+                            <button  class="btn btn-primary"  id="modify-employee-button">Modifier Employé</button>
                          </div>
                     <div class="text-center mt-4">
                         <a href="{{ route('employees.index') }}" class="btn btn-classy">
@@ -336,25 +310,7 @@
             </div>
         </div>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.getElementById('modify-employee-button').addEventListener('click', function() {
-        Swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('edit-employee-form').submit();
-                Swal.fire("Saved!", "", "success");
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
-            }
-        });
-    });
-</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Initializing entite-departement-poste relationship
@@ -610,7 +566,29 @@ document.getElementById('fin_contrat').addEventListener('change', calculateContr
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('modify-employee-button').addEventListener('click', function (e) {
+                    e.preventDefault();
 
+                    Swal.fire({
+                        title: 'Do you want to save the changes?',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Save 💾',
+                        denyButtonText: "Don't save ❌"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.querySelector('form').submit(); // Submit the form if confirmed
+                            Swal.fire("Saved! 💾", "", "success");
+                        } else if (result.isDenied) {
+                            Swal.fire('Changes are not saved ❌', '', 'info');
+                        }
+                    });
+                });
+            });
+        </script>
 @endsection
 @section('styles')
 <style>
@@ -626,7 +604,10 @@ document.getElementById('fin_contrat').addEventListener('change', calculateContr
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         transition: background 0.3s, transform 0.3s;
     }
-
+    .swal2-styled {
+        padding: 0.5em 1em;
+        font-size: 1em;
+    }
     .btn-classy:hover {
         background: linear-gradient(135deg, #0056b3, #003d80);
         transform: scale(1.05);
@@ -638,28 +619,4 @@ document.getElementById('fin_contrat').addEventListener('change', calculateContr
     }
 </style>
 @endsection
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('submit-button').addEventListener('click', function (e) {
-            e.preventDefault();
 
-            Swal.fire({
-                title: 'Do you want to save the changes?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Save 💾',
-                denyButtonText: `Don't save ❌`
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.querySelector('form').submit(); // Submit the form if confirmed
-                    Swal.fire('Saved! 💾', '', 'success');
-                } else if (result.isDenied) {
-                    Swal.fire('Changes are not saved ❌', '', 'info');
-                }
-            });
-        });
-    });
-</script>
-@endsection

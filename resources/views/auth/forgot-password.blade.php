@@ -9,7 +9,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" id="password-reset-request-form">
         @csrf
 
         <!-- Email or Username -->
@@ -26,4 +26,24 @@
             </x-primary-button>
         </div>
     </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('status'))
+            Swal.fire({
+                title: 'Check Your Email! 📧',
+                text: "Link sent successfully! Please check your emails! ",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            @elseif ($errors->any())
+            Swal.fire({
+                title: 'Error! 😕',
+                text: "Verify your Email or Username",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            @endif
+        });
+    </script>
 @endsection

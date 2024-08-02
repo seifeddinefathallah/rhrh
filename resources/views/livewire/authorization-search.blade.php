@@ -9,6 +9,9 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Employee
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Type
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -34,6 +37,13 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($authorizations as $authorization)
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if ($authorization->employee)
+                                    {{ $authorization->employee->prenom }} {{ $authorization->employee->nom }}
+                                @else
+                                    N/A <!-- Display N/A or handle as per your design if employee is null -->
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {{ $authorization->type }}
                             </td>
@@ -64,22 +74,22 @@
                                         <i class="bx bx-dots-vertical-rounded text-primary"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                   
+
                                         <a class="dropdown-item" href="{{ route('authorizations.show', $authorization->id) }}">
                                             <i class="bx bx-show me-1 text-success"></i> Show
                                         </a>
-                               
+
                                         <a class="dropdown-item" href="{{ route('authorizations.edit', $authorization->id) }}">
                                             <i class="bx bx-edit-alt me-1 text-warning"></i> Edit
                                         </a>
-                               
+
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $authorization->id }}">
                                             <i class="bx bx-trash me-1 text-danger"></i> Delete
                                         </a>
-                                 
+
                                     </div>
                                 </div>
-                            
+
                                 <!-- Modal de confirmation pour la suppression -->
                                 <div class="modal fade" id="deleteModal{{ $authorization->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $authorization->id }}" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -103,7 +113,7 @@
                                     </div>
                                 </div>
                             </td>
-                            
+
                         </tr>
                         @endforeach
                     </tbody>

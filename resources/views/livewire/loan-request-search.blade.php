@@ -8,6 +8,9 @@
                     <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Employee
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Type
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -30,6 +33,13 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                     @foreach ($loanRequests as $loanRequest)
                     <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if ($loanRequest->employee)
+                                {{ $loanRequest->employee->prenom }} {{ $loanRequest->employee->nom }}
+                            @else
+                                N/A <!-- Display N/A or handle as per your design if employee is null -->
+                            @endif
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ $loanRequest->type }}
                         </td>
@@ -56,7 +66,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ \Carbon\Carbon::parse($loanRequest->created_at)->format('Y-m-d') }}
                         </td>
-                   
+
 
                         <td>
                             <div class="dropdown">
@@ -73,9 +83,18 @@
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $loanRequest->id }}">
                                         <i class="bx bx-trash me-1 text-danger"></i> Delete
                                     </a>
+                                    @if($loanRequest->status === 'pending')
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $loanRequest->id }}').submit();">
+                                            <i class="bx bx-check-circle me-1 text-success" ></i> Approve
+                                        </a>
+
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $loanRequest->id }}').submit();">
+                                            <i class="bx bx-x-circle me-1 text-danger"></i> Reject
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
-                        
+
                             <!-- Modal -->
                             <div class="modal fade" id="deleteModal{{ $loanRequest->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $loanRequest->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -100,8 +119,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <form id="approve-form-{{ $loanRequest->id }}" action="{{ route('loan_requests.update_status', $loanRequest->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('PUT')
+                            </form>
+
+                            <!-- Reject Form -->
+                            <form id="reject-form-{{ $loanRequest->id }}" action="{{ route('loan_requests.update_status', $loanRequest->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('PUT')
+                            </form>
                         </td>
-                        
+
                     </tr>
                     @endforeach
                     </tbody>

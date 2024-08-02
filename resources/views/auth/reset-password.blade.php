@@ -40,4 +40,24 @@
             </x-primary-button>
         </div>
     </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('status'))
+            Swal.fire({
+                title: 'Success!🎉',
+                text: "{{ session('status') }}",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            @elseif ($errors->any())
+            Swal.fire({
+                title: 'Error!😕',
+                text: "{{ implode(' ', $errors->all()) }}",
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            @endif
+        });
+    </script>
 @endsection

@@ -44,7 +44,7 @@
                             </a>
                         </div>
                     </div>
-                
+
                     <!-- Modal -->
                     <div class="modal fade" id="deleteModal{{ $employee->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $employee->id }}" aria-hidden="true">
                         <div class="modal-dialog">
@@ -70,13 +70,13 @@
                         </div>
                     </div>
                 </td>
-                
-                
+
+
             </tr>
             @endforeach
             </tbody>
         </table>
-    
+
         <!-- Pagination Links -->
         <div class="mt-4">
             {{ $employees->links('pagination::bootstrap-4')  }}
@@ -84,41 +84,3 @@
     </div>
 </div>
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('form.d-inline').forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const form = this;
-
-                Swal.fire({
-                    title: 'Êtes-vous sûr?',
-                    text: "Vous ne pourrez pas revenir en arrière!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Oui, supprimez-le!',
-                    cancelButtonText: 'Non, annuler!',
-                    reverseButtons: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    } else {
-                        Swal.fire(
-                            'Annulé',
-                            'Votre fichier est en sécurité :)',
-                            'error'
-                        );
-                    }
-                });
-            });
-        });
-    });
-</script>
-@endpush
