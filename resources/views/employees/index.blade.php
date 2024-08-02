@@ -1,12 +1,21 @@
-@extends('layouts.app') <!-- Adjust to your base layout -->
+<!-- resources/views/employees/index.blade.php -->
+
+@extends('layouts.app')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
 
-                <!-- Success Message -->
+
+<!-- Wrapper pour gérer la logique de barre latérale -->
+<div x-data="{ open: true }">
+   
+  
+    <!-- Conteneur principal avec classes dynamiques -->
+    <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-4 bg-white border-b border-gray-200">
+                    
+                       <!-- Success Message -->
                 @if(session('success'))
                 <div class="bg-green-200 border border-green-200 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                     <strong class="font-bold">Success!</strong>
@@ -47,28 +56,34 @@
                 </script>
                 @endpush
 
-                <!-- Create Employee Button -->
-                <a href="{{ route('employees.create') }}" class="btn btn-success mb-3">Create Employee</a>
+               
 
                 <!-- Import Employees Form -->
-                <div class="mb-4">
+                <div class="mb-3">
                     <form action="{{ route('employees.import') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label for="file">Choose Excel File</label>
-                            <input type="file" class="form-control-file" id="file" name="file">
+                        @csrf  
+                        <label class="mb-3" for="file">{{ __('Choose Excel File') }}</label>
+                        <div class="input-group">
+                          
+                            <input type="file" class="form-control" id="file" name="file">
+                            <button type="submit" class="btn btn-secondary">{{ __('Import Employees') }}</button>
                         </div>
-                        <button type="submit" class="btn btn-primary">Import Employees</button>
                     </form>
                 </div>
+                
 
                 <!-- Livewire Component and Pagination -->
                 <div>
                     <!-- Include Livewire Component Here -->
                     @livewire('employee-search')
-                    {{ $employees->links() }}
+                    
+                    
+                    
+                    <!-- Create Employee Button -->
+                    <div class="mb-3">
+                <a href="{{ route('employees.create') }}" class="btn btn-primary float-end">Create Employee</a>
                 </div>
-
+            </div>
             </div>
         </div>
     </div>

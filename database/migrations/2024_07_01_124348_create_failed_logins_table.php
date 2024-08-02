@@ -18,7 +18,7 @@ class CreateFailedLoginsTable extends Migration
             $table->string('email')->index();
             $table->ipAddress('ip_address');
             $table->text('user_agent')->nullable();
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

@@ -1,68 +1,19 @@
-@extends('layouts.app')
+ @extends('layouts.app')
 
-@section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
-                <form id="poste-form" action="{{ route('postes.store') }}" method="POST">
-                    @csrf
-
-                    <!-- Form Fields -->
-                    <div class="mb-3">
-                        <label for="titre" class="form-label">Titre</label>
-                        <input type="text" name="titre" id="titre" class="form-control" placeholder="Entrez le titre du poste" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="departement_id" class="form-label">Département</label>
-                        <select name="departement_id" id="departement_id" class="form-control" required>
-                            <option value="">Sélectionner un département</option>
-                            @foreach($departements as $departement)
-                            <option value="{{ $departement->id }}">
-                                {{ $departement->nom }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button type="button" id="submit-button" class="btn btn-primary">
-                        Ajouter
-                    </button>
-                </form>
+    @section('content')
+      
+    <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
+            <div class=" container-xxl flex-grow-1 container-p-y"> 
+                  <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                               Ajouter un nouveau poste
+                  </h2>
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <form action="{{ route('postes.store') }}" method="POST">
+                        @include('postes.form')
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('submit-button').addEventListener('click', function () {
-            Swal.fire({
-                title: 'Do you want to save ?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Save',
-                denyButtonText: `Don't save`,
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    denyButton: 'btn btn-danger',
-                    cancelButton: 'btn btn-secondary'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If confirmed, submit the form
-                    document.getElementById('poste-form').submit();
-                    Swal.fire('Saved!', '', 'success');
-                } else if (result.isDenied) {
-                    Swal.fire('Poste are not saved', '', 'info');
-                }
-            });
-        });
-    });
-</script>
-@endpush
 @endsection

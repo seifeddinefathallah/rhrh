@@ -26,25 +26,56 @@
             <td>{{ $request->type }}</td>
             <td>
                 @if ($request->status === 'En attente' || $request->status === 'en_attente')
-                    <span style="color: orange;">{{ ucfirst($request->status) }}</span>
+                    <span class="badge bg-label-warning me-1">{{ ucfirst($request->status) }}</span>
                 @elseif ($request->status === 'approuvé')
-                    <span style="color: green;">{{ ucfirst($request->status) }}</span>
+                    <span class="badge bg-label-success me-1">{{ ucfirst($request->status) }}</span>
                 @elseif ($request->status === 'rejeté')
-                    <span style="color: red;">{{ ucfirst($request->status) }}</span>
+                    <span class="badge bg-label-danger">{{ ucfirst($request->status) }}</span>
                 @endif
             </td>
             <td>
-                <a href="{{ route('requests.edit', $request->id) }}" class="btn btn-outline-success btn-sm">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <form action="{{ route('requests.destroy', $request->id) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger btn-sm delete-btn">
-                        <i class="fas fa-trash-alt"></i>
+                <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                        <i class="bx bx-dots-vertical-rounded text-primary"></i>
                     </button>
-                </form>
+                    <div class="dropdown-menu">
+                        
+                        <!-- Edit Action -->
+                        <a class="dropdown-item" href="{{ route('requests.edit', $request->id) }}">
+                            <i class="fas fa-edit me-1 text-success"></i> Edit
+                        </a>
+            
+                        <!-- Delete Action -->
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
+                            <i class="fas fa-trash-alt me-1 text-danger"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteModal{{ $request->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $request->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ $request->id }}">Confirm Delete</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="alert alert-danger alert-dismissible">
+                                Are you sure you want to delete this request?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form action="{{ route('requests.destroy', $request->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
+            
         </tr>
         @endforeach
         </tbody>

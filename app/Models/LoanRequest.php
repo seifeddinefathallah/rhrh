@@ -10,7 +10,7 @@ class LoanRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'type', 'amount', 'status', 'comments','employee_id',
+        'user_id', 'type', 'amount', 'status', 'comments','employee_id'
     ];
 
     public function user()

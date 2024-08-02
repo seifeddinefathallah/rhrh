@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Models\FailedLogin;
 use App\Models\User;
-use Illuminate\Support\Facades\Session;
+
 use App\Rules\Recaptcha;
 
 class LoginRequest extends FormRequest
@@ -153,7 +153,6 @@ class LoginRequest extends FormRequest
 
     public function authenticated(Request $request, $user)
     {
-        Session::flash('login_success', true);
         // Vérifiez si OneSignal Player ID est disponible dans l'objet User
         $onesignalPlayerId = $user->onesignal_player_id;
 

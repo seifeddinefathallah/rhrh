@@ -24,41 +24,76 @@
                         <td>{{ \Carbon\Carbon::parse($request->request_date)->format('d/m/Y') }}</td>
                         <td>
                             @if($request->status === 'pending')
-                                <span style="color: orange;">{{ ucfirst($request->status) }}</span>
+                                <span  class="badge bg-label-warning me-1">{{ ucfirst($request->status) }}</span>
                             @elseif($request->status === 'approved')
-                                <span style="color: green;">{{ ucfirst($request->status) }}</span>
+                                <span class="badge bg-label-success me-1">{{ ucfirst($request->status) }}</span>
                             @elseif($request->status === 'rejected')
-                                <span style="color: red;">{{ ucfirst($request->status) }}</span>
+                                <span class="badge bg-label-danger">{{ ucfirst($request->status) }}</span>
                             @else
                                 <span>{{ ucfirst($request->status) }}</span>
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('intervention-requests.edit', $request->id) }}" class="btn btn-outline-success btn-sm" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('intervention-requests.destroy', $request->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger btn-sm delete-btn" title="Delete">
-                                    <i class="fas fa-trash-alt"></i>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded text-primary"></i>
                                 </button>
-                            </form>
-                            <form action="{{ route('intervention-requests.approve', $request->id) }}" method="POST" style="display:inline;">
+                                <div class="dropdown-menu">
+                        
+                                    <a class="dropdown-item" href="{{ route('intervention-requests.edit', $request->id) }}">
+                                        <i class="bx bx-edit-alt me-1 text-success"></i> Edit
+                                    </a>
+                        
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
+                                        <i class="bx bx-trash me-1 text-danger"></i> Delete
+                                    </a>
+                        
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
+                                        <i class="bx bx-check-circle me-1 text-success"></i> Approve
+                                    </a>
+                        
+                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
+                                        <i class="bx bx-x-circle me-1 text-danger"></i> Reject
+                                    </a>
+                                </div>
+                            </div>
+                        
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal{{ $request->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $request->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ $request->id }}">Confirm Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="alert alert-danger alert-dismissible">
+                                            Are you sure you want to delete this request?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form action="{{ route('intervention-requests.destroy', $request->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- Approve Form -->
+                            <form id="approve-form-{{ $request->id }}" action="{{ route('intervention-requests.approve', $request->id) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-outline-success btn-sm approve-btn" onclick="confirmApprove(event)" title="Approve">
-                                    <i class="fas fa-check-circle"></i>
-                                </button>
                             </form>
-                            <form action="{{ route('intervention-requests.reject', $request->id) }}" method="POST" style="display:inline;">
+                        
+                            <!-- Reject Form -->
+                            <form id="reject-form-{{ $request->id }}" action="{{ route('intervention-requests.reject', $request->id) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-outline-danger btn-sm reject-btn" onclick="confirmReject(event)" title="Reject">
-                                    <i class="fas fa-times-circle"></i>
-                                </button>
                             </form>
                         </td>
+                        
                     </tr>
                 @empty
                     <tr>
@@ -118,7 +153,7 @@
                 text: "You want to approve this request! 👍",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#03c3ec',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, approve it!',
                 cancelButtonText: 'Cancel'
@@ -144,7 +179,7 @@
                 text: "You want to reject this request! ❌",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#03c3ec',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, reject it!',
                 cancelButtonText: 'Cancel'

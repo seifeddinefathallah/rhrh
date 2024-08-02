@@ -15,6 +15,7 @@ use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\AuthorizationRequestController;
 use App\Http\Controllers\PosteController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\LoanRequestController;
 use App\Http\Controllers\ApprovalHistoryController;
 use App\Http\Controllers\PlayerIdController;
@@ -27,6 +28,10 @@ use App\Http\Controllers\SpecificRequestController;
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
     return view('welcome');
+});
+Route::get('/pusher', function () {
+    ;
+    return view('pusher');
 });
 
 Route::get('/auth/{provider}/redirect', [ProviderController::class, 'redirect']);
@@ -81,20 +86,18 @@ Route::get('/countries', [EmployeeController::class, 'getCountries'])->name('cou
 Route::get('/cities/{country}', [EmployeeController::class, 'getCitiesByCountry'])->name('cities.by.country');
 
 Route::get('/requests', [AdministrativeRequestController::class, 'index'])->name('requests.index');
-//Route::get('/requests/create', [AdministrativeRequestController::class, 'create'])->name('requests.create');
-//Route::post('/requests', [AdministrativeRequestController::class, 'store'])->name('requests.store');
+Route::get('/requests/create', [AdministrativeRequestController::class, 'create'])->name('requests.create');
+Route::post('/requests', [AdministrativeRequestController::class, 'store'])->name('requests.store');
 Route::get('/requests/{request}/edit', [AdministrativeRequestController::class, 'edit'])->name('requests.edit');
 Route::put('/requests/{administrativeRequest}', [AdministrativeRequestController::class, 'update'])->name('requests.update');
 Route::delete('/requests/{request}', [AdministrativeRequestController::class, 'destroy'])->name('requests.destroy');
 Route::get('/requests/{id}/approve', [AdministrativeRequestController::class, 'approveRequest']);
-Route::middleware(['auth'])->group(function () {
-    Route::get('/requests/create', [App\Http\Controllers\AdministrativeRequestController::class, 'create'])->name('requests.create');
-    Route::post('/requests', [App\Http\Controllers\AdministrativeRequestController::class, 'store'])->name('requests.store');
-});
+
 Route::resource('entites', EntiteController::class);
 
 Route::get('/departements', [DepartementController::class, 'index'])->name('departements.index');
 Route::get('/departements/create', [DepartementController::class, 'create'])->name('departements.create');
+Route::get('/departements/{departement}', [DepartementController::class, 'show'])->name('departements.show');
 Route::post('/departements', [DepartementController::class, 'store'])->name('departements.store');
 Route::get('/departements/{departement}/edit', [DepartementController::class, 'edit'])->name('departements.edit');
 Route::put('/departements/{departement}', [DepartementController::class, 'update'])->name('departements.update');
@@ -110,19 +113,18 @@ Route::post('/authorizations', [AuthorizationRequestController::class, 'store'])
 Route::get('/authorizations/{authorization}', [AuthorizationRequestController::class, 'show'])->name('authorizations.show');
 Route::put('/authorizations/{authorization}', [AuthorizationRequestController::class, 'update'])->name('authorizations.update');
 Route::delete('/authorizations/{authorization}', [AuthorizationRequestController::class, 'destroy'])->name('authorizations.destroy');
-Route::post('authorizations/{authorization}/approve', [AuthorizationRequestController::class, 'approve'])->name('authorizations.approve');
+Route::put('/authorizations/{authorization}/approve', [AuthorizationRequestController::class, 'approve'])->name('authorizations.approve');
 Route::put('/authorizations/{authorization}/reject', [AuthorizationRequestController::class, 'reject'])->name('authorizations.reject');
 Route::get('/authorizations/{authorization}/edit', [AuthorizationRequestController::class, 'edit'])->name('authorizations.edit');
-/*Route::get('/authorizations/update-temporary-balances', function () {
-    return view('update-temporary-balances');
-});*/
 Route::get('/temporary-balances/update', function () {
     return view('authorizations.update-temporary-balances'); // Ensure this view file exists
 })->name('authorizations.update-temporary-balances');
 
 Route::post('/temporary-balances/update', [AuthorizationRequestController::class, 'updateTemporaryBalances'])->name('temporary-balances.update');
 
-//Route::post('/authorizations/update-temporary-balances', [AuthorizationRequestController::class, 'updateTemporaryBalances'])->name('authorizations.update-temporary-balances');
+//Rou
+
+
 Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
 
 Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
@@ -134,17 +136,28 @@ Route::delete('/contracts/{id}', [ContractController::class, 'destroy'])->name('
 
 Route::post('/send-generated-pdf', [DocumentController::class, 'sendGeneratedPdf']);
 
-Route::middleware('auth')->group(function () {
-    Route::post('/save-player-id', [PlayerIdController::class, 'store'])->name('player-id.store');
-    Route::delete('/remove-player-id', [PlayerIdController::class, 'destroy'])->name('player-id.destroy');
-});
-Route::post('/users/update-onesignal-player-id', [UserController::class, 'updateOneSignalPlayerId'])
-    ->middleware('auth') // Ensure user is authenticated
-    ->name('users.updateOneSignalPlayerId');
+
+
 Route::middleware(['auth'])->group(function () {
     Route::resource('loan_requests', LoanRequestController::class);
     Route::post('/loan_requests/{loanRequest}/update-status', [ApprovalHistoryController::class, 'update'])->name('loan_requests.update_status');
 });
+
+
+Route::resource('contract-types', 'App\Http\Controllers\ContractTypeController');
+
+
+
+Route::get('/contract-types', [ContractTypeController::class, 'index'])->name('contract-types.index');
+Route::get('/contract-types/create', [ContractTypeController::class, 'create'])->name('contract-types.create');
+Route::post('/contract-types', [ContractTypeController::class, 'store'])->name('contract-types.store');
+Route::get('/contract-types/{id}', [ContractTypeController::class, 'show'])->name('contract-types.show');
+Route::get('/contract-types/{id}/edit', [ContractTypeController::class, 'edit'])->name('contract-types.edit');
+Route::put('/contract-types/{id}', [ContractTypeController::class, 'update'])->name('contract-types.update');
+Route::delete('/contract-types/{id}', [ContractTypeController::class, 'destroy'])->name('contract-types.destroy');
+Route::resource('contract-types', ContractTypeController::class);
+Route::get('contract-types/search', [ContractTypeController::class, 'search'])->name('contract-types.search');
+
 
 
 Route::get('/intervention-requests', [InterventionRequestController::class, 'index'])->name('intervention-requests.index');

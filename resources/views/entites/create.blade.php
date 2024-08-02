@@ -1,63 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class=" container-xxl mx-auto flex-grow-1 container-p-y">  
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ __('Ajouter une nouvelle entité') }}
-                </h2>
+                
+                <h1 class="text-2xl font-bold text-center my-6">Ajouter une nouvelle entité</h1>
                 <form id="entity-form" action="{{ route('entites.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+              
+                 
+                   
                     @csrf
                     <div class="form-group">
                         <label for="image">Image de l'entité</label>
                         <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
                     </div>
+                    <div class="mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input type="text" id="nom" name="nom" class="form-control {{ $errors->has('nom') ? 'input-invalid' : '' }}" required>
+                        @if($errors->has('nom'))
+                            <div class="error-message">
+                                {{ $errors->first('nom') }}
+                            </div>
+                        @endif
+                    </div>
+                    
                     <div>
-                        <label for="nom" class="form-label">Nom :</label>
-                        <input type="text" id="nom" name="nom" required class="form-control @error('nom') is-invalid @enderror">
+                        <label>Numéro Fiscal </label>
+                        <input class="form-control"type="text" name="numero_fiscal" required>
                     </div>
                     <div>
-                        <label for="numero_fiscal" class="form-label">Numéro Fiscal :</label>
-                        <input type="text" id="numero_fiscal" name="numero_fiscal" required class="form-control @error('numero_fiscal') is-invalid @enderror">
+                        <label>Adresse </label>
+                        <input class="form-control" type="text" name="adresse" required>
                     </div>
                     <div>
-                        <label for="adresse" class="form-label">Adresse :</label>
-                        <input type="text" id="adresse" name="adresse" required class="form-control @error('adresse') is-invalid @enderror">
+                        <label>Pays </label>
+                        <input class="form-control" type="text" name="pays" required>
                     </div>
                     <div>
-                        <label for="pays" class="form-label">Pays :</label>
-                        <input type="text" id="pays" name="pays" required class="form-control @error('pays') is-invalid @enderror">
+                        <label>Contact </label>
+                        <input class="form-control" type="text" name="contact" required>
                     </div>
                     <div>
-                        <label for="contact" class="form-label">Contact :</label>
-                        <input type="text" id="contact" name="contact" required class="form-control @error('contact') is-invalid @enderror">
+                        <label>Nom de l'employeur </label>
+                        <input class="form-control" type="text" name="nom_employeur" required>
                     </div>
                     <div>
-                        <label for="nom_employeur" class="form-label">Nom de l'employeur :</label>
-                        <input type="text" id="nom_employeur" name="nom_employeur" required class="form-control @error('nom_employeur') is-invalid @enderror">
+                        <label>Adresse de l'employeur </label>
+                        <input class="form-control" type="text" name="adresse_employeur" required>
                     </div>
                     <div>
-                        <label for="adresse_employeur" class="form-label">Adresse de l'employeur :</label>
-                        <input type="text" id="adresse_employeur" name="adresse_employeur" required class="form-control @error('adresse_employeur') is-invalid @enderror">
+                        <label>Numéro SIRET </label>
+                        <input class="form-control" type="text" name="numero_siret" required>
                     </div>
                     <div>
-                        <label for="numero_siret" class="form-label">Numéro SIRET :</label>
-                        <input type="text" id="numero_siret" name="numero_siret" required class="form-control @error('numero_siret') is-invalid @enderror">
+                        <label>Code APE/NAF </label>
+                        <input class="form-control" type="text" name="code_ape_naf" required>
                     </div>
                     <div>
-                        <label for="code_ape_naf" class="form-label">Code APE/NAF :</label>
-                        <input type="text" id="code_ape_naf" name="code_ape_naf" required class="form-control @error('code_ape_naf') is-invalid @enderror">
+                        <label>Convention Collective </label>
+                        <input class="form-control" type="text" name="convention_collective" required>
                     </div>
                     <div>
-                        <label for="convention_collective" class="form-label">Convention Collective :</label>
-                        <input type="text" id="convention_collective" name="convention_collective" required class="form-control @error('convention_collective') is-invalid @enderror">
+                        <label>Identifiant de l’établissement </label>
+                        <input class="form-control" type="text" name="identifiant_etablissement" required>
                     </div>
                     <div>
-                        <label for="identifiant_etablissement" class="form-label">Identifiant de l’établissement :</label>
-                        <input type="text" id="identifiant_etablissement" name="identifiant_etablissement" required class="form-control @error('identifiant_etablissement') is-invalid @enderror">
-                    </div>
-                    <div class="mt-4">
                         <button type="submit" class="btn btn-primary">Ajouter</button>
                     </div>
                 </form>

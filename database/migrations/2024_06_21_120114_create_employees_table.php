@@ -20,13 +20,14 @@ class CreateEmployeesTable extends Migration
             $table->string('telephone');
             $table->string('code_postal');
             $table->string('ville');
-            $table->string('pays')->change();
+            $table->string('pays');
             $table->string('adresse');
             $table->string('situation_familiale');
             $table->integer('nombre_enfants');
             $table->foreignId('entite_id')->constrained()->onDelete('cascade');
             $table->foreignId('departement_id')->constrained()->onDelete('cascade');
             $table->foreignId('poste_id')->constrained()->onDelete('cascade');
+            $table->foreignId('contract_type_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('cin_numero')->nullable();
             $table->date('cin_date_delivrance')->nullable();
             $table->string('state')->nullable();
@@ -42,7 +43,16 @@ class CreateEmployeesTable extends Migration
             $table->string('passeport_numero')->nullable();
             $table->date('passeport_date_delivrance')->nullable();
             $table->date('passeport_date_expiration')->nullable();
+            $table->foreignId('contract_type_id')->nullable()->constrained('contract_types')->onDelete('cascade');
+            $table->string('duree_contrat')->nullable(); // Durée du contrat (Maximum 18 mois, Variable, etc.)
+            $table->date('debut_contrat')->nullable();
+            $table->date('fin_contrat')->nullable();
+            
+            
             $table->string('passeport_delai_validite')->nullable();
+            $table->string('duree_contrat')->nullable(); // Durée du contrat (Maximum 18 mois, Variable, etc.)
+            $table->date('debut_contrat')->nullable();
+            $table->date('fin_contrat')->nullable();
             $table->timestamps();
         });
     }
@@ -61,6 +71,11 @@ class CreateEmployeesTable extends Migration
                 'residence_card_number', 'residence_card_delivery_date', 'residence_card_expiry_date', 'residence_card_type',
                 'passport_number', 'passport_delivery_date', 'passport_expiry_date',
             ]);
+        });
+
+        Schema::table('employees', function (Blueprint $table) {
+            $table->dropForeign(['contract_type_id']);
+            $table->dropColumn('contract_type_id');
         });
     }
 }

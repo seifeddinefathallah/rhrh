@@ -40,6 +40,12 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function contractType()
+    {
+        return $this->belongsTo(ContractType::class); // Assuming one-to-one relationship
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -79,7 +85,11 @@ class Employee extends Model
         'passeport_date_delivrance',
         'passeport_date_expiration',
         'passeport_delai_validite',
-        'image',
+        'debut_contrat',
+        'duree_contrat',
+        'fin_contrat' ,
+        'contract_type_id', 
+       'image',
         'sortie_balance',
         'teletravail_days_balance',
 

@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Create Specific Request</h1>
+<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class="container-xxl flex-grow-1 container-p-y">  
+        <div class="bg-white shadow-md rounded-lg">  
+    <h1>Create Specific Request</h1>
         <form id="specific-request-form" action="{{ route('specific_requests.store') }}" method="POST">
             @csrf
             <div class="form-group">
@@ -40,6 +42,8 @@
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
+                confirmButtonColor: '#03c3ec',
+                cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, submit it!  👍',
                 cancelButtonText: 'No, cancel! ❌',
                 reverseButtons: true

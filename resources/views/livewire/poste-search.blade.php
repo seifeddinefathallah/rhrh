@@ -6,9 +6,10 @@
 
     <!-- Postes Table -->
     <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <thead class="table-light">
+        <table class="table table-striped">
+            <thead>
             <tr>
+            
                 <th>Titre</th>
                 <th>Département</th>
                 <th>Actions</th>
@@ -17,20 +18,48 @@
             <tbody>
             @foreach ($postes as $poste)
             <tr>
+             
                 <td>{{ $poste->titre }}</td>
-                <td>{{ $poste->departement->nom ?? 'N/A' }}</td>
+                <td>{{ $poste->departement->nom }}</td>
                 <td>
-                    <a href="{{ route('postes.edit', $poste->id) }}" class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <form action="{{ route('postes.destroy', $poste->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce poste ?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class="fas fa-trash-alt"></i>
+                    <div class="dropdown">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded text-primary"></i>
                         </button>
-                    </form>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ route('postes.edit', $poste->id) }}">
+                                <i class="bx bx-edit-alt me-1 text-warning"></i> Edit
+                            </a>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $poste->id }}">
+                                <i class="bx bx-trash me-1 text-danger"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteModal{{ $poste->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $poste->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ $poste->id }}">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="alert alert-danger alert-dismissible">
+                                    <p>Are you sure you want to delete this poste?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{{ route('postes.destroy', $poste->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
+                
             </tr>
             @endforeach
             </tbody>

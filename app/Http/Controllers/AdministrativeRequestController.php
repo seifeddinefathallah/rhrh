@@ -7,8 +7,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AdministrativeRequest;
 use App\Models\Employee;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateAdministrativeRequestRequest;
 use App\Http\Requests\UpdateAdministrativeRequestRequest;
 use Illuminate\Support\Facades\Mail;
@@ -27,40 +25,24 @@ class AdministrativeRequestController extends Controller
 
     public function create()
     {
-        if (Auth::check()) {
-            $types = AdministrativeRequest::TYPES;
-
-            return view('requests.create', compact('types'));
-        } else {
-            abort(403);
-        }
+        $employees = Employee::all();
+        return view('requests.create', compact('employees'));
     }
 
-    public function store(Request $request)
+    public function store(CreateAdministrativeRequestRequest $request)
     {
-        if (Auth::check()) {
-            $request->validate([
-                'type' => 'required|in:' . implode(',', AdministrativeRequest::TYPES),
-            ]);
+        $validatedData = $request->validated();
 
-            $request->merge(['employee_id' => Auth::user()->employee->id]);
+        $demande = AdministrativeRequest::create($validatedData);
 
-            $administrativeRequest = AdministrativeRequest::create($request->all());
+        // Récupérer l'employé associé à la demande
+        $employee = Employee::findOrFail($request->employee_id);
 
-            // Send email notification for the creation of the request
-            $user = Auth::user();
+        // Envoyer l'e-mail de notification pour la création de la demande
+        Mail::to($employee->email_professionnel)->send(new NewAdministrativeRequestNotification($employee, $demande));
 
-            // Send email notification for the creation of the request
-            if ($user) {
-                Mail::to($user->email)->send(new NewAdministrativeRequestNotification($user, $administrativeRequest));
-            }
-
-            return redirect()->route('requests.index')->with('success', 'Request created successfully.');
-        } else {
-            abort(403, 'Unauthorized action.');
-        }
+        return redirect()->route('requests.index')->with('success', 'Demande administrative créée avec succès.');
     }
-
 
     public function edit(AdministrativeRequest $request)
     {

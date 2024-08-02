@@ -35,9 +35,5 @@ return [
         'timeout' => env('ONESIGNAL_GUZZLE_CLIENT_TIMEOUT', 3.0),
     ],
 
-    'holidays' => [
-        'api_key' => env('HOLIDAY_API_KEY'),
-    ],
-
 
 ];

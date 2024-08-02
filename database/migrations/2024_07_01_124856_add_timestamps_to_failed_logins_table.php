@@ -14,7 +14,9 @@ class AddTimestampsToFailedLoginsTable extends Migration
     public function up()
     {
         Schema::table('failed_logins', function (Blueprint $table) {
-            $table->timestamps(); // This adds created_at and updated_at columns
+            if (!Schema::hasColumn('failed_logins', 'created_at') && !Schema::hasColumn('failed_logins', 'updated_at')) {
+                $table->timestamps(); // This adds created_at and updated_at columns
+            }
         });
     }
 
@@ -26,7 +28,9 @@ class AddTimestampsToFailedLoginsTable extends Migration
     public function down()
     {
         Schema::table('failed_logins', function (Blueprint $table) {
-            $table->dropTimestamps(); // This removes created_at and updated_at columns
+            if (Schema::hasColumn('failed_logins', 'created_at') && Schema::hasColumn('failed_logins', 'updated_at')) {
+                $table->dropTimestamps(); // This removes created_at and updated_at columns
+            }
         });
     }
 }

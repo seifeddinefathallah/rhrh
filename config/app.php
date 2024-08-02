@@ -183,7 +183,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
         Berkayk\OneSignal\OneSignalServiceProvider::class,
-        Livewire\LivewireServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -202,6 +201,7 @@ return [
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Nnjeim\World\WorldServiceProvider::class,
 
     ],
 
@@ -223,6 +223,7 @@ return [
         'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'World' => Nnjeim\World\Facades\World::class,
         'PDF' => Barryvdh\DomPDF\Facade::class
     ])->toArray(),
 

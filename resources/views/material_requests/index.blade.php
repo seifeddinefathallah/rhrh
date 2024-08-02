@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container my-4">
+<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class="container-xxl flex-grow-1 container-p-y">  
+        <div class="bg-white shadow-md rounded-lg">
+            <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Material Requests</h2>
         <div class="row">
             <div class="col-md-12">
                 @if(session('success'))
@@ -19,11 +22,15 @@
                     </script>
                 @endif
                 <div class="d-flex justify-content-between mb-3">
-                    <h2>Material Requests</h2>
-                    <a href="{{ route('material_requests.create') }}" class="btn btn-primary">Create New Request</a>
+                 
+               
                 </div>
                 @livewire('material-request-search')
-            </div>
+            </div>  
+            
+            <div class="mb-3">
+            <a href="{{ route('material_requests.create') }}" class="btn btn-primary float-end">Create New Request</a>
+            </div> 
         </div>
     </div>
 @endsection

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdministrativeRequest;
 use App\Models\Departement;
 use App\Models\Entite;
 use Illuminate\Http\Request;
@@ -11,7 +10,7 @@ class DepartementController extends Controller
 {
     public function index()
     {
-        $departements = Departement::latest()->paginate(10);
+        $departements = Departement::all();
         return view('departements.index', compact('departements'));
     }
 
@@ -67,8 +66,6 @@ class DepartementController extends Controller
 
         // Synchroniser les entités avec le département
         $departement->entites()->sync($request->entites);
-        //$departement->entites()->sync($request->input('entites'));
-        //\Log::info('Updated Department Entites:', $departement->entites()->pluck('id'));
 
         return redirect()->route('departements.index')
             ->with('success', 'Entités assignées avec succès au département.');
@@ -78,4 +75,10 @@ class DepartementController extends Controller
         $entites = Entite::all();
         return view('departements.assign', compact('departement', 'entites'));
     }
+
+    public function show(Departement $departement)
+{
+    return view('departements.show', compact('departement'));
+}
+
 }

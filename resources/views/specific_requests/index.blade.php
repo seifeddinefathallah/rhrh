@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container my-4">
-        @if(session('success'))
+<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class="container-xxl flex-grow-1 container-p-y">  
+        <div class="bg-white shadow-md rounded-lg"> 
+            
+            <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Specific Requests</h2>
+    @if(session('success'))
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
@@ -17,13 +21,14 @@
             </script>
         @endif
 
-        <div class="d-flex justify-content-between mb-3">
-            <h2>Specific Requests</h2>
-            <a href="{{ route('specific_requests.create') }}" class="btn btn-primary">Create New Request</a>
-        </div>
-
+       
         <div class="col-md-12">
             @livewire('specific-request-search')
+        </div>
+
+        <div class="mb-3">
+          
+            <a href="{{ route('specific_requests.create') }}"  class="btn btn-primary float-end">Create New Request</a>
         </div>
     </div>
 @endsection

@@ -13,7 +13,7 @@ class CreateInterventionRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('intervention-requests', function (Blueprint $table) {
+        Schema::create('intervention_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->text('description');

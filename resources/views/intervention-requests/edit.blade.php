@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class="container-xxl flex-grow-1 container-p-y">  
+        <div class="bg-white shadow-md rounded-lg">
         <h1>Modifier la Demande d'Intervention</h1>
 
         <form id="intervention-form" action="{{ route('intervention-requests.update', $interventionRequest) }}" method="POST">

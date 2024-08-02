@@ -20,7 +20,7 @@ switch ($remainingAttempts) {
         break;
 
     default:
-        $remainingAttemptsClass = 'success';
+        $remainingAttemptsClass = 'info';
         break;
 }
 @endphp
