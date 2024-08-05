@@ -282,19 +282,19 @@
               </li>
               <!-- Forms -->
               <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
-                <a href="http://127.0.0.1:8000/contract-types" class="menu-link menu-toggle">
+                <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-credit-card"style="color: white;"></i>
                   <div data-i18n="Boxicons"style="color: white;">Types Contrats</div>
                 </a>
                 <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
-                    <a href="http://127.0.0.1:8000/contract-types/" class="menu-link" >
+                    <a href="{{ route('contract-types.index') }}" class="menu-link" >
                       <div data-i18n="Error">List Type Contrat </div>
                     </a>
                   </li>
 
                   <li class="menu-item {{ request()->is('contract-types/create') ? 'active' : ''}}">
-                    <a href="http://127.0.0.1:8000/contract-types/create" class="menu-link" >
+                    <a href="{{ route('contract-types.create') }}" class="menu-link" >
                       <div data-i18n="Error">Create Type Contrat </div>
                     </a>
                   </li>
