@@ -90,7 +90,7 @@ class AuthorizationRequestController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'duration_type' => 'nullable|string', // Adjust as per your validation rules
             'duration' => 'nullable|string',
-            'status' => 'required|string',
+
         ]);
 
         // Calculate duration if necessary
@@ -237,7 +237,12 @@ class AuthorizationRequestController extends Controller
             $authorization->update(['status' => 'approved']);
             $this->updateEmployeeBalance($authorization->employee_id, $authorization);
 
-            $authorization->user->notify(new AuthorizationStatusNotification($authorization));
+            // Notify the employee's user
+            if ($authorization->employee && $authorization->employee->user) {
+                $authorization->employee->user->notify(new AuthorizationStatusNotification($authorization));
+            } else {
+                throw new \Exception('User not found for the employee associated with this authorization request.');
+            }
 
             DB::commit();
             return redirect()->route('authorizations.index')->with('success', 'Authorization request approved successfully.');
@@ -252,10 +257,23 @@ class AuthorizationRequestController extends Controller
     {
         //$this->authorize('update', $authorization);
 
-        $authorization->update(['status' => 'rejected']);
+        DB::beginTransaction();
 
-        $authorization->user->notify(new AuthorizationStatusNotification($authorization));
+        try {
+            $authorization->update(['status' => 'rejected']);
 
-        return redirect()->route('authorizations.index')->with('success', 'Authorization request rejected successfully.');
+            if ($authorization->employee && $authorization->employee->user) {
+                $authorization->employee->user->notify(new AuthorizationStatusNotification($authorization));
+            } else {
+                throw new \Exception('User not found for the employee associated with this authorization request.');
+            }
+
+            DB::commit();
+            return redirect()->route('authorizations.index')->with('success', 'Authorization request rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Rejection Failed: ' . $e->getMessage());
+            return redirect()->route('authorizations.index')->with('error', 'Failed to reject the request.');
+        }
     }
 }

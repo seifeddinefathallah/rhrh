@@ -86,6 +86,17 @@
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $authorization->id }}">
                                             <i class="bx bx-trash me-1 text-danger"></i> Delete
                                         </a>
+                                        @if($authorization->status === 'pending')
+                                            <!-- Approve Action -->
+                                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $authorization->id }}').submit();">
+                                                <i class="bx bx-check-circle me-1 text-success"></i> Approve
+                                            </a>
+
+                                            <!-- Reject Action -->
+                                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $authorization->id }}').submit();">
+                                                <i class="bx bx-x-circle me-1 text-danger"></i> Reject
+                                            </a>
+                                        @endif
 
                                     </div>
                                 </div>
@@ -112,6 +123,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <form id="approve-form-{{ $authorization->id }}" action="{{ route('authorizations.approve', $authorization->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                </form>
+
+                                <!-- Reject Form -->
+                                <form id="reject-form-{{ $authorization->id }}" action="{{ route('authorizations.reject', $authorization->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                </form>
                             </td>
 
                         </tr>
@@ -130,131 +151,100 @@
     <p>No authorizations found.</p>
     @endif
 </div>
-            @push('scripts')
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    console.log('SweetAlert2 script loaded');
 
-                    // Ensure jQuery is loaded
-                    if (typeof jQuery === 'undefined') {
-                        console.error('jQuery is not loaded');
-                        return;
-                    }
 
-                    // Handle delete form confirmation
-                    $('form.d-inline').on('submit', function (event) {
-                        event.preventDefault(); // Prevent default form submission
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            console.log('SweetAlert2 script loaded');
 
-                        var form = $(this); // Get the form that triggered the event
-
-                        Swal.fire({
-                            title: 'Êtes-vous sûr?',
-                            text: "Vous ne pourrez pas revenir en arrière!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Oui, supprimez-le!',
-                            cancelButtonText: 'Non, annuler!',
-                            reverseButtons: true,
-                            customClass: {
-                                confirmButton: 'btn btn-success',
-                                cancelButton: 'btn btn-danger'
-                            },
-                            buttonsStyling: false
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                console.log('Form submitted');
-                                form.off('submit').submit(); // Remove the event handler and submit the form
-                            } else {
-                                Swal.fire(
-                                    'Annulé',
-                                    'Votre fichier est en sécurité :)',
-                                    'error'
-                                );
+                            // Ensure jQuery is loaded
+                            if (typeof jQuery === 'undefined') {
+                                console.error('jQuery is not loaded');
+                                return;
                             }
-                        });
-                    });
-                });
-            </script>
-            @endpush
-            @push('scripts')
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    console.log('SweetAlert2 script loaded');
 
-                    document.querySelectorAll('form.approve-form').forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-                            event.preventDefault(); // Prevent the default form submission
+                            // Handle delete form confirmation
+                            $('form.d-inline').on('submit', function (event) {
+                                event.preventDefault(); // Prevent default form submission
+
+                                var form = $(this); // Get the form that triggered the event
+
+                                Swal.fire({
+                                    title: 'Êtes-vous sûr?',
+                                    text: "Vous ne pourrez pas revenir en arrière!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Oui, supprimez-le!',
+                                    cancelButtonText: 'Non, annuler!',
+                                    reverseButtons: true,
+                                    customClass: {
+                                        confirmButton: 'btn btn-success',
+                                        cancelButton: 'btn btn-danger'
+                                    },
+                                    buttonsStyling: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        console.log('Form submitted');
+                                        form.off('submit').submit(); // Remove the event handler and submit the form
+                                    } else {
+                                        Swal.fire(
+                                            'Annulé',
+                                            'Votre fichier est en sécurité :)',
+                                            'error'
+                                        );
+                                    }
+                                });
+                            });
+                        });
+                        function confirmApprove(event) {
+                            event.preventDefault();
 
                             Swal.fire({
-                                title: 'Êtes-vous sûr?',
-                                text: "Vous allez approuver cette demande!",
+                                title: 'Are you sure?',
+                                text: "You want to approve this request! 👍",
                                 icon: 'warning',
                                 showCancelButton: true,
-                                confirmButtonText: 'Oui, approuver!',
-                                cancelButtonText: 'Non, annuler!',
-                                reverseButtons: true,
-                                customClass: {
-                                    confirmButton: 'btn btn-success',
-                                    cancelButton: 'btn btn-danger'
-                                },
-                                buttonsStyling: false
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, approve it!',
+                                cancelButtonText: 'Cancel'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    console.log('Approval confirmed');
-                                    form.submit(); // Submit the form if confirmed
-                                } else {
+                                    event.target.closest('form').submit();
                                     Swal.fire(
-                                        'Annulé',
-                                        'La demande n\'a pas été approuvée :)',
-                                        'error'
+                                        'Approved!',
+                                        'The request has been approved.',
+                                        'success'
                                     );
                                 }
                             });
-                        });
-                    });
-                });
-            </script>
-            @endpush
-            @push('scripts')
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    console.log('SweetAlert2 script loaded');
+                        }
 
-                    document.querySelectorAll('form.reject-form').forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-                            event.preventDefault(); // Prevent the default form submission
+                        function confirmReject(event) {
+                            event.preventDefault();
 
                             Swal.fire({
-                                title: 'Êtes-vous sûr?',
-                                text: "Vous allez rejeter cette demande!",
+                                title: 'Are you sure?',
+                                text: "You want to reject this request! ❌",
                                 icon: 'warning',
                                 showCancelButton: true,
-                                confirmButtonText: 'Oui, rejeter!',
-                                cancelButtonText: 'Non, annuler!',
-                                reverseButtons: true,
-                                customClass: {
-                                    confirmButton: 'btn btn-danger',
-                                    cancelButton: 'btn btn-secondary'
-                                },
-                                buttonsStyling: false
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, reject it!',
+                                cancelButtonText: 'Cancel'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    console.log('Rejection confirmed');
-                                    form.submit(); // Submit the form if confirmed
-                                } else {
+                                    event.target.closest('form').submit();
                                     Swal.fire(
-                                        'Annulé',
-                                        'La demande n\'a pas été rejetée :)',
-                                        'error'
+                                        'Rejected!',
+                                        'The request has been rejected.',
+                                        'success'
                                     );
                                 }
                             });
-                        });
-                    });
-                });
-            </script>
-            @endpush
+                        }
+                    </script>
+
+
