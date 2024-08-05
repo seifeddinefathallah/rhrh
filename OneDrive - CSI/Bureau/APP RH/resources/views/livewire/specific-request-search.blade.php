@@ -28,7 +28,18 @@
                             @else
                                 <span>{{ ucfirst($request->status) }}</span>
                             @endif
-                        </td>
+                        </td> 
+                        <!-- Approve Form -->
+                            <form id="approve-form-{{ $request->id }}" action="{{ route('specific_requests.approve', $request->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('PUT')
+                            </form>
+                        
+                            <!-- Reject Form -->
+                            <form id="reject-form-{{ $request->id }}" action="{{ route('specific_requests.reject', $request->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('PUT')
+                            </form>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -52,12 +63,12 @@
                                     </a>
                                     @if($request->status === 'pending')
                                     <!-- Approve Action -->
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
+                                    <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')">
                                         <i class="bx bx-check-circle me-1 text-success"></i> Approve
                                     </a>
                                
                                     <!-- Reject Action -->
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
+                                    <a class="dropdown-item" href="#" onclick="confirmReject(event, '{{ $request->id }}')">
                                         <i class="bx bx-x-circle me-1 text-danger"></i> Reject
                                     </a>
                                     @endif
@@ -87,17 +98,7 @@
                                 </div>
                             </div>
                         
-                            <!-- Approve Form -->
-                            <form id="approve-form-{{ $request->id }}" action="{{ route('specific_requests.approve', $request->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('PUT')
-                            </form>
-                        
-                            <!-- Reject Form -->
-                            <form id="reject-form-{{ $request->id }}" action="{{ route('specific_requests.reject', $request->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('PUT')
-                            </form>
+                           
                         </td>
                         
                     </tr>

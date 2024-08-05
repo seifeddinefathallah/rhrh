@@ -52,11 +52,11 @@
                             </a>
                 
                             @if($request->status === 'pending')
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
+                            <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')">
                                 <i class="bx bx-check-circle me-1 text-success" ></i> Approve
                             </a>
                 
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
+                            <a class="dropdown-item" href="#" onclick="confirmReject(event, '{{ $request->id }}')">
                                 <i class="bx bx-x-circle me-1 text-danger"></i> Reject
                             </a>
                             @endif

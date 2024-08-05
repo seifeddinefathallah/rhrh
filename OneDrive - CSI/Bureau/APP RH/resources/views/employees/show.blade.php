@@ -149,7 +149,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Poste:</strong></label>
-                                    <p>{{ optional($employee->poste)->nom }}</p>
+                                    <p>{{ optional($employee->poste)->titre }}</p>
                                 </div>
                             </div>
                         </div>

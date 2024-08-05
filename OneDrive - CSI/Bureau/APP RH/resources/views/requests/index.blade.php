@@ -61,9 +61,9 @@
                                         <i class="bx bx-dots-vertical-rounded text-primary"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('requests.edit', $request->id) }}">
+                                     <!--   <a class="dropdown-item" href="{{ route('requests.edit', $request->id) }}">
                                             <i class="bx bx-edit-alt me-1 text-warning"></i> Modifier
-                                        </a>
+                                        </a>-->
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                             <i class="bx bx-trash me-1 text-danger"></i> Supprimer
                                         </a>

@@ -171,7 +171,7 @@ Route::put('/intervention-requests/{interventionRequest}', [InterventionRequestC
 Route::delete('/intervention-requests/{interventionRequest}', [InterventionRequestController::class, 'destroy'])->name('intervention-requests.destroy');
 Route::get('/intervention-requests/{interventionRequest}/edit', [InterventionRequestController::class, 'edit'])->name('intervention-requests.edit');
 Route::patch('intervention-requests/{intervention_request}/approve', [InterventionRequestController::class, 'approve'])->name('intervention-requests.approve');
-Route::patch('intervention-requests/{intervention_request}/reject', [InterventionRequestController::class, 'reject'])->name('intervention-requests.reject');
+Route::put('intervention-requests/{intervention_request}/reject', [InterventionRequestController::class, 'reject'])->name('intervention-requests.reject');
 
 // Routes pour les demandes de fournitures
 Route::get('/supply-requests', [SupplyRequestController::class, 'index'])->name('supply_requests.index');

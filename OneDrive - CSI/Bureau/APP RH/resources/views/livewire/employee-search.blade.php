@@ -1,6 +1,7 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12">
+            
         <input type="text" wire:model.debounce.300ms="searchTerm" placeholder="Chercher employees par nom ou prénom" class="form-control mb-3" aria-label="Search" />
 
 
@@ -21,7 +22,7 @@
             @foreach ($employees as $employee)
             <tr>
                  <td>
-                     <img src="{{ asset('storage/' . $employee->image) }}" class="img-thumbnail" style="width: 80px; height: 80px;" alt="{{ $employee->nom }}">
+                    <img src="{{ asset('storage/' . $employee->image) }}" class="img-thumbnail" style="width: 80px; height: 80px;" alt="{{ $employee->nom }}">
                  </td>
                  <td>{{ $employee->nom }}</td>
                  <td>{{ $employee->prenom }}</td>
@@ -84,7 +85,7 @@
     </div>
 </div>
 
-@push('scripts')
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -121,4 +122,4 @@
         });
     });
 </script>
-@endpush
+
