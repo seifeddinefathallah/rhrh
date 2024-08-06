@@ -6,11 +6,9 @@
         <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
             Liste des postes
         </h2>
-
+ 
         @livewire('poste-search')
- <div class="mb-3">
-                    <a href="{{ route('postes.create') }}" class="btn btn-primary float-end">Ajouter un poste</a>
-                </div>
+
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <!-- Success message -->

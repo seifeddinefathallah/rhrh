@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 02 août 2024 à 10:42
+-- Généré le : mar. 06 août 2024 à 12:34
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `administrative_requests` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `administrative_requests_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `administrative_requests`
@@ -45,10 +45,12 @@ CREATE TABLE IF NOT EXISTS `administrative_requests` (
 
 INSERT INTO `administrative_requests` (`id`, `employee_id`, `type`, `status`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Attestation de travail', 'approuvé', '2024-07-10 09:31:50', '2024-07-26 09:31:47'),
-(2, 2, 'Attestation de salaire', 'En attente', '2024-07-18 10:26:08', '2024-07-18 10:26:08'),
-(3, 2, 'Fiche de paie avec cachet', 'rejeté', '2024-07-29 10:25:23', '2024-07-29 10:26:47'),
-(4, 2, 'Fiche de paie avec cachet', 'approuvé', '2024-07-29 10:25:26', '2024-07-29 10:26:34'),
-(5, 1, 'Attestation de salaire', 'En attente', '2024-07-29 10:38:37', '2024-07-29 10:38:37');
+(2, 8, 'Attestation de salaire', 'En attente', '2024-07-18 10:26:08', '2024-07-18 10:26:08'),
+(3, 8, 'Fiche de paie avec cachet', 'rejeté', '2024-07-29 10:25:23', '2024-07-29 10:26:47'),
+(4, 8, 'Fiche de paie avec cachet', 'approuvé', '2024-07-29 10:25:26', '2024-07-29 10:26:34'),
+(5, 1, 'Attestation de salaire', 'En attente', '2024-07-29 10:38:37', '2024-07-29 10:38:37'),
+(6, 1, 'Fiche de paie avec cachet', 'En attente', '2024-08-06 09:33:18', '2024-08-06 09:33:18'),
+(7, 1, 'Attestation de travail', 'En attente', '2024-08-06 09:34:26', '2024-08-06 09:34:26');
 
 -- --------------------------------------------------------
 
@@ -100,9 +102,7 @@ CREATE TABLE IF NOT EXISTS `authorization_requests` (
 --
 
 INSERT INTO `authorization_requests` (`id`, `user_id`, `employee_id`, `type`, `start_date`, `start_time`, `end_date`, `duration_type`, `duration`, `status`, `created_at`, `updated_at`) VALUES
-(2, 1, 1, 'Télétravail', '2024-07-10', '00:00:00', '2024-07-10', 'half day', '4 hours', 'approved', '2024-07-10 09:37:34', '2024-07-11 08:29:30'),
 (3, 2, 2, 'Sortie', '2024-07-10', '00:00:00', '2024-07-10', 'hours', '1 hours', 'rejected', '2024-07-10 09:44:35', '2024-07-11 09:09:26'),
-(4, 1, 1, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-12', 'days', '29 hours', 'approved', '2024-07-11 07:56:36', '2024-07-11 09:10:40'),
 (5, 1, 1, 'Sortie', '2024-07-11', '00:00:00', '2024-07-11', 'hours', '1 hours', 'approved', '2024-07-11 08:36:21', '2024-07-11 09:12:12'),
 (6, 1, 1, 'Sortie', '2024-07-11', '00:00:00', '2024-07-11', 'hours', '0 hours', 'approved', '2024-07-11 09:12:57', '2024-07-11 09:13:05'),
 (7, 2, 2, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-11', 'half day', '1 days', 'approved', '2024-07-11 09:23:31', '2024-07-11 09:23:46'),
@@ -119,9 +119,7 @@ INSERT INTO `authorization_requests` (`id`, `user_id`, `employee_id`, `type`, `s
 (18, 4, 2, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-11', 'half day', '0.5 days', 'approved', '2024-07-11 10:51:26', '2024-07-11 10:51:32'),
 (19, 2, 2, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-11', 'half day', '0.5 days', 'approved', '2024-07-11 11:22:43', '2024-07-11 11:23:11'),
 (20, 2, 2, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-11', 'half day', '0.5 days', 'approved', '2024-07-11 11:24:53', '2024-07-11 11:24:57'),
-(21, 4, 2, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-11', 'half day', '0.5 days', 'approved', '2024-07-11 11:30:17', '2024-07-11 11:34:49'),
-(22, 2, 2, 'Télétravail', '2024-07-11', '00:00:00', '2024-07-11', 'half day', '0.5 days', 'approved', '2024-07-11 11:39:20', '2024-07-11 11:39:25'),
-(23, 1, 1, 'Sortie', '2024-07-11', '00:00:00', '2024-07-11', 'hours', '0.5 hours', 'pending', '2024-07-11 17:57:07', '2024-07-29 09:11:47');
+(23, 1, 1, 'Sortie', '2024-07-11', '00:00:00', '2024-07-11', 'hours', '0.5 hours', 'approved', '2024-07-11 17:57:07', '2024-08-05 10:29:19');
 
 -- --------------------------------------------------------
 
@@ -251,7 +249,14 @@ CREATE TABLE IF NOT EXISTS `default_balances` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `default_balances_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `default_balances`
+--
+
+INSERT INTO `default_balances` (`id`, `employee_id`, `period`, `sortie_balance`, `teletravail_days_balance`, `created_at`, `updated_at`) VALUES
+(1, 8, 'month', 2.00, 5.00, '2024-08-02 12:08:44', '2024-08-02 12:08:44');
 
 -- --------------------------------------------------------
 
@@ -310,6 +315,22 @@ INSERT INTO `departement_entite` (`id`, `departement_id`, `entite_id`, `created_
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `divers`
+--
+
+DROP TABLE IF EXISTS `divers`;
+CREATE TABLE IF NOT EXISTS `divers` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `divers_type_unique` (`type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `employees`
 --
 
@@ -360,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   KEY `employees_departement_id_foreign` (`departement_id`),
   KEY `employees_poste_id_foreign` (`poste_id`),
   KEY `employees_contract_type_id_foreign` (`contract_type_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `employees`
@@ -368,12 +389,12 @@ CREATE TABLE IF NOT EXISTS `employees` (
 
 INSERT INTO `employees` (`id`, `user_id`, `nom`, `prenom`, `date_naissance`, `email_professionnel`, `email_personnel`, `matricule`, `telephone`, `code_postal`, `ville`, `pays`, `adresse`, `situation_familiale`, `nombre_enfants`, `entite_id`, `departement_id`, `poste_id`, `cin_numero`, `cin_date_delivrance`, `state`, `carte_sejour_numero`, `carte_sejour_date_delivrance`, `carte_sejour_date_expiration`, `carte_sejour_type`, `passeport_numero`, `passeport_date_delivrance`, `passeport_date_expiration`, `passeport_delai_validite`, `created_at`, `updated_at`, `contract_type_id`, `duree_contrat`, `debut_contrat`, `fin_contrat`, `image`, `sortie_balance`, `teletravail_days_balance`) VALUES
 (1, 1, 'fathallah', 'seifeddine', '1999-04-04', 'seifeddine.fathallah@csi-corporation.com', 'seifeddine@gmail.com', '7845', '9562623', '8745', 'Sidi Khaled', 'DZ', '562', 'Célibataire', 0, 1, 1, 1, '8751', '2020-04-04', '07', '8456', '2020-04-04', '2025-04-04', '8956', '95526', '2020-04-04', '2025-04-04', '79865', '2024-07-10 09:29:18', '2024-07-11 17:59:02', NULL, NULL, NULL, NULL, NULL, 2.00, 5),
-(2, 24, 'rayen', 'rayen', '1999-04-04', 'rayen.kharbech@csi-corporation.com', 'rayen.kharbech@gmail.com', '974865', '4784656', '646', 'Menzel Abderhaman', 'TN', '788745', 'Célibataire', 0, 1, 1, 1, '852', '2020-04-04', '23', '856', '2020-04-04', '2025-04-04', '8956', '9562', '2020-04-04', '2025-04-04', '85632', '2024-07-10 09:40:39', '2024-07-11 11:41:01', NULL, NULL, NULL, NULL, NULL, 2.00, 5),
-(3, 3, 'eazu', 'ijar', '1999-01-04', 'ahf@csi-corporation.com', 'aufh@gmail.com', '89645', '8532', '785', 'Aïn el Bya', 'DZ', '8785', 'Célibataire', 0, 1, 1, 1, '864', '2020-04-04', '31', '8458', '2020-04-04', '2025-04-04', '485zer', '984', '2020-09-08', '2025-04-04', '1669', '2024-07-12 11:09:03', '2024-07-12 11:09:03', NULL, NULL, NULL, NULL, NULL, 2.00, 5),
+(3, 3, 'eazu', 'ijar', '1999-01-04', 'ahf@csi-corporation.com', 'aufh@gmail.com', '89645', '8532', '1000', 'Jijel', 'DZ', '!jkhn', 'Célibataire', 0, 1, 1, 5, '864', '2020-04-04', '18', '2772uygf', '2021-10-01', '2028-10-01', 'bgfvdc', '984', '2020-09-08', '2025-04-04', '1669', '2024-07-12 11:09:03', '2024-08-05 07:32:17', 1, '1 ans, 0 mois', '2024-09-05', '2025-09-16', 'employees/bzCH8aVwQPQM76kM9cz6xC16MsRJ5W7IdTpuRGGu.jpg', 2.00, 5),
 (4, 12, 'rr', 'rr', '1999-06-11', 'kharbecherayen19@csi-corporation.com', 'qfev@gmail.com', '11111', '11447788', '7000', 'Bizerte', 'TN', 'bizerte', 'Célibataire', 0, 1, 1, 5, '11447788', '2023-02-11', '23', '2577', '2023-02-11', '2026-02-10', 'gjhrsg', NULL, NULL, NULL, NULL, '2024-07-24 07:53:57', '2024-07-24 07:53:57', NULL, '1 ans, 9 mois', '2024-07-27', '2026-05-24', NULL, 2.00, 5),
 (5, 14, 'rr', 'rr.rr', '2003-09-20', 'rayen.kharbech1@csi-corporation.com', 'emna@gmail.com', '11111', '11447788', '7000', 'Bizerte', 'TN', 'ain mariem', 'Célibataire', 0, 1, 4, 4, '11447788', '2020-10-10', '23', '2577666', '2020-10-10', '2026-12-04', 'ttrree', '11223366', '2020-10-10', '2026-10-10', '2191', '2024-07-29 07:31:28', '2024-07-29 07:31:28', 1, '1 ans, 10 mois', '2024-08-04', '2026-06-17', NULL, 2.00, 5),
 (6, 21, 'rrbbb', 'rrbbbbb', '2000-10-10', 'rayen.kharbech11@csi-corporation.com', 'rayen.kharbech44@gmail.com', '1414145', '11422020', '581', 'Oran', 'DZ', 'nf c', 'Célibataire', 0, 1, 1, 5, '25747250', '2020-02-10', '31', 'vrf', '2020-10-10', '2026-10-10', 'kj hgf', '2754KJHG', '2020-01-01', '2026-02-01', '2223', '2024-08-01 09:36:25', '2024-08-01 11:05:15', 1, '0 ans, 4 mois', '2024-08-27', '2024-12-13', NULL, 2.00, 5),
-(7, 22, 'kharbeche', 'rayen', '1997-11-22', 'rayen.kharbech24@csi-corporation.com', 'rayen.kharbech1@gmail.com', '1414145', '11447788', '21721', 'Bizerte Sud', 'TN', 'HKJGH', 'Célibataire', 0, 1, 1, 5, '25747250', '2020-10-10', '23', 'I54754', '2020-01-01', '2026-01-01', 'ttrreehgj,hng v', '2754KJHG', '2020-01-01', '2026-01-01', '2192', '2024-08-01 11:37:50', '2024-08-01 11:37:50', 1, '0 ans, 2 mois', '2024-09-03', '2024-11-22', NULL, 2.00, 5);
+(7, 22, 'kharbeche', 'rayen', '1997-11-22', 'rayen.kharbech24@csi-corporation.com', 'rayen.kharbech1@gmail.com', '1414145', '11447788', '7000', 'Bizerte', 'TN', 'vs', 'Célibataire', 0, 1, 1, 5, '25747250', '2020-10-10', '23', 'bgv', '2020-01-01', '2026-01-01', 'ml:kj,hg', '2754KJHG', '2020-01-01', '2026-01-01', '2192', '2024-08-01 11:37:50', '2024-08-05 07:25:36', 1, '1 ans, 2 mois', '2024-08-22', '2025-10-24', 'employees/cqIokj5lmCmHRHkg20nQrzej03T4mFh19zSmVBVp.jpg', 2.00, 5),
+(8, 27, 'kharbeche', 'rayenn', '1999-06-11', 'rayen.kharbech@csi-corporation.com', 'rayen.kharbech@gmail.com', '69', '11447788', '7000', 'Bizerte', 'TN', 'czdqxceqs', 'Célibataire', 0, 1, 1, 5, '11423038', '2019-02-01', '23', '2577666', '2020-01-01', '2026-01-01', 'gjhrsg', '28328hgfv', '2020-01-01', '2026-02-01', '2223', '2024-08-02 12:08:44', '2024-08-05 06:56:32', 1, '1 ans, 2 mois', '2024-08-29', '2025-10-02', 'employees/P66ybF6hiMATFWYtGZ0hvHVg8Q9P41XOD52GXDkl.jpg', 2.00, 5);
 
 -- --------------------------------------------------------
 
@@ -445,7 +466,16 @@ CREATE TABLE IF NOT EXISTS `failed_logins` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `failed_logins_email_index` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `failed_logins`
+--
+
+INSERT INTO `failed_logins` (`id`, `email`, `ip_address`, `user_agent`, `created_at`, `updated_at`) VALUES
+(1, 'rayen.kharbech@csi-corporation.com', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0', '2024-08-05 06:33:18', '2024-08-05 06:33:18'),
+(2, 'rayen.kharbech@csi-corporation.com', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0', '2024-08-05 06:38:46', '2024-08-05 06:38:46'),
+(3, 'rayen.kharbech@csi-corporation.com', '192.168.100.15', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0', '2024-08-05 08:09:00', '2024-08-05 08:09:00');
 
 -- --------------------------------------------------------
 
@@ -510,14 +540,14 @@ CREATE TABLE IF NOT EXISTS `laravel2step` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `laravel2step_userid_index` (`userId`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `laravel2step`
 --
 
 INSERT INTO `laravel2step` (`id`, `userId`, `authCode`, `authCount`, `authStatus`, `authDate`, `requestDate`, `created_at`, `updated_at`) VALUES
-(1, 1, 'S6OG', 0, 1, '2024-07-15 09:34:21', NULL, '2024-07-10 09:24:51', '2024-07-15 08:34:21'),
+(1, 1, 'X64X', 0, 1, '2024-08-02 11:58:49', NULL, '2024-07-10 09:24:51', '2024-08-02 10:58:49'),
 (2, 2, 'Y7WA', 0, 1, '2024-07-11 10:23:13', NULL, '2024-07-10 09:43:55', '2024-07-11 09:23:13'),
 (3, 4, '7PP6', 0, 1, '2024-07-18 08:35:01', NULL, '2024-07-18 07:34:40', '2024-07-18 07:35:01'),
 (4, 5, '1UON', 0, 1, '2024-07-19 07:43:22', NULL, '2024-07-19 06:43:05', '2024-07-19 06:43:22'),
@@ -534,7 +564,10 @@ INSERT INTO `laravel2step` (`id`, `userId`, `authCode`, `authCount`, `authStatus
 (15, 19, '54AI', 0, 1, '2024-07-31 20:16:32', NULL, '2024-07-31 19:16:14', '2024-07-31 19:16:32'),
 (16, 20, '7B8T', 0, 1, '2024-08-01 07:42:37', NULL, '2024-08-01 06:42:12', '2024-08-01 06:42:37'),
 (17, 23, '3IU9', 0, 1, '2024-08-02 07:49:39', NULL, '2024-08-02 06:49:06', '2024-08-02 06:49:39'),
-(18, 24, 'NW9G', 1, 1, '2024-08-02 09:50:59', '2024-08-02 09:52:21', '2024-08-02 08:50:39', '2024-08-02 08:52:21');
+(18, 24, 'NW9G', 1, 1, '2024-08-02 09:50:59', '2024-08-02 09:52:21', '2024-08-02 08:50:39', '2024-08-02 08:52:21'),
+(19, 25, 'I9KU', 0, 1, '2024-08-02 12:11:40', NULL, '2024-08-02 11:11:19', '2024-08-02 11:11:40'),
+(20, 26, 'FONJ', 0, 1, '2024-08-02 12:18:01', NULL, '2024-08-02 11:17:42', '2024-08-02 11:18:01'),
+(21, 27, '77UQ', 0, 1, '2024-08-06 07:35:19', NULL, '2024-08-02 11:20:55', '2024-08-06 06:35:19');
 
 -- --------------------------------------------------------
 
@@ -556,14 +589,15 @@ CREATE TABLE IF NOT EXISTS `loan_requests` (
   PRIMARY KEY (`id`),
   KEY `loan_requests_user_id_foreign` (`user_id`),
   KEY `loan_requests_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `loan_requests`
 --
 
 INSERT INTO `loan_requests` (`id`, `user_id`, `type`, `amount`, `status`, `comments`, `employee_id`, `created_at`, `updated_at`) VALUES
-(1, 20, 'Prêt', 200.00, 'En attente', NULL, 2, '2024-08-01 12:45:46', '2024-08-01 12:45:46');
+(2, 27, 'Prêt', 100.00, 'En attente', 'DGC FD XC', 8, '2024-08-02 12:28:49', '2024-08-06 06:37:11'),
+(3, 27, 'Avances', 400.00, 'En attente', 'RGDBDGBVX', 8, '2024-08-02 12:40:03', '2024-08-06 06:37:21');
 
 -- --------------------------------------------------------
 
@@ -583,14 +617,19 @@ CREATE TABLE IF NOT EXISTS `material_requests` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `material_requests_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `material_requests`
 --
 
 INSERT INTO `material_requests` (`id`, `employee_id`, `material_name`, `description`, `quantity`, `status`, `created_at`, `updated_at`) VALUES
-(1, 2, 'f g', 'fx', 100, 'approved', '2024-08-02 07:58:36', '2024-08-02 07:58:43');
+(1, 2, 'f g', 'fx', 100, 'approved', '2024-08-02 07:58:36', '2024-08-02 07:58:43'),
+(2, 8, 'gbd', 'fd', 10, 'approved', '2024-08-05 06:40:16', '2024-08-05 08:40:52'),
+(3, 8, 'NHGB', 'gbvd', 10, 'approved', '2024-08-05 08:44:48', '2024-08-05 08:44:54'),
+(4, 8, 'NHGB', 'v cw', 10, 'approved', '2024-08-05 08:52:47', '2024-08-05 08:52:53'),
+(5, 8, 'NHGB', 'qdw c', 20, 'approved', '2024-08-05 08:53:45', '2024-08-05 08:59:19'),
+(6, 8, 'NHGB', 'v d wxc', 20, 'pending', '2024-08-05 09:01:47', '2024-08-05 09:01:47');
 
 -- --------------------------------------------------------
 
@@ -604,7 +643,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `migrations`
@@ -655,7 +694,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (58, '2024_07_26_111235_create_intervention_requests_table', 16),
 (59, '2024_07_26_132748_create_supply_requests_table', 16),
 (60, '2024_07_29_074553_create_material_requests_table', 16),
-(61, '2024_07_29_090044_create_specific_requests_table', 16);
+(61, '2024_07_29_090044_create_specific_requests_table', 16),
+(62, '0000_00_00_000000_create_websockets_statistics_entries_table', 17),
+(63, '2024_08_06_113636_create_divers_table', 17),
+(64, '2024_08_06_113810_create_divers_table', 18);
 
 -- --------------------------------------------------------
 
@@ -772,14 +814,16 @@ CREATE TABLE IF NOT EXISTS `specific_requests` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `specific_requests_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `specific_requests`
 --
 
 INSERT INTO `specific_requests` (`id`, `employee_id`, `request_type`, `description`, `status`, `created_at`, `updated_at`) VALUES
-(1, 2, 'TY', 'yvgihbjkml', 'approved', '2024-08-02 07:02:51', '2024-08-02 07:58:56');
+(1, 2, 'TY', 'yvgihbjkml', 'approved', '2024-08-02 07:02:51', '2024-08-02 07:58:56'),
+(2, 8, 'TY', 'bvhcgbfdc', 'approved', '2024-08-02 12:12:13', '2024-08-02 12:12:19'),
+(3, 8, 'fgbv', 'bgfv', 'approved', '2024-08-05 06:39:58', '2024-08-05 08:03:04');
 
 -- --------------------------------------------------------
 
@@ -830,14 +874,16 @@ CREATE TABLE IF NOT EXISTS `supply_requests` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `supply_requests_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `supply_requests`
 --
 
 INSERT INTO `supply_requests` (`id`, `employee_id`, `item_name`, `quantity`, `status`, `created_at`, `updated_at`) VALUES
-(1, 2, 'ugkbhj', 200, 'approved', '2024-08-02 07:19:26', '2024-08-02 07:58:03');
+(1, 2, 'ugkbhj', 200, 'approved', '2024-08-02 07:19:26', '2024-08-02 07:58:03'),
+(2, 8, 'cfg', 100, 'approved', '2024-08-02 12:10:03', '2024-08-02 12:10:09'),
+(3, 8, 'h', 20, 'pending', '2024-08-05 06:40:38', '2024-08-05 06:40:38');
 
 -- --------------------------------------------------------
 
@@ -900,20 +946,38 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `email`, `email_verified_at`, `password`, `provider`, `provider_id`, `provider_token`, `remember_token`, `created_at`, `updated_at`, `onesignal_player_id`, `failed_attempts`) VALUES
-(1, 'seifeddine fathallah', 'seifeddine.fathallah', 'seifeddine.fathallah@csi-corporation.com', '2024-07-10 09:24:51', '$2y$10$3riMo58v/eL12SxVVNKmL.r14xLLE8/nE/wkLYQk2YfCB23p/Gnjm', NULL, NULL, NULL, NULL, '2024-07-10 09:24:34', '2024-07-10 09:24:51', NULL, 0),
+(1, 'seifeddine fathallah', 'seifeddine.fathallah', 'seifeddine.fathallah@csi-corporation.com', '2024-07-10 09:24:51', '$2y$10$3riMo58v/eL12SxVVNKmL.r14xLLE8/nE/wkLYQk2YfCB23p/Gnjm', NULL, NULL, NULL, 'Y5e8paQs7TleIYvtcusYde7ta9HgYlG3IXdGAvLCMm5HU2T4JPghT69vTbgM', '2024-07-10 09:24:34', '2024-07-10 09:24:51', NULL, 0),
 (12, 'rr', 'rr.rr', 'kharbecherayen19@csi-corporation.com', NULL, '$2y$10$OoxM5wN8W4B11JOCMou0heKHGNeCvCaHTfhm8ldBmIJ03LkFtdzjC', NULL, NULL, NULL, NULL, '2024-07-24 07:53:57', '2024-07-24 07:53:57', NULL, 0),
 (3, 'ijar eazu', 'ijar.eazu', 'ahf@csi-corporation.com', NULL, '$2y$10$HaEHR1DfUs.h89Sb1aZlQOhcA.U8eHMgPpsyfz7jljHrDSd4Alngm', NULL, NULL, NULL, NULL, '2024-07-12 11:09:03', '2024-07-12 11:09:03', NULL, 0),
-(24, 'rayen kharbeche', 'rayen', 'rayen.kharbech@csi-corporation.com', '2024-08-02 08:50:38', '$2y$10$GbvSOORFUTkSgbSGIS5G2u1rhT6NlP.Vdc9wCyX4ZgmWoccPK.Nc6', NULL, NULL, NULL, NULL, '2024-08-02 08:50:20', '2024-08-02 08:50:38', NULL, 0),
 (15, 'rr', 'rr.rr.rr', 'rayen.kharbech1@csi-corporation.com', NULL, '$2y$10$4IB8pHosgilmiQtzUthdSuaJKoUVGS7WDTlZbiXK8N2NZK9kuJO9G', NULL, NULL, NULL, NULL, '2024-07-29 07:31:28', '2024-07-29 07:31:28', NULL, 0),
 (21, 'rrbbb', 'rrbbbbb.rrbbb', 'rayen.kharbech14@csi-corporation.com', NULL, '$2y$10$PVCAkQtIzz12r9Y.WgYQ..H5l522Ot3gRZFSEDZiYpi9cJfdrDk3C', NULL, NULL, NULL, NULL, '2024-08-01 09:36:25', '2024-08-01 09:36:25', NULL, 0),
-(22, 'kharbeche', 'rayen.kharbeche', 'rayen.kharbech24@csi-corporation.com', NULL, '$2y$10$RPQA0zBJntr8ToW2qmXF8O5OP7NyKFPdGiknrfNpCA5ZQ7UshZJYi', NULL, NULL, NULL, NULL, '2024-08-01 11:37:50', '2024-08-01 11:37:50', NULL, 0);
+(22, 'rayen kharbeche', 'rayen.kharbeche', 'rayen.kharbech24@csi-corporation.com', NULL, '$2y$10$RPQA0zBJntr8ToW2qmXF8O5OP7NyKFPdGiknrfNpCA5ZQ7UshZJYi', NULL, NULL, NULL, NULL, '2024-08-01 11:37:50', '2024-08-05 07:24:43', NULL, 0),
+(27, 'rayenn kharbeche', 'rayenn.kharbeche', 'rayen.kharbech@csi-corporation.com', '2024-08-02 11:20:55', '$2y$10$l3WViS2FBL3w8VnBR0GzMutuEv1kMCk9XCBIBEZ.Os0hr1L/ziOVm', NULL, NULL, NULL, NULL, '2024-08-02 11:20:44', '2024-08-05 06:56:32', NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `websockets_statistics_entries`
+--
+
+DROP TABLE IF EXISTS `websockets_statistics_entries`;
+CREATE TABLE IF NOT EXISTS `websockets_statistics_entries` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `app_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `peak_connection_count` int NOT NULL,
+  `websocket_message_count` int NOT NULL,
+  `api_message_count` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

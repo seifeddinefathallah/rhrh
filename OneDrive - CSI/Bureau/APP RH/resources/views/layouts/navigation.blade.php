@@ -240,8 +240,8 @@
                       <div data-i18n="Error">Demandes Prêt Avances </div>
                     </a>
                   </li> 
-                  <li class="menu-item {{ request()->is('intervention-requests/*') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}"">
-                    <a href="{{ route('loan_requests.index') }}" class="menu-link" >
+                  <li class="menu-item {{ request()->is('') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}"">
+                    <a href="{{ route('select-demande') }}" class="menu-link" >
                       <div data-i18n="Error">Demandes Divers </div>
                     </a>
                   </li> 

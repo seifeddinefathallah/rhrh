@@ -1,6 +1,9 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12">
+            <div class="mb-3 custom-margin-bottom">
+                <a href="{{ route('postes.create') }}" class="btn btn-primary float-end">Ajouter un poste</a>
+            </div>
         <input type="text" wire:model.debounce.300ms="searchTerm" placeholder="Chercher postes" class="form-control mb-3" aria-label="Search" />
         </div>
 
@@ -107,3 +110,8 @@
             });
         });
     </script>
+<style>
+    .custom-margin-bottom {
+        margin-bottom: 20px; /* Ajustez selon vos besoins */
+    }
+</style>

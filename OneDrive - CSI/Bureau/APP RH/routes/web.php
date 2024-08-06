@@ -25,6 +25,7 @@ use App\Http\Controllers\SupplyRequestController;
 use App\Http\Controllers\MaterialRequestController;
 use App\Http\Controllers\SpecificRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\DiversController;
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -208,6 +209,8 @@ Route::delete('/specific-requests/{specificRequest}', [SpecificRequestController
 Route::get('/specific-requests/{specificRequest}/edit', [SpecificRequestController::class, 'edit'])->name('specific_requests.edit');
 Route::put('/specific-requests/{specificRequest}/approve', [SpecificRequestController::class, 'approve'])->name('specific_requests.approve');
 Route::put('/specific-requests/{specificRequest}/reject', [SpecificRequestController::class, 'reject'])->name('specific_requests.reject');
+
+Route::get('/select-demande', [DiversController::class, 'showSelectDemande'])->name('select-demande');
 
 Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 require __DIR__.'/auth.php';
