@@ -1,7 +1,11 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12">
-
+            <div class="mb-3">
+                <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour</a>
+               <a href="{{ route('intervention-requests.create') }}" class="btn btn-primary float-end">Créer</a>
+            </div>
+        
             <!-- Search Form -->
             <input type="text" wire:model.debounce.300ms="search" placeholder="Chercher par nom ou prénom de l'employé" class="form-control form-control-navbar" aria-label="Search" />
 
@@ -145,10 +149,12 @@
             });
         });
 
+        
+    </script>
+    <script>
         // Function for handling approve action
-        function confirmApprove(event) {
+        function confirmApprove(event, id) {
             event.preventDefault(); // Prevent the default form submission
-
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You want to approve this request! 👍",
@@ -161,7 +167,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Submit the form
-                    event.target.closest('form').submit();
+                    document.getElementById('approve-form-' + id).submit();
                     Swal.fire(
                         'Approved!',
                         'The request has been approved.',
@@ -170,11 +176,10 @@
                 }
             });
         }
-
+    
         // Function for handling reject action
-        function confirmReject(event) {
+        function confirmReject(event, id) {
             event.preventDefault(); // Prevent the default form submission
-
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You want to reject this request! ❌",
@@ -187,7 +192,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Submit the form
-                    event.target.closest('form').submit();
+                    document.getElementById('reject-form-' + id).submit();
                     Swal.fire(
                         'Rejected!',
                         'The request has been rejected.',

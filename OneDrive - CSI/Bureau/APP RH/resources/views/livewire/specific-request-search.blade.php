@@ -146,52 +146,56 @@
             });
         });
     });
-
-    function confirmApprove(event) {
-        event.preventDefault();
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to approve this request! 👍",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, approve it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.closest('form').submit();
-                Swal.fire(
-                    'Approved!',
-                    'The request has been approved.',
-                    'success'
-                );
-            }
-        });
-    }
-
-    function confirmReject(event) {
-        event.preventDefault();
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to reject this request! ❌",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, reject it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                event.target.closest('form').submit();
-                Swal.fire(
-                    'Rejected!',
-                    'The request has been rejected.',
-                    'success'
-                );
-            }
-        });
-    }
 </script>
+
+<script>
+    function confirmApprove(event, id) {
+event.preventDefault(); // Prevent the default link action
+
+Swal.fire({
+ title: 'Are you sure?',
+ text: "You want to approve this request! 👍",
+ icon: 'warning',
+ showCancelButton: true,
+ confirmButtonColor: '#3085d6',
+ cancelButtonColor: '#d33',
+ confirmButtonText: 'Yes, approve it!',
+ cancelButtonText: 'Cancel'
+}).then((result) => {
+ if (result.isConfirmed) {
+     document.getElementById('approve-form-' + id).submit();
+     Swal.fire(
+         'Approved!',
+         'The request has been approved.',
+         'success'
+     );
+ }
+});
+}
+
+function confirmReject(event, id) {
+event.preventDefault(); // Prevent the default link action
+
+Swal.fire({
+ title: 'Are you sure?',
+ text: "You want to reject this request! ❌",
+ icon: 'warning',
+ showCancelButton: true,
+ confirmButtonColor: '#3085d6',
+ cancelButtonColor: '#d33',
+ confirmButtonText: 'Yes, reject it!',
+ cancelButtonText: 'Cancel'
+}).then((result) => {
+ if (result.isConfirmed) {
+     document.getElementById('reject-form-' + id).submit();
+     Swal.fire(
+         'Rejected!',
+         'The request has been rejected.',
+         'success'
+     );
+ }
+});
+}
+
+ </script>
+

@@ -52,7 +52,7 @@
                             </a>
                 
                             @if($request->status === 'pending')
-                            <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')">
+                            <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')" >
                                 <i class="bx bx-check-circle me-1 text-success" ></i> Approve
                             </a>
                 
@@ -147,55 +147,52 @@
             });
         </script>
         <script>
-            // Function for handling approve action
-            function confirmApprove(event) {
-                event.preventDefault(); // Prevent the default form submission
+           function confirmApprove(event, id) {
+    event.preventDefault(); // Prevent the default link action
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to approve this request! 👍",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, approve it!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit the form
-                        event.target.closest('form').submit();
-                        Swal.fire(
-                            'Approved!',
-                            'The request has been approved.',
-                            'success'
-                        );
-                    }
-                });
-            }
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to approve this request! 👍",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, approve it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('approve-form-' + id).submit();
+            Swal.fire(
+                'Approved!',
+                'The request has been approved.',
+                'success'
+            );
+        }
+    });
+}
 
-            // Function for handling reject action
-            function confirmReject(event) {
-                event.preventDefault(); // Prevent the default form submission
+function confirmReject(event, id) {
+    event.preventDefault(); // Prevent the default link action
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to reject this request! ❌",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, reject it!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit the form
-                        event.target.closest('form').submit();
-                        Swal.fire(
-                            'Rejected!',
-                            'The request has been rejected.',
-                            'success'
-                        );
-                    }
-                });
-            }
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to reject this request! ❌",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, reject it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('reject-form-' + id).submit();
+            Swal.fire(
+                'Rejected!',
+                'The request has been rejected.',
+                'success'
+            );
+        }
+    });
+}
+
         </script>

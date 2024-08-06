@@ -27,8 +27,8 @@
         </div>
 
         <div class="mb-3">
-          
-            <a href="{{ route('specific_requests.create') }}"  class="btn btn-primary float-end">Create New Request</a>
+            <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour</a>
+            <a href="{{ route('specific_requests.create') }}"  class="btn btn-primary float-end">Créer</a>
         </div>
     </div>
 @endsection
