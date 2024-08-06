@@ -76,10 +76,10 @@
             </div>
             
         </div>
-        <div class="mt-6 flex gap-4  float-end">
-                <a href="{{ route('contract-types.edit', $contractType->id) }}" class="btn btn-primary float-end">Edit</a>
-                <a href="{{ route('contract-types.index') }}" class="btn btn-secondary ">Back</a>
-            </div>
+        <div class="mt-4">     
+                <a href="{{ route('contract-types.index') }}" class="btn btn-secondary float-end ">Retour</a>
+                <a href="{{ route('contract-types.edit', $contractType->id) }}" class="btn btn-primary float-end">Sauvegarder</a>
+        </div>
     </div>
 </div>
 @endsection

@@ -145,6 +145,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('loan_requests', LoanRequestController::class);
     Route::post('/loan_requests/{loanRequest}/update-status', [ApprovalHistoryController::class, 'update'])->name('loan_requests.update_status');
 });
+Route::put('/loan_requests/{id}/approve', [LoanRequestController::class, 'approve'])->name('loan_requests.approve');
+Route::put('/loan_requests/{id}/reject', [LoanRequestController::class, 'reject'])->name('loan_requests.reject');
 
 
 Route::resource('contract-types', 'App\Http\Controllers\ContractTypeController');

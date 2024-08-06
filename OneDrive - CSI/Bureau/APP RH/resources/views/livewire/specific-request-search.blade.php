@@ -97,11 +97,8 @@
                                     </div>
                                 </div>
                             </div>
-                        
-                           
                         </td>
-                        
-                    </tr>
+                   </tr>
                 @empty
                     <tr>
                         <td colspan="6" class="text-center">No results found.</td>

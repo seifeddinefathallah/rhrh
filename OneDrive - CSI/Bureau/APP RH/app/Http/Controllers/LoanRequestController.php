@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\LoanRequestNotification;
+use App\Notifications\LoanRequestUpdateNotification;
+Use App\Http\Controllers\LoanRequestStatusUpdated;
 use App\Models\User;
 use App\Models\Employee;
+use Illuminate\Support\Facades\Mail;
 
 class LoanRequestController extends Controller
 {
@@ -85,28 +88,48 @@ class LoanRequestController extends Controller
         return redirect()->route('loan_requests.index')->with('success', 'Demande mise à jour avec succès.');
     }
 
-    public function approve(Request $request, LoanRequest $loanRequest)
+    public function approve(LoanRequest $loanRequest)
     {
-        // Logique d'approbation
-        $loanRequest->update(['status' => 'approved']);
-
-        // Envoyer une notification au demandeur
-        $loanRequest->user->notify(new LoanRequestApproved($loanRequest));
-
-        return redirect()->route('loan_requests.index')->with('success', 'La demande a été approuvée.');
+        // Eager load employee relationship
+        $loanRequest->load('employee');
+    
+        // Check if employee is not null
+        if ($loanRequest->employee) {
+            $loanRequest->update(['status' => 'approved']);
+    
+            // Envoyer une notification par e-mail au demandeur
+            Mail::to($loanRequest->employee->email_professionnel)
+                ->send(new LoanRequestStatusUpdated($loanRequest));
+    
+            return redirect()->route('loan_requests.index')
+                ->with('success', 'La demande a été approuvée.');
+        } else {
+            return redirect()->route('loan_requests.index')
+                ->with('error', 'L\'employé associé à cette demande n\'a pas été trouvé.');
+        }
     }
-
-    public function reject(Request $request, LoanRequest $loanRequest)
+    
+    public function reject(LoanRequest $loanRequest)
     {
-        // Logique de rejet
-        $loanRequest->update(['status' => 'rejected']);
-
-        // Envoyer une notification au demandeur
-        $loanRequest->user->notify(new LoanRequestRejected($loanRequest));
-
-        return redirect()->route('loan_requests.index')->with('success', 'La demande a été rejetée.');
+        // Eager load employee relationship
+        $loanRequest->load('employee');
+    
+        // Check if employee is not null
+        if ($loanRequest->employee) {
+            $loanRequest->update(['status' => 'rejected']);
+    
+            // Envoyer une notification par e-mail au demandeur
+            Mail::to($loanRequest->employee->email_professionnel)
+                ->send(new LoanRequestStatusUpdated($loanRequest));
+    
+            return redirect()->route('loan_requests.index')
+                ->with('success', 'La demande a été rejetée.');
+        } else {
+            return redirect()->route('loan_requests.index')
+                ->with('error', 'L\'employé associé à cette demande n\'a pas été trouvé.');
+        }
     }
-
+    
     public function updateStatus(Request $request, LoanRequest $loanRequest)
     {
         // Validez les données reçues du formulaire, si nécessaire

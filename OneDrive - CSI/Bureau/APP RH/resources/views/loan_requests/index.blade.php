@@ -4,11 +4,11 @@
              
         <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
             <div class=" container-xxl flex-grow-1 container-p-y">  
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+          
                 <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
             {{ __('Les demandes') }}
         </h2>
-                <div class="p-6 bg-white border-b border-gray-200">
+               
                     
                     @if ($message = Session::get('success'))
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -24,11 +24,7 @@
                         });
                     </script>
                     @endif
-                 
-            
-                </div>
-               
-                
+              
                 @livewire('loan-request-search')
                 
                 <div class="mb-4">
@@ -37,4 +33,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

@@ -155,13 +155,10 @@
                   
                 </li>
   
-                <li class="menu-header small text-uppercase">
-                  <span class="menu-header-text" style="display: block; text-align: center;">Entites            & Departements & Postes</span>
-              </li>
               <li class="menu-item {{ request()->is('departements') || request()->is('departements/create') || request()->is('postes') || request()->is('postes/create') || request()->is('entites') || request()->is('entites/create') ? 'active' : '' }}">
                   <a href="#" class="menu-link menu-toggle">
                       <i class="menu-icon tf-icons bx bx-dock-top" ></i>
-                      <div data-i18n="Account Settings" style="display: block; ">Entites & Departements & Postes</div>
+                      <div data-i18n="Account Settings" style="display: block; ">Structure d'entreprise</div>
                   </a>
                   <ul class="menu-sub">
                       <li class="menu-item {{ request()->is('entites') || request()->is('entites/create') ? 'active' : '' }}">
@@ -225,29 +222,35 @@
               
               
               
-              <li class="menu-header small text-uppercase">
-                <span class="menu-header-text" style="display: block; text-align: center;">Documents
-                   </span>
-              </li> 
               <li class="menu-item {{ request()->is('requests') ? 'active' : ''}}">
                 <a href="" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-detail"></i>
-                  <div data-i18n="Authentications" >Documents</div>
+                  <div data-i18n="Authentications" >Demandes </div>
                 </a>
          
               <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('requests') ? 'active' : ''}}">
                     <a href="{{ route('requests.index') }}" class="menu-link" target="_blank">
-                      <div data-i18n="Basic">Administrative Documents</div>
+                      <div data-i18n="Basic">Demandes administratives</div>
                     </a>
                   </li>
+                
+                  <li class="menu-item {{ request()->is('loan_requests') ? 'active' : ''}}">
+                    <a href="{{ route('loan_requests.index') }}" class="menu-link" >
+                      <div data-i18n="Error">Demandes Prêt Avances </div>
+                    </a>
+                  </li> 
+                  <li class="menu-item {{ request()->is('intervention-requests/*') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}"">
+                    <a href="{{ route('loan_requests.index') }}" class="menu-link" >
+                      <div data-i18n="Error">Demandes Divers </div>
+                    </a>
+                  </li> 
            
                 </ul>
             
            
-              <!-- Authorizations -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text" style="display: block; text-align: center;">Authorizations
-            </span></li>
+          
+             
               <!-- Authorizations-->
               <li class="menu-item {{ request()->is('authorizations') ? 'active' : ''}}">
                 <a href="{{ route('authorizations.index') }}" class="menu-link">
@@ -257,29 +260,12 @@
                 </a>
               </li>
             
-              <li class="menu-header small text-uppercase">
-                <span class="menu-header-text" style="display: block; text-align: center;">Mes demandes </span>
-              </li> 
-              <li class="menu-item {{ request()->is('loan_requests') ? 'active' : ''}}">
-                <a href="{{ route('loan_requests.index') }}" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bx-collection"style="color: white;"></i>
-                  <div data-i18n="Boxicons" style="display: block; text-align: center;">Mes demandes</div>
-                </a>
-
-                <ul class="menu-sub">
-                  <li class="menu-item {{ request()->is('loan_requests') ? 'active' : ''}}">
-                    <a href="{{ route('loan_requests.index') }}" class="menu-link" >
-                      <div data-i18n="Error">Demandes Prêt Avances </div>
-                    </a>
-                  </li> 
-
-                </ul>
+             
+            
              <!-- </li>
   
                Forms & Tables &amp;-->
-               <li class="menu-header small text-uppercase">
-                <span class="menu-header-text" style="display: block; text-align: center;">Types Contrats</span>
-              </li>
+              
               <!-- Forms -->
               <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
                 <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
@@ -301,10 +287,8 @@
 
                 </ul>
               </li>
-              <li class="menu-header small text-uppercase">
-                <span class="menu-header-text" style="display: block; text-align: center;">Demandes Divers</span>
-            </li>
-            <li class="menu-item {{ request()->is('intervention-requests/*') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}">
+             
+          <!--  <li class="menu-item {{ request()->is('intervention-requests/*') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}">
                 <a href="#" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-show-alt "style="color: white;"></i>
                     <div data-i18n="Boxicons"style="color: white;">Demandes Divers</div>
@@ -331,8 +315,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
-            
+            </li>-->
          
           </aside>
    

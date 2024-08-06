@@ -60,6 +60,9 @@
                             </div>
                         </form>
                     </div>
+                    <div class="mb-3">
+                        <a href="{{ route('employees.create') }}" class="btn btn-primary float-end">Create Employee</a>
+                    </div>
    </div>
         </div>
                     <!-- Livewire Component and Pagination -->
@@ -68,9 +71,7 @@
                         @livewire('employee-search')
 
                         <!-- Create Employee Button -->
-                        <div class="mb-3">
-                            <a href="{{ route('employees.create') }}" class="btn btn-primary float-end">Create Employee</a>
-                        </div>
+                        
                     </div>
                 </div>
          
