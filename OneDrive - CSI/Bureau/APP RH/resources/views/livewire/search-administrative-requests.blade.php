@@ -1,9 +1,10 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12">
+            <a href="{{ route('requests.create') }}" class="btn btn-primary float-end">Créer Demande</a>
     <input type="text" wire:model.debounce.300ms="searchTerm" placeholder="Chercher par nom ou prénom de l'employé" class="form-control mb-3" aria-label="Search" />
 
-    <div class="table-responsive">
+ 
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead class="bg-gray-50">
@@ -33,6 +34,15 @@
                             <span class="badge bg-label-success me-1">{{ $request->status }}</span>
                         @endif
                     </td>
+                    <form id="approve-form-{{ $request->id }}" action="{{ route('requests.approve', $request->id) }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('PUT')
+                    </form>
+                    <form id="reject-form-{{ $request->id }}" action="{{ route('requests.reject', $request->id) }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('PUT')
+                    </form>
+
                     <td>
                         <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -66,10 +76,10 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="alert alert-danger alert-dismissible">
-                                        Êtes-vous sûr de vouloir supprimer cette demande ?
+                                        Êtes-vous sûr de vouloir supprimer cette demande ?tn-secondary" data-bs-dismiss="modal">Annuler</button>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn b
                                         <form action="{{ route('requests.destroy', $request->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -123,4 +133,55 @@
         });
     });
 </script>
+<script>
+    function confirmApprove(event, id) {
+event.preventDefault(); // Prevent the default link action
+
+Swal.fire({
+ title: 'Are you sure?',
+ text: "You want to approve this request! 👍",
+ icon: 'warning',
+ showCancelButton: true,
+ confirmButtonColor: '#3085d6',
+ cancelButtonColor: '#d33',
+ confirmButtonText: 'Yes, approve it!',
+ cancelButtonText: 'Cancel'
+}).then((result) => {
+ if (result.isConfirmed) {
+     document.getElementById('approve-form-' + id).submit();
+     Swal.fire(
+         'Approved!',
+         'The request has been approved.',
+         'success'
+     );
+ }
+});
+}
+
+function confirmReject(event, id) {
+event.preventDefault(); // Prevent the default link action
+
+Swal.fire({
+ title: 'Are you sure?',
+ text: "You want to reject this request! ❌",
+ icon: 'warning',
+ showCancelButton: true,
+ confirmButtonColor: '#3085d6',
+ cancelButtonColor: '#d33',
+ confirmButtonText: 'Yes, reject it!',
+ cancelButtonText: 'Cancel'
+}).then((result) => {
+ if (result.isConfirmed) {
+     document.getElementById('reject-form-' + id).submit();
+     Swal.fire(
+         'Rejected!',
+         'The request has been rejected.',
+         'success'
+     );
+ }
+});
+}
+
+ </script>
+
 

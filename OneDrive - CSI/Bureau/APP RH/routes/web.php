@@ -96,6 +96,8 @@ Route::get('/requests/{request}/edit', [AdministrativeRequestController::class, 
 Route::put('/requests/{administrativeRequest}', [AdministrativeRequestController::class, 'update'])->name('requests.update');
 Route::delete('/requests/{request}', [AdministrativeRequestController::class, 'destroy'])->name('requests.destroy');
 Route::get('/requests/{id}/approve', [AdministrativeRequestController::class, 'approveRequest']);
+Route::put('/requests/{request}/approve', [AdministrativeRequestController::class, 'approveRequest'])->name('requests.approve');
+Route::put('/requests/{request}/reject', [AdministrativeRequestController::class, 'rejectRequest'])->name('requests.reject');
 
 Route::resource('entites', EntiteController::class);
 

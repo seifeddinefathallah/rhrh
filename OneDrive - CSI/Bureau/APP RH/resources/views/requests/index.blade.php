@@ -4,7 +4,7 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg"> 
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-6">
+                <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
                     {{ __('Liste des demandes administratives') }}
                 </h2>
 
@@ -48,7 +48,7 @@
                 </script>
         
 
-                <!-- Actions and Search -->   <a href="{{ route('requests.create') }}" class="btn btn-primary">Créer Demande</a>
+                <!-- Actions and Search --> 
                 <div class="mb-4 flex justify-between items-center">
                  
                     <livewire:search-administrative-requests />

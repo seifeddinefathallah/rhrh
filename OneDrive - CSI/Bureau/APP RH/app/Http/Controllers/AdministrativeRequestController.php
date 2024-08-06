@@ -14,6 +14,8 @@ use App\Mail\NewAdministrativeRequestNotification;
 use App\Mail\UpdateAdministrativeRequestStatusNotification;
 use App\Services\PdfService;
 use App\Mail\DocumentMail;
+use App\Mail\AdministrativeRequestStatusUpdated;
+use Illuminate\Support\Facades\Log;
 class AdministrativeRequestController extends Controller
 {
     protected $pdfService;
@@ -121,7 +123,7 @@ class AdministrativeRequestController extends Controller
         $this->pdfService = $pdfService;
     }
 
-    public function approveRequest($id)
+    /*public function approveRequest($id)
     {
         $administrativeRequest = AdministrativeRequest::findOrFail($id);
 
@@ -141,5 +143,40 @@ class AdministrativeRequestController extends Controller
         }
 
         return response()->json(['message' => 'La demande n\'est pas approuvée.'], 400);
+    }*/
+
+    public function approveRequest($id)
+{
+    $request = AdministrativeRequest::findOrFail($id);
+    $request->update(['status' => 'approuvé']);
+
+    if ($request->employee && !empty($request->employee->email_professionnel)) {
+        Mail::to($request->employee->email_professionnel)
+            ->send(new AdministrativeRequestStatusUpdated($request));
+        Log::info('E-mail envoyé à : ' . $request->employee->email_professionnel);
+    } else {
+        Log::warning('L\'employé n\'a pas d\'adresse e-mail valide.');
     }
+
+    return redirect()->route('requests.index')
+        ->with('success', 'La demande a été approuvée.');
+}
+
+public function rejectRequest($id)
+{
+    $request = AdministrativeRequest::findOrFail($id);
+    $request->update(['status' => 'rejeté']);
+
+    if ($request->employee && !empty($request->employee->email_professionnel)) {
+        Mail::to($request->employee->email_professionnel)
+            ->send(new AdministrativeRequestStatusUpdated($request));
+        Log::info('E-mail envoyé à : ' . $request->employee->email_professionnel);
+    } else {
+        Log::warning('L\'employé n\'a pas d\'adresse e-mail valide.');
+    }
+
+    return redirect()->route('requests.index')
+        ->with('success', 'La demande a été rejetée.');
+}
+
 }
