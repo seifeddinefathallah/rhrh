@@ -7,7 +7,11 @@
         <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
             {{ __('Authorization Requests') }}
         </h2>
-
+        <div class="mb-3">
+            <a href="{{ route('authorizations.create') }}" class="btn btn-primary float-end">
+                {{ __('Créer une autorization') }}
+            </a>
+        </div>
         @if(session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {

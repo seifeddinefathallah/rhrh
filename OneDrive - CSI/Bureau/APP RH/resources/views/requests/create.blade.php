@@ -10,20 +10,16 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
              
-                        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
                             {{ __('Créer une demande administrative') }}
                         </h2>
 
                     
                     <form action="{{ route('requests.store') }}" method="POST">
                         @csrf
-                        <div class="mb-3">
-                            <label for="employee_id" class="form-label">Employé</label>
-                            <select name="employee_id" id="employee_id" class="form-control">
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->prenom }} {{ $employee->nom }}</option>
-                                @endforeach
-                            </select>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="employee_name" value="{{ $employee->nom }}" readonly>
+                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
                         </div>
                         <div class="mb-4">
                             <label for="type" class="block text-sm font-medium text-gray-700">Type de demande</label>
@@ -33,7 +29,11 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="mt-4 d-flex justify-content-end gap-2"> 
                         <button type="submit" class="btn btn-primary">Créer la demande</button>
+                        <a href="{{ route('requests.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+                        </div>
                     </form>
                 </div>
             </div>

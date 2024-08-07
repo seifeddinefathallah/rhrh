@@ -53,6 +53,7 @@
                             <button type="submit" class="btn btn-primary">
                                 Update
                             </button>
+                            <a href="{{ route('authorizations.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
                         </div>
                     </form>
                 </div>

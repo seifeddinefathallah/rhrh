@@ -5,7 +5,9 @@
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg"> 
     <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Demandes de fournitures</h2>
-        @if(session('success'))
+    
+    
+    @if(session('success'))
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
@@ -21,10 +23,6 @@
         @endif
         
         @livewire('supply-search')
-        <div class="mb-3">
-            <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour</a>
-        <a href="{{ route('supply_requests.create') }}" class="btn btn-primary float-end">Créer</a>
-        
-    </div>
+       
     </div>
 @endsection

@@ -8,20 +8,7 @@
                     {{ __('Liste des demandes administratives') }}
                 </h2>
 
-                <!-- Success and Error Messages -->
-                @if(session('success'))
-                <div class="alert alert-success mb-4">
-                    <strong class="font-bold">Success!</strong>
-                    <span>{{ session('success') }}</span>
-                </div>
-                @endif
-
-                @if(session('error'))
-                <div class="alert alert-error mb-4">
-                    <strong class="font-bold">Error!</strong>
-                    <span>{{ session('error') }}</span>
-                </div>
-                @endif
+            
 
                 <!-- SweetAlert2 Notification -->
             

@@ -64,9 +64,11 @@
                                             <a class="dropdown-item" href="{{ route('authorizations.show', $authorization->id) }}">
                                                 <i class="bx bx-show me-1 text-success"></i> Show
                                             </a>
+                                            @if($authorization->status === 'pending')
                                             <a class="dropdown-item" href="{{ route('authorizations.edit', $authorization->id) }}">
                                                 <i class="bx bx-edit-alt me-1 text-warning"></i> Edit
                                             </a>
+                                            @endif
                                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $authorization->id }}">
                                                 <i class="bx bx-trash me-1 text-danger"></i> Delete
                                             </a>
@@ -108,11 +110,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="mb-3">
-                        <a href="{{ route('authorizations.create') }}" class="btn btn-primary float-end">
-                            {{ __('Créer une autorization') }}
-                        </a>
-                    </div>
+                  
                     <div class="mt-3">
                         {{ $authorizations->links('pagination::bootstrap-4') }}
                     </div>

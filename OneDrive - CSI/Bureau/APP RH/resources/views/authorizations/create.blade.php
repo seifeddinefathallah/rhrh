@@ -8,7 +8,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200"> 
                      <h2 class="font-semibold text-xl text-center leading-tight mb-6" style="color: #03428e;">
-        {{ __('Create Authorization Request') }}
+        {{ __('Créer une autorisation') }}
     </h2>
                     <form action="{{ route('authorizations.store') }}" method="POST">
                         @csrf
@@ -75,10 +75,11 @@
 
                         <input type="hidden" name="status" id="status" value="pending">
 
-                        <div class="flex items-center justify-end mt-4">
+                        <div class="mt-4 d-flex justify-content-end gap-2"> 
                             <button type="submit" class="btn btn-primary">
-                                {{ __('Create Authorization Request') }}
+                                {{ __('Créer une autorisation') }}
                             </button>
+                            <a href="{{ route('authorizations.index') }}" class="btn btn-secondary float-end ">Retour  à la liste</a>
                         </div>
                     </form>
                 </div>

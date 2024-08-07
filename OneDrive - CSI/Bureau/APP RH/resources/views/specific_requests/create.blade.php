@@ -4,7 +4,8 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg">  
-    <h1>Create Specific Request</h1>
+            <div class="bg-white shadow-md rounded-lg">
+                <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Create  demande spécifique</h2>
         <form id="specific-request-form" action="{{ route('specific_requests.store') }}" method="POST">
             @csrf
             <div class="form-group">
@@ -25,7 +26,10 @@
                 </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mt-4 d-flex justify-content-end gap-2"> 
+            <button type="submit" class="btn btn-primary float-end">Créer</button>
+            <a href="{{ route('specific_requests.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+            </div>
         </form>
     </div>
 @endsection

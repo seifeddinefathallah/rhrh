@@ -10,7 +10,7 @@
              
                 <div>
                     <h2 class="font-semibold text-xl text-center leading-tight" style="color: #03428e;" >
-                        {{ __(' Loan Request Details') }}
+                        {{ __(' Details') }}
                     </h2>
                     <div class="mt-5 row">
                         <div class="col-md-6 mb-3">
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <a href="{{ route('loan_requests.index') }}" class="btn btn-secondary float-end">Back to Loan Requests</a>
+                            <a href="{{ route('loan_requests.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
                         </div>
                     </div>
                 </div>

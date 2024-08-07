@@ -73,7 +73,7 @@
                 </div>
                 
                 <div class="mt-4">
-                    <a href="{{ route('entites.index') }}" class="btn btn-primary float-end">
+                    <a href="{{ route('entites.index') }}" class="btn btn-secondary float-end">
                         Retour à la liste
                     </a>
                 </div>

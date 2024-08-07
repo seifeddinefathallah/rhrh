@@ -111,8 +111,11 @@
                                     </span>
                                 @enderror
                             </div>
-
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <div class="mt-4 d-flex justify-content-end gap-2"> 
+                                <button type="submit" class="btn btn-primary float-end">Créer</button>
+                                <a href="{{ route('contract-types.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+                            </div>
+                        
                         </form>
                     </div>
                 </div>

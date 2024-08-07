@@ -21,7 +21,7 @@
                 <input type="number" name="quantity" class="form-control" value="{{ $materialRequest->quantity }}" required>
             </div>
             <div class="mt-4"> 
-                <a href="{{ route('material_requests.index') }}" class="btn btn-secondary float-end">Retour</a>
+                <a href="{{ route('material_requests.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
                 <button type="submit" class="btn btn-primary float-end"  id="submitButton">Sauvegarder</button>
                 
             </div>

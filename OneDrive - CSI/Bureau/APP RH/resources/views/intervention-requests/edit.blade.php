@@ -26,9 +26,9 @@
                 @enderror
             </div>
         </div>
-        <div class="mt-4"> 
+        <div class="mt-4 d-flex justify-content-end gap-2">    
             <button type="submit" class="btn btn-primary float-end">Sauvegarder</button>
-            <a href="{{ route('intervention-requests.index') }}" class="btn btn-secondary float-end">Retour</a>
+             <a href="{{ route('intervention-requests.index') }}" class="btn btn-secondary float-end">Retour</a>
         </div>
         </form>
     </div>

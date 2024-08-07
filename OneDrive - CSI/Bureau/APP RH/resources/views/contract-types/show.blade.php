@@ -77,8 +77,8 @@
             
         </div>
         <div class="mt-4">     
-                <a href="{{ route('contract-types.index') }}" class="btn btn-secondary float-end ">Retour</a>
-                <a href="{{ route('contract-types.edit', $contractType->id) }}" class="btn btn-primary float-end">Sauvegarder</a>
+                <a href="{{ route('contract-types.index') }}" class="btn btn-secondary float-end ">Retour  à la liste</a>
+                
         </div>
     </div>
 </div>

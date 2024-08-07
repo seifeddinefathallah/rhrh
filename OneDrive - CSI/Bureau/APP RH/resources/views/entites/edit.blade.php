@@ -72,9 +72,11 @@
                             <label for="identifiant_etablissement" class="block text-sm font-medium text-gray-700">Identifiant de l’établissement :</label>
                             <input type="text" name="identifiant_etablissement" id="identifiant_etablissement" value="{{ old('identifiant_etablissement', $entite->identifiant_etablissement) }}" class="form-control">
                         </div>
-    
-                        <div class="mb-4">
-                            <button type="submit" id="save-button" class="btn btn-primary">Modifier</button>
+                        <div class="mt-4 d-flex justify-content-end gap-2"> 
+                             <button type="submit" id="save-button" class="btn btn-primary float-end">Modifier</button>
+                             <a href="{{ route('entites.index') }}" class="btn btn-secondary float-end">
+                                Retour à la liste
+                            </a>  
                         </div>
                     </form>
                 </div>

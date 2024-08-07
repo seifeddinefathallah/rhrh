@@ -20,10 +20,10 @@
               
             
         </p>
-        <div class="mt-4"> 
-        <a href="{{ route('supply_requests.index') }}" class="btn btn-secondary float-end" >Retour</a>
-    </div>
-    </div>
+      
+        <a href="{{ route('supply_requests.index') }}" class="btn btn-secondary float-end" >Retour à la liste</a>
+
+
 </div>
 </div>
 @endsection

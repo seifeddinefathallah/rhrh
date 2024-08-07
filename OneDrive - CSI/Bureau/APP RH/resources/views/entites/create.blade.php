@@ -66,8 +66,15 @@
                         <input class="form-control" type="text" name="identifiant_etablissement" required>
                     </div>
                     <div>
+ <div class="mt-4 d-flex justify-content-end gap-2"> 
+
                         <button type="submit" class="btn btn-primary">Ajouter</button>
+                        <a href="{{ route('entites.index') }}" class="btn btn-secondary float-end">
+                            Retour à la liste
+                        </a> 
                     </div>
+                </div>
+
                 </form>
             </div>
         </div>

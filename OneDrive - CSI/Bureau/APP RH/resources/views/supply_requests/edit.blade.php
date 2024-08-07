@@ -4,7 +4,7 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg">
-    <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Edit Supply Request</h2>
+    <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Modisier demande de fournitures</h2>
         <form id="editSupplyRequestForm" action="{{ route('supply_requests.update', $supplyRequest->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -16,7 +16,9 @@
                 <label for="quantity">Quantity</label>
                 <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $supplyRequest->quantity }}" required>
             </div>
-            <button type="submit" class="btn btn-primary" id="submitButton">Update</button>
+            <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+     
+            <button type="submit" class="btn btn-primary float-end" id="submitButton">Modifier</button>
         </form>
     </div>
 

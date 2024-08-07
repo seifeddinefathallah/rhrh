@@ -26,8 +26,13 @@
         @endforeach
     </select>
 </div>
-<button type="submit" id="submit-button" class="btn btn-primary">Modifier</button>
-                    </form>
+          <div class="mt-4 d-flex justify-content-end gap-2"> 
+                 <button type="submit" id="submit-button" class="btn btn-primary">Modifier</button>
+                 <a href="{{ route('postes.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+           
+
+          </div> 
+         </form>
                 </div>
             </div>
         </div>

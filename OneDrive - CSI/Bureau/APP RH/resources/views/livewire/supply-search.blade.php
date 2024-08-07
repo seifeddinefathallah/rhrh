@@ -1,5 +1,10 @@
 <div class="container my-4">
     <div class="row">
+        <div class="mb-3">
+            <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+        <a href="{{ route('supply_requests.create') }}" class="btn btn-primary float-end">Créer</a>
+        
+    </div>
         <div class="col-md-12">
 
             <input type="text" wire:model.debounce.300ms="search" placeholder="chercher par employee" class="form-control form-control-navbar" aria-label="Search" />
@@ -42,11 +47,11 @@
                             <a class="dropdown-item" href="{{ route('supply_requests.show', $request->id) }}">
                                 <i class="bx bx-show me-1 text-primary"></i> Show
                             </a>
-                
+                            @if($request->status === 'pending')
                             <a class="dropdown-item" href="{{ route('supply_requests.edit', $request->id) }}">
                                 <i class="bx bx-edit-alt me-1 text-success"></i> Edit
                             </a>
-                
+                            @endif
                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                 <i class="bx bx-trash me-1 text-danger"></i> Delete
                             </a>

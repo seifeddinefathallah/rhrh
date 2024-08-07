@@ -11,5 +11,11 @@
         @endforeach
     </select>
 </div>
+
+
+<div class="mt-4 d-flex justify-content-end gap-2"> 
+     <button type="submit" id="submit-button" class="btn btn-primary">    {{ isset($poste) ? 'Mettre à jour' : 'Ajouter' }}</button>
+    <a href="{{ route('postes.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+</div> 
 <!--<button type="submit" id="submit-button" class="btn btn-primary">{ isset($poste) ? 'Mettre à jour' : 'Ajouter' }}</button>-->
-<button type="submit" id="submit-button" class="btn btn-primary">    {{ isset($poste) ? 'Mettre à jour' : 'Ajouter' }}</button>
+

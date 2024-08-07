@@ -26,9 +26,9 @@
             @livewire('specific-request-search')
         </div>
 
-        <div class="mb-3">
+        <div class="mt-4 d-flex justify-content-end gap-2">  
+               <a href="{{ route('specific_requests.create') }}"  class="btn btn-primary float-end">Créer</a>
             <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour</a>
-            <a href="{{ route('specific_requests.create') }}"  class="btn btn-primary float-end">Créer</a>
         </div>
     </div>
 @endsection

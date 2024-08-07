@@ -10,9 +10,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     @livewire('departement-search')
                 </div>
-                <div class="mb-3">
-                      <a href="{{ route('departements.create') }}" class="btn btn-primary float-end">Ajouter un département</a>
-                 </div>
+                
                 @if(session('success'))
                     <div class="bg-green-200 border border-green-200 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                         <strong class="font-bold">Success!</strong>

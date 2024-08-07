@@ -27,7 +27,10 @@
                             <label for="comments">Commentaires</label>
                             <textarea name="comments" id="comments" class="form-control"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Soumettre</button>
+                        <div class="mt-4 d-flex justify-content-end gap-2"> 
+                        <button type="submit" class="btn btn-primary">Créer</button>
+                        <a href="{{ route('loan_requests.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -6,7 +6,7 @@
         <div class=" container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
-                        Edit Contract Type
+                       Modifier type de contrat
             </h2>
                     <div class="card-body">
                         <form method="POST" action="{{ route('contract-types.update', $contractType->id) }}">
@@ -106,9 +106,12 @@
                             </div>
 
                             <div >
-                            <button type="submit" class="btn btn-primary float-end">Update</button>
-                            <a href="{{ route('contract-types.show', $contractType->id) }}" class="btn btn-secondary float-end">Cancel</a>
-                        </div>
+                                 
+                                <div class="mt-4 d-flex justify-content-end gap-2"> 
+                                    <button type="submit" class="btn btn-primary float-end">Modifier</button>
+                                    <a href="{{ route('contract-types.show', $contractType->id) }}" class="btn btn-secondary float-end">Retour à la liste</a>
+                               </div> 
+                             </div>
                         </form>
                     </div>
                 </div>

@@ -53,12 +53,12 @@
                                     <a class="dropdown-item" href="{{ route('material_requests.show', $request->id) }}">
                                         <i class="bx bx-show me-1 text-primary"></i> Show
                                     </a>
-                        
+                                    @if($request->status === 'pending')
                                     <!-- Edit Action -->
                                     <a class="dropdown-item" href="{{ route('material_requests.edit', $request->id) }}">
                                         <i class="bx bx-edit-alt me-1 text-success"></i> Edit
                                     </a>
-                        
+                                    @endif
                                     <!-- Delete Action -->
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                         <i class="bx bx-trash me-1 text-danger"></i> Delete

@@ -1,9 +1,10 @@
 <div class="container my-4">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="mb-3 custom-margin-bottom">
+    <div class="row"> 
+         <div class="mb-3 custom-margin-bottom">
                 <a href="{{ route('postes.create') }}" class="btn btn-primary float-end">Ajouter un poste</a>
             </div>
+        <div class="col-md-12">
+          
         <input type="text" wire:model.debounce.300ms="searchTerm" placeholder="Chercher postes" class="form-control mb-3" aria-label="Search" />
         </div>
 

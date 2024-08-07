@@ -6,7 +6,7 @@
             <div class=" container-xxl flex-grow-1 container-p-y">  
           
                 <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
-            {{ __('Les demandes') }}
+            {{ __('Les demandes Prét Avances') }}
         </h2>
                
                     
@@ -27,9 +27,7 @@
               
                 @livewire('loan-request-search')
                 
-                <div class="mb-4">
-                    <a href="{{ route('loan_requests.create') }}" class="btn btn-primary float-end">Create Loan</a>
-                </div>
+               
             </div>
         </div>
     </div>

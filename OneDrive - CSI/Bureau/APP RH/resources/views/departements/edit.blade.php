@@ -4,7 +4,7 @@
 <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
             Modifier le département
         </h2>
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
@@ -17,7 +17,12 @@
                             <label for="nom" class="form-label">Nom du département</label>
                             <input type="text" name="nom" id="nom" class="form-control" value="{{ $departement->nom }}" required>
                         </div>
-                        <button type="submit" id="save-button" class="btn btn-primary">Modifier</button>
+                        <div class="mt-4 d-flex justify-content-end gap-2">
+                            <button type="submit" id="save-button" class="btn btn-primary float-end">Modifier</button>   
+                            <a href="{{ route('departements.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+                        </div>
+                        
+                 
                     </form>
                 </div>
             </div>

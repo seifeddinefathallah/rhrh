@@ -1,11 +1,13 @@
 <div class="container my-4">
     <div class="row">
-        <div class="col-md-12">
-            <div class="mb-3">
-                <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour</a>
-               <a href="{{ route('intervention-requests.create') }}" class="btn btn-primary float-end">Créer</a>
-            </div>
         
+        <div class="mt-4 d-flex justify-content-end gap-2"> 
+             <a href="{{ route('intervention-requests.create') }}" class="btn btn-primary float-end">Créer</a>
+                <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour </a>
+            </div>
+        <div class="col-md-12">
+            
+           
             <!-- Search Form -->
             <input type="text" wire:model.debounce.300ms="search" placeholder="Chercher par nom ou prénom de l'employé" class="form-control form-control-navbar" aria-label="Search" />
 
@@ -43,11 +45,11 @@
                                     <i class="bx bx-dots-vertical-rounded text-primary"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                        
+                                    @if($request->status === 'pending')
                                     <a class="dropdown-item" href="{{ route('intervention-requests.edit', $request->id) }}">
                                         <i class="bx bx-edit-alt me-1 text-success"></i> Edit
                                     </a>
-                        
+                                    @endif
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                         <i class="bx bx-trash me-1 text-danger"></i> Delete
                                     </a>

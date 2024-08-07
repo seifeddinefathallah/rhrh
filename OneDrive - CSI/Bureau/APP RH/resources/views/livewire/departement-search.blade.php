@@ -1,5 +1,8 @@
 <div class="container my-4">
     <div class="row">
+        <div class="mb-3">
+            <a href="{{ route('departements.create') }}" class="btn btn-primary float-end">Ajouter un département</a>
+       </div>
         <div class="col-md-12">
             <input type="text" wire:model.debounce.300ms="search" placeholder="Search departments" class="form-control mb-3" aria-label="Search departments">
 
@@ -27,9 +30,9 @@
                                         <i class="bx bx-dots-vertical-rounded text-primary"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('departements.show', $departement->id) }}">
+                                            <!--  <a class="dropdown-item" href="{{ route('departements.show', $departement->id) }}">
                                             <i class="bx bx-show me-1 text-success"></i> Show
-                                        </a>
+                                        </a> -->
                                         <a class="dropdown-item" href="{{ route('departements.edit', $departement->id) }}">
                                             <i class="bx bx-edit-alt me-1 text-warning"></i> Edit
                                         </a>

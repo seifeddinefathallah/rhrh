@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoanRequest;
 use Illuminate\Http\Request;
 use App\Models\AdministrativeRequest;
 use App\Models\Employee;
@@ -14,11 +15,11 @@ use App\Mail\NewAdministrativeRequestNotification;
 use App\Mail\UpdateAdministrativeRequestStatusNotification;
 use App\Services\PdfService;
 use App\Mail\DocumentMail;
-use App\Mail\AdministrativeRequestStatusUpdated;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 class AdministrativeRequestController extends Controller
 {
     protected $pdfService;
+
     public function index()
     {
         $requests = AdministrativeRequest::latest()->paginate(10);
@@ -27,13 +28,16 @@ class AdministrativeRequestController extends Controller
 
     public function create()
     {
-        $employees = Employee::all();
-        return view('requests.create', compact('employees'));
+        $employee = Auth::user()->employee;
+        return view('requests.create', compact('employee'));
     }
 
     public function store(CreateAdministrativeRequestRequest $request)
     {
         $validatedData = $request->validated();
+
+        // Assurez-vous que vous ajoutez les informations de l'employé
+        $validatedData['employee_id'] = Auth::user()->employee->id;
 
         $demande = AdministrativeRequest::create($validatedData);
 
@@ -45,6 +49,8 @@ class AdministrativeRequestController extends Controller
 
         return redirect()->route('requests.index')->with('success', 'Demande administrative créée avec succès.');
     }
+
+
 
     public function edit(AdministrativeRequest $request)
     {
@@ -121,62 +127,51 @@ class AdministrativeRequestController extends Controller
     public function __construct(PdfService $pdfService)
     {
         $this->pdfService = $pdfService;
+        $this->middleware('auth');
     }
 
-    /*public function approveRequest($id)
+    public function approveRequest($id)
     {
         $administrativeRequest = AdministrativeRequest::findOrFail($id);
 
-        if ($administrativeRequest->status == 'approuvé') {
-            $employee = $administrativeRequest->employee;  // Assurez-vous que cette relation est définie dans votre modèle AdministrativeRequest
+        if ($administrativeRequest->status != 'approuvé') {
+            $administrativeRequest->status = 'approuvé';
+            $administrativeRequest->save();
+
+            $employee = $administrativeRequest->employee;
 
             $data = [
                 'title' => 'Document approuvé',
                 'content' => 'Votre document a été approuvé.',
             ];
 
-            $pdf = $this->pdfService->generatePdf($data);
+            $viewName = $this->getViewNameForRequestType($administrativeRequest->type, $employee->pays, $employee->id);
+            $pdf = $this->pdfService->generatePdf($data, $viewName);
 
-            Mail::to($employee->email_professionnel)->send(new DocumentMail($data, $pdf));
+            Mail::to($employee->email_professionnel)->send(new DocumentMail($employee, $administrativeRequest, $pdf));
 
-            return response()->json(['message' => 'E-mail envoyé avec succès.']);
+            return redirect()->route('requests.index')->with('success', 'Demande approuvée avec succès.');
         }
 
-        return response()->json(['message' => 'La demande n\'est pas approuvée.'], 400);
-    }*/
-
-    public function approveRequest($id)
-{
-    $request = AdministrativeRequest::findOrFail($id);
-    $request->update(['status' => 'approuvé']);
-
-    if ($request->employee && !empty($request->employee->email_professionnel)) {
-        Mail::to($request->employee->email_professionnel)
-            ->send(new AdministrativeRequestStatusUpdated($request));
-        Log::info('E-mail envoyé à : ' . $request->employee->email_professionnel);
-    } else {
-        Log::warning('L\'employé n\'a pas d\'adresse e-mail valide.');
+        return redirect()->route('requests.index')->with('error', 'La demande est déjà approuvée.');
     }
 
-    return redirect()->route('requests.index')
-        ->with('success', 'La demande a été approuvée.');
-}
+    public function rejectRequest($id)
+    {
+        $administrativeRequest = AdministrativeRequest::findOrFail($id);
 
-public function rejectRequest($id)
-{
-    $request = AdministrativeRequest::findOrFail($id);
-    $request->update(['status' => 'rejeté']);
+        if ($administrativeRequest->status != 'rejeté') {
+            $administrativeRequest->status = 'rejeté';
+            $administrativeRequest->save();
 
-    if ($request->employee && !empty($request->employee->email_professionnel)) {
-        Mail::to($request->employee->email_professionnel)
-            ->send(new AdministrativeRequestStatusUpdated($request));
-        Log::info('E-mail envoyé à : ' . $request->employee->email_professionnel);
-    } else {
-        Log::warning('L\'employé n\'a pas d\'adresse e-mail valide.');
+            $employee = $administrativeRequest->employee;
+
+            Mail::to($employee->email_professionnel)->send(new UpdateAdministrativeRequestStatusNotification($employee, $administrativeRequest));
+
+            return redirect()->route('requests.index')->with('success', 'Demande rejetée avec succès.');
+        }
+
+        return redirect()->route('requests.index')->with('error', 'La demande est déjà rejetée.');
     }
-
-    return redirect()->route('requests.index')
-        ->with('success', 'La demande a été rejetée.');
-}
 
 }

@@ -4,7 +4,7 @@
       
     <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
             <div class=" container-xxl flex-grow-1 container-p-y"> 
-                  <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
                                Ajouter un nouveau poste
                   </h2>
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">

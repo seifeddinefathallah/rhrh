@@ -4,7 +4,7 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg">  
-    <h1>Create Material Request</h1>
+    <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Demande de matérieles informatiques</h2>
         <form id="material-request-form" action="{{ route('material_requests.store') }}" method="POST">
             @csrf
             <div class="form-group">
@@ -34,8 +34,10 @@
                 </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+            
+            <a href="{{ route('material_requests.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
+    <button type="submit" class="btn btn-primary float-end ">Créer</button>   
+ </form>
     </div>
 @endsection
 

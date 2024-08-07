@@ -66,7 +66,7 @@
 
                 <!-- Bouton de retour -->
                 <div class="mt-4 ">
-                    <a href="{{ route('authorizations.index') }}" class="btn btn-primary float-end">Retour à la liste</a>
+                    <a href="{{ route('authorizations.index') }}" class="btn btn-secondary float-end">Retour à la liste</a>
                 </div>
             </div>
         </div>
