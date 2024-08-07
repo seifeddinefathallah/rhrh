@@ -15,8 +15,6 @@ class CreateEntitesTable extends Migration
             $table->string('adresse');
             $table->string('pays');
             $table->string('contact');
-            $table->string('nom_employeur');
-            $table->string('adresse_employeur');
             $table->string('numero_siret');
             $table->string('code_ape_naf');
             $table->string('convention_collective');

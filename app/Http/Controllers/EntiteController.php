@@ -34,8 +34,6 @@ public function store(Request $request)
         'adresse' => 'required|string',
         'pays' => 'required|string',
         'contact' => 'required|string',
-        'nom_employeur' => 'required|string',
-        'adresse_employeur' => 'required|string',
         'numero_siret' => 'required|string',
         'code_ape_naf' => 'required|string',
         'convention_collective' => 'required|string',
@@ -66,8 +64,6 @@ public function store(Request $request)
             'adresse' => $request->adresse,
             'pays' => $request->pays,
             'contact' => $request->contact,
-            'nom_employeur' => $request->nom_employeur,
-            'adresse_employeur' => $request->adresse_employeur,
             'numero_siret' => $request->numero_siret,
             'code_ape_naf' => $request->code_ape_naf,
             'convention_collective' => $request->convention_collective,
@@ -102,8 +98,6 @@ public function store(Request $request)
             'adresse' => 'required|string',
             'pays' => 'required|string',
             'contact' => 'required|string',
-            'nom_employeur' => 'required|string',
-            'adresse_employeur' => 'required|string',
             'numero_siret' => 'required|string',
             'code_ape_naf' => 'required|string',
             'convention_collective' => 'required|string',
@@ -129,8 +123,6 @@ public function store(Request $request)
         $entite->adresse = $request->adresse;
         $entite->pays = $request->pays;
         $entite->contact = $request->contact;
-        $entite->nom_employeur = $request->nom_employeur;
-        $entite->adresse_employeur = $request->adresse_employeur;
         $entite->numero_siret = $request->numero_siret;
         $entite->code_ape_naf = $request->code_ape_naf;
         $entite->convention_collective = $request->convention_collective;
