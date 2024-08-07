@@ -1,6 +1,7 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12">
+            
         <input type="text" wire:model.debounce.300ms="searchTerm" placeholder="Chercher employees par nom ou prénom" class="form-control mb-3" aria-label="Search" />
 
 
@@ -21,7 +22,7 @@
             @foreach ($employees as $employee)
             <tr>
                  <td>
-                     <img src="{{ asset('storage/' . $employee->image) }}" class="img-thumbnail" style="width: 80px; height: 80px;" alt="{{ $employee->nom }}">
+                    <img src="{{ asset('storage/' . $employee->image) }}" class="img-thumbnail" style="width: 80px; height: 80px;" alt="{{ $employee->nom }}">
                  </td>
                  <td>{{ $employee->nom }}</td>
                  <td>{{ $employee->prenom }}</td>
@@ -44,7 +45,7 @@
                             </a>
                         </div>
                     </div>
-
+                
                     <!-- Modal -->
                     <div class="modal fade" id="deleteModal{{ $employee->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $employee->id }}" aria-hidden="true">
                         <div class="modal-dialog">
@@ -70,17 +71,55 @@
                         </div>
                     </div>
                 </td>
-
-
+                
+                
             </tr>
             @endforeach
             </tbody>
         </table>
-
+    
         <!-- Pagination Links -->
         <div class="mt-4">
             {{ $employees->links('pagination::bootstrap-4')  }}
         </div>
     </div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('form.d-inline').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const form = this;
+
+                Swal.fire({
+                    title: 'Êtes-vous sûr?',
+                    text: "Vous ne pourrez pas revenir en arrière!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimez-le!',
+                    cancelButtonText: 'Non, annuler!',
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    } else {
+                        Swal.fire(
+                            'Annulé',
+                            'Votre fichier est en sécurité :)',
+                            'error'
+                        );
+                    }
+                });
+            });
+        });
+    });
+</script>
 

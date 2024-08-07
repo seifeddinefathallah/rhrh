@@ -3,11 +3,11 @@
 
         @section('content')
         <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
-            <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="container-xxl flex-grow-1 container-p-y">  
             <h4 class="card-header text-center" style="color: #03428e;">
             {{ __('Edit Authorization Request') }}
            </h4>
-
+     
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{ route('authorizations.update', $authorization->id) }}">
                         @csrf
@@ -37,6 +37,17 @@
                             @enderror
                         </div>
 
+                        <div class="mb-4">
+                            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                            <select name="status" id="status" class="form-select rounded-md shadow-sm mt-1 block w-full" required>
+                                <option value="pending" {{ old('status', $authorization->status) === 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="approved" {{ old('status', $authorization->status) === 'approved' ? 'selected' : '' }}>Approved</option>
+                                <option value="rejected" {{ old('status', $authorization->status) === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            </select>
+                            @error('status')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                            @enderror
+                        </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <button type="submit" class="btn btn-primary">

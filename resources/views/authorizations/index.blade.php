@@ -40,9 +40,7 @@
         </div>
 
         @livewire('authorization-search')
-        <div class="mt-4">
-            {{ $authorizations->links() }}
-        </div>
+        
     </div>
 </div>
 </div>

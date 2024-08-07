@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Mail;
 
 class SpecificRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $requests = SpecificRequest::with('employee')->paginate(10);

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 class EntiteController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $entites = Entite::latest()->paginate(10);
@@ -19,7 +23,7 @@ class EntiteController extends Controller
     {
         return view('entites.create');
     }
-    
+
 public function store(Request $request)
 {
     Log::info('Début du processus de création d\'entité.');
@@ -79,7 +83,7 @@ public function store(Request $request)
     // Redirection avec un message de succès
     return redirect()->route('entites.index')->with('success', 'Entité créée avec succès.');
 }
-    
+
     public function show(Entite $entite)
     {
         return view('entites.show', compact('entite'));

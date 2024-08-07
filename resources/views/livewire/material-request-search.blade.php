@@ -29,6 +29,19 @@
                                 <span>{{ ucfirst($request->status) }}</span>
                             @endif
                         </td>
+                        <!-- Approve Form -->
+<form id="approve-form-{{ $request->id }}" action="{{ route('material_requests.approve', $request->id) }}" method="POST" style="display: none;">
+    @csrf
+    @method('PUT')
+</form>
+
+<!-- Reject Form -->
+<form id="reject-form-{{ $request->id }}" action="{{ route('material_requests.reject', $request->id) }}" method="POST" style="display: none;">
+    @csrf
+    @method('PUT')
+</form>
+
+
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -50,18 +63,18 @@
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                         <i class="bx bx-trash me-1 text-danger"></i> Delete
                                     </a>
-
+                                   @if($request->status === 'pending')
                                     <!-- Approve Action -->
-                                    @if($request->status === 'pending')
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
+                                    <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')">
                                         <i class="bx bx-check-circle me-1 text-success"></i> Approve
                                     </a>
 
                                     <!-- Reject Action -->
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
+                                    <a class="dropdown-item" href="#" onclick="confirmReject(event, '{{ $request->id }}')">
                                         <i class="bx bx-x-circle me-1 text-danger"></i> Reject
                                     </a>
                                     @endif
+
                                 </div>
                             </div>
 
@@ -88,17 +101,6 @@
                                 </div>
                             </div>
 
-                            <!-- Approve Form -->
-                            <form id="approve-form-{{ $request->id }}" action="{{ route('material_requests.approve', $request->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('PUT')
-                            </form>
-
-                            <!-- Reject Form -->
-                            <form id="reject-form-{{ $request->id }}" action="{{ route('material_requests.reject', $request->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('PUT')
-                            </form>
                         </td>
 
                     </tr>
@@ -150,8 +152,8 @@
         });
     });
 
-    function confirmApprove(event) {
-        event.preventDefault();
+    function confirmApprove(event, requestId) {
+        event.preventDefault(); // Prevent the default form submission
 
         Swal.fire({
             title: 'Are you sure?',
@@ -164,7 +166,7 @@
             cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                event.target.closest('form').submit();
+                document.getElementById('approve-form-' + requestId).submit();
                 Swal.fire(
                     'Approved!',
                     'The request has been approved.',
@@ -174,8 +176,9 @@
         });
     }
 
-    function confirmReject(event) {
-        event.preventDefault();
+    // Function for handling reject action
+    function confirmReject(event, requestId) {
+        event.preventDefault(); // Prevent the default form submission
 
         Swal.fire({
             title: 'Are you sure?',
@@ -188,7 +191,7 @@
             cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                event.target.closest('form').submit();
+                document.getElementById('reject-form-' + requestId).submit();
                 Swal.fire(
                     'Rejected!',
                     'The request has been rejected.',

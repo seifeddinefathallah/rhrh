@@ -4,7 +4,7 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg">   
-    <h1>Edit Material Request</h1>
+    <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Modifier la Demande materiel</h2>
         <form id="editMaterialRequestForm" action="{{ route('material_requests.update', $materialRequest->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -20,8 +20,12 @@
                 <label for="quantity">Quantity</label>
                 <input type="number" name="quantity" class="form-control" value="{{ $materialRequest->quantity }}" required>
             </div>
-
-            <button type="submit" class="btn btn-primary" id="submitButton">Update</button>
+            <div class="mt-4"> 
+                <a href="{{ route('material_requests.index') }}" class="btn btn-secondary float-end">Retour</a>
+                <button type="submit" class="btn btn-primary float-end"  id="submitButton">Sauvegarder</button>
+                
+            </div>
+          
         </form>
     </div>
     @push('scripts')

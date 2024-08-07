@@ -53,8 +53,8 @@
                         <h5 class="mb-2" style="text-align: center;color: #03428e;">Welcome to CSI</h5>
                         <p class="mb-4" style=" text-align: center;">Please sign-up to your account and start the adventure</p>
 
-
-    <form method="POST" action="{{ route('register') }}" id="registration-form">
+         
+    <form method="POST" action="{{ route('register') }}">
         @csrf
 
         <!-- Name -->
@@ -82,7 +82,7 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <x-text-input  class="form-control"  id="password"
+            <x-text-input  class="form-control"  id="password" 
                           type="password"
                           name="password"
                           autocomplete="new-password" />
@@ -94,7 +94,7 @@
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-            <x-text-input  class="form-control" id="password_confirmation"
+            <x-text-input  class="form-control" id="password_confirmation" 
                           type="password"
                           name="password_confirmation"  />
 
@@ -102,7 +102,7 @@
         </div>
     <div  class="mt-4">
         <button type="submit" class="btn btn-primary d-grid w-100">
-
+             
             {{ __('Register') }}
         </button>
     </div>
@@ -111,7 +111,7 @@
                 { __('Already registered?') }}
             </a>
 
-
+   
         </div>-->
 
     </form>
@@ -120,9 +120,9 @@
 
     <p class="text-center">
         <span>Already have an account?</span>
-        <a  href="{{  route ('login') }}">
-          <span>Login</span>
-
+        <a  href="{{ route('login') }}">
+          <span>Login</span> 
+        
         </a>
       </p>
     </div>
@@ -134,26 +134,7 @@
 
 <!-- / Content -->
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            @if (session('status'))
-            Swal.fire({
-                title: 'Success! 🎉',
-                text: "{{ session('status') }}",
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-            @elseif ($errors->any())
-            Swal.fire({
-                title: 'Oops! 😓',
-                text: "{{ implode(' ', $errors->all()) }}",
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            @endif
-        });
-    </script>
+
 
   <!-- Core JS -->
   <script src="{{ asset('../backend/assets/vendor/libs/jquery/jquery.js') }}"></script>

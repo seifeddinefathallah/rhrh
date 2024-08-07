@@ -11,4 +11,5 @@
         @endforeach
     </select>
 </div>
-<button type="submit" class="btn btn-primary">{{ isset($poste) ? 'Mettre à jour' : 'Ajouter' }}</button>
+<!--<button type="submit" id="submit-button" class="btn btn-primary">{ isset($poste) ? 'Mettre à jour' : 'Ajouter' }}</button>-->
+<button type="submit" id="submit-button" class="btn btn-primary">    {{ isset($poste) ? 'Mettre à jour' : 'Ajouter' }}</button>

@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoanRequest;
 use Illuminate\Http\Request;
 use App\Models\AdministrativeRequest;
 use App\Models\Employee;
@@ -14,9 +15,11 @@ use App\Mail\NewAdministrativeRequestNotification;
 use App\Mail\UpdateAdministrativeRequestStatusNotification;
 use App\Services\PdfService;
 use App\Mail\DocumentMail;
+use Illuminate\Support\Facades\Auth;
 class AdministrativeRequestController extends Controller
 {
     protected $pdfService;
+
     public function index()
     {
         $requests = AdministrativeRequest::latest()->paginate(10);
@@ -25,13 +28,16 @@ class AdministrativeRequestController extends Controller
 
     public function create()
     {
-        $employees = Employee::all();
-        return view('requests.create', compact('employees'));
+        $employee = Auth::user()->employee;
+        return view('requests.create', compact('employee'));
     }
 
     public function store(CreateAdministrativeRequestRequest $request)
     {
         $validatedData = $request->validated();
+
+        // Assurez-vous que vous ajoutez les informations de l'employé
+        $validatedData['employee_id'] = Auth::user()->employee->id;
 
         $demande = AdministrativeRequest::create($validatedData);
 
@@ -43,6 +49,8 @@ class AdministrativeRequestController extends Controller
 
         return redirect()->route('requests.index')->with('success', 'Demande administrative créée avec succès.');
     }
+
+
 
     public function edit(AdministrativeRequest $request)
     {
@@ -119,6 +127,7 @@ class AdministrativeRequestController extends Controller
     public function __construct(PdfService $pdfService)
     {
         $this->pdfService = $pdfService;
+        $this->middleware('auth');
     }
 
     public function approveRequest($id)

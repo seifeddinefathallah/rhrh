@@ -17,15 +17,16 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('employees.update', $employee->id) }}" enctype="multipart/form-data">
+    <form id="edit-employee-form" method="POST" action="{{ route('employees.update', $employee->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <livewire:employee-notifications />
-                    <div class="form-group">
-                            <label for="image">Image de l'employee</label>
-                            <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
-                    </div>
+        <div class="mb-3">
+
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
                     <!-- Personal Information Section -->
                     <div class="border mb-4 p-4">
                         <h3 class="text-lg font-semibold mb-2">Informations Personnelles</h3>
@@ -298,9 +299,9 @@
 
 
                     <!-- Submit Button -->
-                        <div class="mt-4">
-                            <button  class="btn btn-primary"  id="modify-employee-button">Modifier Employé</button>
-                         </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary" id="modify-employee-button">Modifier Employé</button>
+                    </div>
                     <div class="text-center mt-4">
                         <a href="{{ route('employees.index') }}" class="btn btn-classy">
                             <i class="bi bi-arrow-left-circle"></i> Retour à la liste
@@ -310,6 +311,32 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('modify-employee-button').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonColor: '#71dd37',
+                cancelButtonColor: '#d33',
+                denyButtonColor: '#3085d6',
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form only if the user confirms
+                    document.getElementById('edit-employee-form').submit();
+                    Swal.fire("Saved!", "", "success");
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        });
+    </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -566,57 +593,8 @@ document.getElementById('fin_contrat').addEventListener('change', calculateContr
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                document.getElementById('modify-employee-button').addEventListener('click', function (e) {
-                    e.preventDefault();
 
-                    Swal.fire({
-                        title: 'Do you want to save the changes?',
-                        showDenyButton: true,
-                        showCancelButton: true,
-                        confirmButtonText: 'Save 💾',
-                        denyButtonText: "Don't save ❌"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.querySelector('form').submit(); // Submit the form if confirmed
-                            Swal.fire("Saved! 💾", "", "success");
-                        } else if (result.isDenied) {
-                            Swal.fire('Changes are not saved ❌', '', 'info');
-                        }
-                    });
-                });
-            });
-        </script>
 @endsection
-@section('styles')
-<style>
-    .btn-classy {
-        background: linear-gradient(135deg, #007bff, #0056b3);
-        color: white;
-        border: none;
-        border-radius: 50px;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
-        text-transform: uppercase;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: background 0.3s, transform 0.3s;
-    }
-    .swal2-styled {
-        padding: 0.5em 1em;
-        font-size: 1em;
-    }
-    .btn-classy:hover {
-        background: linear-gradient(135deg, #0056b3, #003d80);
-        transform: scale(1.05);
-    }
 
-    .btn-classy:focus, .btn-classy:active {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(0,123,255,0.5);
-    }
-</style>
-@endsection
+
 

@@ -77,8 +77,7 @@
                                 <x-input-label for="remember_me" :value="__('Remember me')" class="form-check-label" />
                             </div>
 
-                            <!-- Recaptcha -->
-
+                           
 
                             <div class="d-flex justify-content-between align-items-center">
                                 @if (Route::has('password.request'))
@@ -159,7 +158,6 @@
         @endif
     </script>
 
-    <!-- reCaptcha Script -->
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

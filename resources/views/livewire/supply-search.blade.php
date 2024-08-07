@@ -50,12 +50,13 @@
                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                 <i class="bx bx-trash me-1 text-danger"></i> Delete
                             </a>
+
                             @if($request->status === 'pending')
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $request->id }}').submit();">
+                            <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')">
                                 <i class="bx bx-check-circle me-1 text-success" ></i> Approve
                             </a>
 
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $request->id }}').submit();">
+                            <a class="dropdown-item" href="#" onclick="confirmReject(event, '{{ $request->id }}')">
                                 <i class="bx bx-x-circle me-1 text-danger"></i> Reject
                             </a>
                             @endif
@@ -147,7 +148,7 @@
         </script>
         <script>
             // Function for handling approve action
-            function confirmApprove(event) {
+            function confirmApprove(event, requestId) {
                 event.preventDefault(); // Prevent the default form submission
 
                 Swal.fire({
@@ -161,8 +162,7 @@
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Submit the form
-                        event.target.closest('form').submit();
+                        document.getElementById('approve-form-' + requestId).submit();
                         Swal.fire(
                             'Approved!',
                             'The request has been approved.',
@@ -173,7 +173,7 @@
             }
 
             // Function for handling reject action
-            function confirmReject(event) {
+            function confirmReject(event, requestId) {
                 event.preventDefault(); // Prevent the default form submission
 
                 Swal.fire({
@@ -187,8 +187,7 @@
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Submit the form
-                        event.target.closest('form').submit();
+                        document.getElementById('reject-form-' + requestId).submit();
                         Swal.fire(
                             'Rejected!',
                             'The request has been rejected.',

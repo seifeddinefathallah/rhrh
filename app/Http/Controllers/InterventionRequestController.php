@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Mail;
 
 class InterventionRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $requests = InterventionRequest::all();

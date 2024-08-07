@@ -11,6 +11,10 @@ use App\Mail\MaterialRequestStatusUpdated;
 
 class MaterialRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $requests = MaterialRequest::all();

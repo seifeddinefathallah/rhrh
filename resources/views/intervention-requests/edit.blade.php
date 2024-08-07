@@ -4,7 +4,7 @@
 <div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
     <div class="container-xxl flex-grow-1 container-p-y">  
         <div class="bg-white shadow-md rounded-lg">
-        <h1>Modifier la Demande d'Intervention</h1>
+        <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Modifier la Demande d'Intervention</h2>
 
         <form id="intervention-form" action="{{ route('intervention-requests.update', $interventionRequest) }}" method="POST">
             @csrf
@@ -25,9 +25,11 @@
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-
-            <button type="submit" class="btn btn-primary">Sauvegarder</button>
-            <a href="{{ route('intervention-requests.index') }}" class="btn btn-secondary">Retour</a>
+        </div>
+        <div class="mt-4"> 
+            <button type="submit" class="btn btn-primary float-end">Sauvegarder</button>
+            <a href="{{ route('intervention-requests.index') }}" class="btn btn-secondary float-end">Retour</a>
+        </div>
         </form>
     </div>
 

@@ -7,6 +7,10 @@ use App\Models\ContractType; // Assurez-vous d'importer le modèle ContractType
 
 class ContractTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,11 +34,11 @@ class ContractTypeController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
-    
+
         $contractTypes = ContractType::where('name', 'like', "%{$search}%")
-                         
+
                          ->get();
-    
+
         return view('contract-types.index', compact('contractTypes', 'search'));
     }
     /**

@@ -8,6 +8,10 @@ use App\Models\Subscription; // Ensure you have this model
 
 class SubscriptionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function store(Request $request)
     {
         // Validate the request

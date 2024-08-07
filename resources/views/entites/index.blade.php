@@ -53,9 +53,7 @@
           
             <livewire:search-entities />
         </div>
-        <div class="mb-3">
-                  <a href="{{ route('entites.create') }}" class="btn btn-primary float-end">Créer Entite</a>
-        </div>
+       
     </div>
 </div>
 </div>

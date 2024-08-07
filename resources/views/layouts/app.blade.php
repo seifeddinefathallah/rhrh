@@ -36,7 +36,7 @@
             </div>
         </header>
         @endisset
-    </div>
+
     <!-- Page Content -->
 <main id="main-content" class="container-fluid" >
     @yield('content')

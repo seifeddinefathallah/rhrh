@@ -33,6 +33,10 @@ use App\Events\MessageSent;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
 
@@ -44,11 +48,11 @@ class EmployeeController extends Controller
 
         })
             ->latest()
-            ->with('poste.departement.entites')
+            ->with('poste.departement.entites','contractType')
             ->paginate(10);
-            //->get();
+           // ->get();
 
-       // $employees = Employee::with('poste.departement.entites','contractType')->get();
+       // $employees = Employee::with('poste.departement.entites')->get();
         return view('employees.index', compact('employees'));
     }
 

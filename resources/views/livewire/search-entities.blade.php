@@ -1,8 +1,12 @@
 <div class="container my-4">
     <div class="row">
         <div class="col-md-12">
+            <div class="mb-3">
+                <a href="{{ route('entites.create') }}" class="btn btn-primary float-end">Créer Entite</a>
+        </div>
+        <div class="mb-3">
     <input type="text" wire:model.debounce.300ms="searchTerm" placeholder="chercher entities avec nom ou autre critère" class="form-control form-control-navbar" aria-label="Search" />
-
+</div>
             <div class="table-responsive">
              
                 <table class="table table-striped">

@@ -1,4 +1,4 @@
-<div>
+<div class="container my-4">
     <div class="row">
         <div class="col-md-12">
     <input type="text" wire:model.debounce.300ms="search" placeholder="Rechercher par nom d'employé..." class="form-control form-control-navbar" aria-label="Search" />
@@ -8,7 +8,7 @@
                     <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Employee
+                            Employé
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Type
@@ -30,8 +30,8 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach ($loanRequests as $loanRequest)
+                    <tbody class="bg-white divide-y divide-gray-200" >
+                    @forelse ($loanRequests as $loanRequest)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
                             @if ($loanRequest->employee)
@@ -40,7 +40,7 @@
                                 N/A <!-- Display N/A or handle as per your design if employee is null -->
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td >
                             {{ $loanRequest->type }}
                         </td>
                         <td>
@@ -57,7 +57,7 @@
                             @elseif ($loanRequest->status === 'Approuvé')
                             <span class="badge bg-label-success me-1">{{ ucfirst($loanRequest->status) }}</span>
                             @elseif ($loanRequest->status === 'Rejeté')
-                            <span class="badge bg-label-info me-1">{{ ucfirst($loanRequest->status) }}</span>
+                            <span class="badge bg-label-danger me-1">{{ ucfirst($loanRequest->status) }}</span>
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -66,7 +66,17 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             {{ \Carbon\Carbon::parse($loanRequest->created_at)->format('Y-m-d') }}
                         </td>
+<!-- Approve Form -->
+                        <form id="approve-form-{{ $loanRequest->id }}" action="{{ route('loan_requests.approve', $loanRequest->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('POST')
+                        </form>
 
+<!-- Reject Form -->
+                        <form id="reject-form-{{ $loanRequest->id }}" action="{{ route('loan_requests.reject', $loanRequest->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('POST')
+                        </form>
 
                         <td>
                             <div class="dropdown">
@@ -75,7 +85,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route('loan_requests.show', $loanRequest->id) }}">
-                                        <i class="bx bx-show me-1 text-success"></i> Show
+                                        <i class="bx bx-show me-1 text-primary"></i> Show
                                     </a>
                                     <a class="dropdown-item" href="{{ route('loan_requests.edit', $loanRequest->id) }}">
                                         <i class="bx bx-edit-alt me-1 text-warning"></i> Edit
@@ -83,14 +93,14 @@
                                     <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $loanRequest->id }}">
                                         <i class="bx bx-trash me-1 text-danger"></i> Delete
                                     </a>
-                                    @if($loanRequest->status === 'pending')
-                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('approve-form-{{ $loanRequest->id }}').submit();">
-                                            <i class="bx bx-check-circle me-1 text-success" ></i> Approve
-                                        </a>
-
-                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('reject-form-{{ $loanRequest->id }}').submit();">
-                                            <i class="bx bx-x-circle me-1 text-danger"></i> Reject
-                                        </a>
+                                    @if($loanRequest->status === 'En attente')
+                                  <!-- Actions -->
+                                    <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $loanRequest->id }}')">
+                                         <i class="bx bx-check-circle me-1 text-success"></i> Approve
+                                    </a>
+                                    <a class="dropdown-item" href="#" onclick="confirmReject(event, '{{ $loanRequest->id }}')">
+                                        <i class="bx bx-x-circle me-1 text-danger"></i> Reject
+                                    </a>
                                     @endif
                                 </div>
                             </div>
@@ -119,27 +129,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="approve-form-{{ $loanRequest->id }}" action="{{ route('loan_requests.update_status', $loanRequest->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('PUT')
-                            </form>
-
-                            <!-- Reject Form -->
-                            <form id="reject-form-{{ $loanRequest->id }}" action="{{ route('loan_requests.update_status', $loanRequest->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('PUT')
-                            </form>
                         </td>
-
                     </tr>
-                    @endforeach
-                    </tbody>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center">Aucune demande trouvée.</td>
+                    </tr>
+                    @endforelse
+                 </tbody>
                 </table>
-                @else
-                <p>Aucune demande trouvée.</p>
                 @endif
-</div>
-        </div> </div> </div>
+           </div>
+        </div>
+     </div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -175,4 +178,53 @@
             });
         });
     });
+
+    function confirmApprove(event, loanRequestId) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to approve this request! 👍",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, approve it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`approve-form-${loanRequestId}`).submit();
+            Swal.fire(
+                'Approved!',
+                'The request has been approved.',
+                'success'
+            );
+        }
+    });
+}
+
+function confirmReject(event, loanRequestId) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to reject this request! ❌",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, reject it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(`reject-form-${loanRequestId}`).submit();
+            Swal.fire(
+                'Rejected!',
+                'The request has been rejected.',
+                'success'
+            );
+        }
+    });
+}
+
 </script>

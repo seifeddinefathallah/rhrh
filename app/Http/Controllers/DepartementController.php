@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class DepartementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $departements = Departement::all();
