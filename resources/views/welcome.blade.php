@@ -49,7 +49,7 @@
                         <p class="mb-4">Join us and start the adventure</p>
 
                         <!-- Welcome Image -->
-                      
+
 
                         <!-- Buttons -->
                         <div class="d-grid gap-2 d-md-block">
@@ -75,43 +75,39 @@
     <script src="{{ asset('../backend/assets/js/main.js') }}"></script>
 
     <!-- OneSignal SDK -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
     <script>
-        async function sendPushNotification(event) {
-            event.preventDefault(); // Prevent the form from submitting immediately
+        window.onesignal || (window.onesignal = []);
+        window.onesignal.push(function() {
+            window.onesignal.init({
+                appId: 'f815d9fe-2803-44f4-886d-0ede2d40ba52',
+                notifyButton: {
+                    enable: true,
+                },
+                welcomeNotification: {
+                    enable: true,
+                },
+            });
 
-            // OneSignal initialization
-            OneSignal.push(function() {
-                OneSignal.getUserId().then(function(userId) {
-                    console.log("OneSignal User ID:", userId);
+            window.onesignal.getUserId().then(userId => {
+                if (userId) {
+                    localStorage.setItem('os-user', userId);
 
-                    // Send push notification via OneSignal's REST API
-                    fetch('https://onesignal.com/api/v1/notifications', {
+                    // Send the userId to your server
+                    fetch('/save-user-id', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Basic N2M4Njg5MjgtNGQxMi00NmQyLWJjNDUtNDU0MDNlODU4ZmMw' // Replace with your OneSignal REST API key
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({
-                            app_id: "f815d9fe-2803-44f4-886d-0ede2d40ba52", // Your OneSignal App ID
-                            include_player_ids: [userId], // Send notification to this user
-                            contents: { en: "Welcome back! You have logged in successfully." }, // Notification content
-                            headings: { en: "Login Notification" }, // Notification title
-                            url: "https://127.0.0.1:8000/dashboard" // URL to open when notification is clicked
-                        })
-                    }).then(response => {
-                        console.log('Notification sent:', response);
-                        // Optionally, redirect user after successful login
-                        window.location.href = "{{ route('dashboard') }}";
-                    }).catch(error => {
-                        console.error('Error sending notification:', error);
-                    });
-                });
+                        body: JSON.stringify({ userId: userId })
+                    })
+                        .then(response => response.json())
+                        .then(data => console.log('User ID saved:', data))
+                        .catch(error => console.error('Error:', error));
+                }
             });
-        }
-        @if (!empty($onesignal_player_id))
-            console.log('Received OneSignal Player ID:', {!! json_encode($onesignal_player_id) !!});
-        @endif
+        });
     </script>
 
     <!-- reCaptcha Script -->

@@ -213,6 +213,11 @@ Route::put('/specific-requests/{specificRequest}/approve', [SpecificRequestContr
 Route::put('/specific-requests/{specificRequest}/reject', [SpecificRequestController::class, 'reject'])->name('specific_requests.reject');
 
 Route::get('/select-demande', [DiversController::class, 'showSelectDemande'])->name('select-demande');
+use App\Http\Controllers\OneSignalController;
+
+Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
+
+Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');;
 
 Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 require __DIR__.'/auth.php';
