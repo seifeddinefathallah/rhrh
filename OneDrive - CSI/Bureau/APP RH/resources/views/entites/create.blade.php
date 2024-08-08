@@ -5,15 +5,15 @@
     <div class=" container-xxl mx-auto flex-grow-1 container-p-y">  
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 
-                <h1 class="text-2xl font-bold text-center my-6">Ajouter une nouvelle entité</h1>
+                <h1 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Ajouter une nouvelle entité</h1>
                 <form id="entity-form" action="{{ route('entites.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
               
                  
                    
                     @csrf
-                    <div class="form-group">
-                        <label for="image">Image de l'entité</label>
-                        <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
+                    <div class="mb-3">
+                        <label for="mb-2 font-semibold">Image de l'entité</label>
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
                     </div>
                     <div class="mb-3">
                         <label for="nom" class="form-label">Nom</label>
@@ -41,14 +41,7 @@
                         <label>Contact </label>
                         <input class="form-control" type="text" name="contact" required>
                     </div>
-                    <div>
-                        <label>Nom de l'employeur </label>
-                        <input class="form-control" type="text" name="nom_employeur" required>
-                    </div>
-                    <div>
-                        <label>Adresse de l'employeur </label>
-                        <input class="form-control" type="text" name="adresse_employeur" required>
-                    </div>
+                     
                     <div>
                         <label>Numéro SIRET </label>
                         <input class="form-control" type="text" name="numero_siret" required>
@@ -80,8 +73,7 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
+=
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -104,4 +96,55 @@
             });
         });
     </script>
-@endpush
+
+=  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('entity-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Reset previous error states
+            let form = this;
+            let isValid = true;
+            let firstInvalidField = null;
+            let inputs = form.querySelectorAll('input[required]');
+
+            inputs.forEach(function(input) {
+                input.classList.remove('input-invalid'); // Remove the red border class
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('input-invalid'); // Add the red border class
+                    if (!firstInvalidField) {
+                        firstInvalidField = input;
+                    }
+                }
+            });
+
+            if (isValid) {
+                Swal.fire({
+                    title: '⚠️ Vous êtes sûr ?',
+                    icon: 'question',
+                    iconHtml: '❓',
+                    confirmButtonText: 'Oui, continuer !',
+                    cancelButtonText: 'Non, annuler !',
+                    showCancelButton: true,
+                    showCloseButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Submit the form if the user confirms
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Veuillez remplir tous les champs requis.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    if (firstInvalidField) {
+                        firstInvalidField.focus(); // Scroll to the first invalid field
+                    }
+                });
+            }
+        });
+    });
+</script>

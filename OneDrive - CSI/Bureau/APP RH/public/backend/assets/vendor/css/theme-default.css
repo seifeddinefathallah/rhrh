@@ -469,7 +469,7 @@ button.list-group-item-primary.active {
   background-color: #61a7fc;
 }
 .menu.bg-primary.menu-horizontal .menu-sub > .menu-item.active > .menu-link:not(.menu-toggle) {
-  background-color: #61a7fc;
+  background-color: #fdb913;
 }
 .menu.bg-primary.menu-horizontal .menu-inner .menu-item:not(.menu-item-closing) > .menu-sub, .menu.bg-primary.menu-horizontal .menu-inner .menu-item.open > .menu-toggle {
   background: #61a7fc;
@@ -696,7 +696,7 @@ a:hover {
 }
 .bg-menu-theme .menu-item.open:not(.menu-item-closing) > .menu-toggle,
 .bg-menu-theme .menu-item.active > .menu-link {
-  color: #00b5cc;
+  color: #fdb913;
 }
 .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
   background-color: #fff;
@@ -764,11 +764,11 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
 .bg-menu-theme .menu-inner .menu-sub > .menu-item.active > .menu-link.menu-toggle {
   background-color: rgba(67, 89, 113, 0.04);
 }
-.bg-menu-theme .menu-inner .menu-sub > .menu-item.active .menu-icon {
-  color: #fdfdfd;
+.bg-menu-theme .menu-inner .menu-sub > .menu-item.active .menu-link1 {
+  color: #fdb913;
 }
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-  color: #00b5cc;
+  color: #fdb913;
   background-color: rgba(105, 108, 255, 0.16) !important;
 }
 .bg-menu-theme .menu-inner > .menu-item.active:before {
@@ -778,7 +778,7 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
   background-color: #b4bdc6 !important;
 }
 .bg-menu-theme .menu-sub > .menu-item.active > .menu-link:not(.menu-toggle):before {
-  background-color: #00b5cc !important;
+  background-color: #fdb913 !important;
   border: 3px solid #e7e7ff !important;
 }
 

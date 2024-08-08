@@ -24,7 +24,7 @@
         @endif
 
         <!-- SweetAlert2 Notification -->
-        @push('scripts')
+      
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -46,7 +46,7 @@
             @endif
             });
         </script>
-        @endpush
+
 
         <!-- Actions and Search -->
         <div class="mb-4 flex justify-between items-center">

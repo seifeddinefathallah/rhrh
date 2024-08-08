@@ -14,8 +14,6 @@ class Entite extends Model
         'adresse',
         'pays',
         'contact',
-        'nom_employeur',
-        'adresse_employeur',
         'numero_siret',
         'code_ape_naf',
         'convention_collective',

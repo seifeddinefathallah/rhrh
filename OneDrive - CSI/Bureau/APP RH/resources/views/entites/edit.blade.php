@@ -43,15 +43,7 @@
                             <input type="text" name="contact" id="contact" value="{{ old('contact', $entite->contact) }}" class="form-control">
                         </div>
     
-                        <div class="mb-4">
-                            <label for="nom_employeur" class="block text-sm font-medium text-gray-700">Nom de l'employeur :</label>
-                            <input type="text" name="nom_employeur" id="nom_employeur" value="{{ old('nom_employeur', $entite->nom_employeur) }}" class="form-control">
-                        </div>
-    
-                        <div class="mb-4">
-                            <label for="adresse_employeur" class="block text-sm font-medium text-gray-700">Adresse de l'employeur :</label>
-                            <input type="text" name="adresse_employeur" id="adresse_employeur" value="{{ old('adresse_employeur', $entite->adresse_employeur) }}" class="form-control">
-                        </div>
+                       
     
                         <div class="mb-4">
                             <label for="numero_siret" class="block text-sm font-medium text-gray-700">Numéro SIRET :</label>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" 
-      data-assets-path="../backend/assets/" 
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+      data-assets-path="../backend/assets/"
       data-template="vertical-menu-template-free">
 <head>
     <meta charset="utf-8" />
@@ -56,19 +56,19 @@
     <nav x-data="{ open: true }" :class="{ 'container-expanded': open, 'container-collapsed': !open }" class="bg-gray-50 border-b border-gray-500">
         <div class="layout-wrapper layout-content-navbar d-flex">
             <div class="layout-container container d-flex" >
-         
+
           <!-- Menu -->
-  
+
           <aside x-show="open"  id="layout-menu" class="layout-menu  menu-vertical menu bg-menu-theme " class="navbar-dark d-flex":class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden"  >
 
             <div class="app-brand demo">
-           
+
                 <a href="{{ request()->is('dashboard') }}" class="app-brand-link gap-2">
                     <img src="{{ asset('../backend/image-removebg-preview.png') }}" alt="CSI Maghreb Logo" width="130" class="center-logo" />
-                  
-                
-                </a> 
-             
+
+
+                </a>
+
                     <defs>
                       <path
                         d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
@@ -116,18 +116,18 @@
                     </g>
                   </svg>
                 </span>
-              
+
               </a>
-  
+
               <a href="javascript:void(0);" class="layout-menu-toggle menu-link  ms-auto d-block  toggle-navbar">
                 <i class="bx bx-chevron-left bx-sm align-middle" @click="open = !open" ></i>
-                
-            </a>
-            
-            </div>
-  
 
-     
+            </a>
+
+            </div>
+
+
+
             <ul class="menu-inner py-1">
                 <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
                     <a href="{{ url('dashboard') }}" class="menu-link">
@@ -135,16 +135,16 @@
                         <div data-i18n="Analytics"  >Dashboard</div>
                     </a>
                 </li>
-                
+
                 <!-- Layouts -->
                 <li class="menu-item {{ request()->is('employees') ? 'active' : '' }}">
                     <a  href="{{ route('employees.index') }}" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Layouts"  >Employees</div>
                     </a>
-                
-                   
-                 
+
+
+
                   <ul class="menu-sub">
                     <li class="menu-item {{ request()->is('employees') ? 'active' : '' }}">
                         <a href="{{ route('employees.index') }}" class="menu-link">
@@ -152,9 +152,9 @@
                         </a>
                     </li>
                 </ul>
-                  
+
                 </li>
-  
+
               <li class="menu-item {{ request()->is('departements') || request()->is('departements/create') || request()->is('postes') || request()->is('postes/create') || request()->is('entites') || request()->is('entites/create') ? 'active' : '' }}">
                   <a href="#" class="menu-link menu-toggle">
                       <i class="menu-icon tf-icons bx bx-dock-top" ></i>
@@ -219,38 +219,38 @@
                       </li>
                   </ul>
               </li>
-              
-              
-              
+
+
+
               <li class="menu-item {{ request()->is('requests') ? 'active' : ''}}">
                 <a href="" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-detail"></i>
                   <div data-i18n="Authentications" >Demandes </div>
                 </a>
-         
+
               <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('requests') ? 'active' : ''}}">
                     <a href="{{ route('requests.index') }}" class="menu-link" target="_blank">
                       <div data-i18n="Basic">Demandes administratives</div>
                     </a>
                   </li>
-                
+
                   <li class="menu-item {{ request()->is('loan_requests') ? 'active' : ''}}">
                     <a href="{{ route('loan_requests.index') }}" class="menu-link" >
                       <div data-i18n="Error">Demandes Prêt Avances </div>
                     </a>
-                  </li> 
+                  </li>
                   <li class="menu-item {{ request()->is('') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}"">
                     <a href="{{ route('select-demande') }}" class="menu-link" >
                       <div data-i18n="Error">Demandes Divers </div>
                     </a>
-                  </li> 
-           
+                  </li>
+
                 </ul>
-            
-           
-          
-             
+
+
+
+
               <!-- Authorizations-->
               <li class="menu-item {{ request()->is('authorizations') ? 'active' : ''}}">
                 <a href="{{ route('authorizations.index') }}" class="menu-link">
@@ -259,13 +259,13 @@
                 </div>
                 </a>
               </li>
-            
-             
-            
+
+
+
              <!-- </li>
-  
+
                Forms & Tables &amp;-->
-              
+
               <!-- Forms -->
               <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
                 <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
@@ -277,17 +277,17 @@
                     <a href="{{ route('contract-types.index') }}" class="menu-link" >
                       <div data-i18n="Error">List Type Contrat </div>
                     </a>
-                  </li> 
+                  </li>
 
                   <li class="menu-item {{ request()->is('contract-types/create') ? 'active' : ''}}">
                     <a href="{{ route('contract-types.create') }}" class="menu-link" >
                       <div data-i18n="Error">Create Type Contrat </div>
                     </a>
-                  </li> 
+                  </li>
 
                 </ul>
               </li>
-             
+
           <!--  <li class="menu-item {{ request()->is('intervention-requests/*') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}">
                 <a href="#" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-show-alt "style="color: white;"></i>
@@ -316,26 +316,26 @@
                     </li>
                 </ul>
             </li>-->
-         
+
           </aside>
-   
+
           <!-- / Menu -->
-  
+
           <!-- Layout container -->
           <div class="layout-page">
             <!-- Navbar -->
-  
+
            <nav
             class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme ms-auto"
-            id="layout-navbar" 
+            id="layout-navbar"
           >
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0" data-testid="menu-hamburger">
             <a @click="open = !open" class="nav-item nav-link px-0 me-xl-4 toggle-sidebar-btn">
                 <i class="bx bx-menu bx-sm"></i>
             </a>
           </div>
-        
-  
+
+
           <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
             <!-- Search -->
             <div class="navbar-nav align-items-center">
@@ -369,21 +369,22 @@
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    <img src="{{ asset('storage/' . Auth::user()->employee->image) }}"  />
                   </div>
                 </a>
+                
                 <ul class="dropdown-menu dropdown-menu-end">
                   <li>
                     <a class="dropdown-item" href="#">
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                            <img src="{{ asset('storage/' . Auth::user()->employee->image) }}" />
                           </div>
                         </div>
                         <div class="flex-grow-1">
                           <div lass="flex-grow-1">{{ Auth::user()->name }}</div>
-                          <small class="text-muted">{{ Auth::user()->email }}</small> 
+                          <small class="text-muted">{{ Auth::user()->email }}</small>
                         </div>
                       </div>
                     </a>
@@ -415,23 +416,25 @@
                   <li>
                     <div class="dropdown-divider"></div>
                   </li>
-                  <li>
-                    <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="dropdown-item" style="background: none; border: none; padding: 0; color: inherit; font: inherit; cursor: pointer;">
+                    <li>
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                   document.getElementById('logout-form').submit();">
                             <i class="bx bx-power-off me-2"></i>
                             <span class="align-middle">Log Out</span>
-                        </button>
-                    </form>
-                </li>
-                
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+
+
                     </ul>
                   </li>
                   <!--/ User -->
                 </ul>
               </div>
             </nav>
-  
+
             <!-- / Navbar -->
     <!-- Responsive Navigation Menu -->
     <!--
@@ -463,8 +466,8 @@
             </x-responsive-nav-link>
         </div>
 
-       
-       
+
+
     </div>-->
 </nav>
 
@@ -474,14 +477,13 @@
     <script src="{{ asset('../backend/assets/vendor/js/bootstrap.js') }}"></script>
     <script src="{{ asset('../backend/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('../backend/assets/vendor/js/menu.js') }}"></script>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 
     <!-- Main JS -->
     <script src="{{ asset('../backend/assets/js/main.js') }}"></script>
 
     <!-- OneSignal SDK -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       document.addEventListener('alpine:init', () => {
           Alpine.data('menu', () => ({

@@ -26,6 +26,7 @@ use App\Http\Controllers\MaterialRequestController;
 use App\Http\Controllers\SpecificRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DiversController;
+use App\Http\Controllers\OneSignalController;
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -215,4 +216,8 @@ Route::put('/specific-requests/{specificRequest}/reject', [SpecificRequestContro
 Route::get('/select-demande', [DiversController::class, 'showSelectDemande'])->name('select-demande');
 
 Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
+
+Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
+
+Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');
 require __DIR__.'/auth.php';

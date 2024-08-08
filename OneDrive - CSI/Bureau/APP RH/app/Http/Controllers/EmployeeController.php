@@ -30,9 +30,14 @@ use Livewire\Livewire;
 use App\Events\EmployeeNotification;
 use App\Http\Livewire\EmployeeNotifications;
 use App\Events\MessageSent;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
 
@@ -442,31 +447,49 @@ public function store(Request $request)
         Mail::to($employee->email_professionnel)->send(new EmployeeUpdated($employee));
 
         // Send OneSignal notification to the employee
-        Log::info('Employee updated:', $employee->toArray());
+        $notificationMessageForEmployee = "Votre profil a été mis à jour : {$employee->nom} {$employee->prenom}";
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
 
-        try {
-            // Créer des filtres de notification basés sur les tags
-            $filters = [
-                ['field' => 'tag', 'key' => 'user_id', 'relation' => '=', 'value' => (string) $employee->user_id]
-            ];
+        $this->sendOneSignalNotification($notificationMessageForEmployee, $employeeSubscriptions);
 
-            Log::info('OneSignal Filters:', $filters);
+        // Notify the admin/HR
+        $notificationMessageForAdmin = "Vous avez mis à jour le profil de {$employee->nom} {$employee->prenom}";
+        $adminSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', auth()->user()->id)
+            ->pluck('subscription_id')
+            ->toArray();
 
-            // Envoyer la notification
-            $response = OneSignal::sendNotificationUsingTags(
-                "Votre profil a été mis à jour : {$employee->nom} {$employee->prenom}",
-                $filters
-            );
-
-            Log::info('OneSignal Response:', (array) $response);
-
-        } catch (\Exception $e) {
-            Log::error('Failed to send OneSignal notification: ' . $e->getMessage());
-        }
+        $this->sendOneSignalNotification($notificationMessageForAdmin, $adminSubscriptions);
 
         return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
     }
+    protected function sendOneSignalNotification($message, array $subscriptionIds)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
 
+            $response = OneSignal::sendNotificationToAll(
+                $message,
+                $url = null,
+                $data = null,
+                $buttons = null,
+                $schedule = null
+            );
+
+            Log::info('Notification sent successfully.', [
+                'response' => $response
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
+    }
     public function destroy(Employee $employee)
     {
         $employee->delete();
@@ -538,4 +561,3 @@ public function store(Request $request)
     }
 
 }
-
