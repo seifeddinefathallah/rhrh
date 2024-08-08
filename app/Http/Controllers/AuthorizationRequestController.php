@@ -13,6 +13,8 @@ use App\Models\TemporaryBalance;
 use App\Models\PeriodDefinition;
 use App\Models\DefaultBalance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Berkayk\OneSignal\OneSignalClient;
 
 
 class AuthorizationRequestController extends Controller
@@ -79,9 +81,44 @@ class AuthorizationRequestController extends Controller
         $authorization->duration = $duration;
         $authorization->save();
         $authorization->user->notify(new AuthorizationStatusNotification($authorization));
+        $notificationMessageForEmployee = "Authorization request submitted successfully : {$authorization->type}";
+
+        // Retrieve all subscription IDs for the employee
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        // Send push notifications to all subscription IDs
+        $this->sendOneSignalNotification($notificationMessageForEmployee, $employeeSubscriptions);
         return redirect()->route('authorizations.index')->with('success', 'Authorization request submitted successfully.');
     }
+    protected function sendOneSignalNotification($message, array $subscriptionIds)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+            $appUrl = config('app.url');
+            $route = 'requests';
+            $notificationUrl = "{$appUrl}/{$route}";
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl
+                );
 
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
+    }
     public function show(AuthorizationRequest $authorization)
     {
         //$this->authorize('view', $authorization); // Only authorized users can view their own authorizations
@@ -299,6 +336,13 @@ class AuthorizationRequestController extends Controller
             Log::error('Approval Failed: ' . $e->getMessage());
             return redirect()->route('authorizations.index')->with('error', 'Failed to approve the request.');
         }
+        $notificationMessageForApproval = "Authorization request approved successfully.";
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $authorization->employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        $this->sendOneSignalNotification_($notificationMessageForApproval, $employeeSubscriptions, 'approved');
     }
 
     public function reject(Request $request, AuthorizationRequest $authorization)
@@ -308,8 +352,47 @@ class AuthorizationRequestController extends Controller
         $authorization->update(['status' => 'rejected']);
 
         $authorization->user->notify(new AuthorizationStatusNotification($authorization));
+        $notificationMessageForRejection = "Authorization request rejected successfully.";
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $authorization->employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        $this->sendOneSignalNotification_($notificationMessageForRejection, $employeeSubscriptions, 'rejected');
+
 
         return redirect()->route('authorizations.index')->with('success', 'Authorization request rejected successfully.');
+    }
+    protected function sendOneSignalNotification_($message, array $subscriptionIds, $status)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+
+            // Define the URL to which the user will be redirected when they click the notification
+            $appUrl = config('app.url'); // Fetch the APP_URL from .env
+
+            // Set route based on status
+            $route = $status === 'approved' ? 'requests.approved' : 'requests.rejected'; // Replace with actual route names
+            $notificationUrl = "{$appUrl}/{$route}"; // Construct the full URL
+
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl // Add the URL parameter
+                );
+
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
     }
 
     public function updateTemporaryBalances(Request $request)

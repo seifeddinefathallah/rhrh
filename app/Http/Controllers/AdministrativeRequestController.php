@@ -16,9 +16,16 @@ use App\Mail\UpdateAdministrativeRequestStatusNotification;
 use App\Services\PdfService;
 use App\Mail\DocumentMail;
 use Illuminate\Support\Facades\Auth;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
+use App\Models\PushSubscription;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Berkayk\OneSignal\OneSignalClient;
+
 class AdministrativeRequestController extends Controller
 {
     protected $pdfService;
+    protected $oneSignal;
 
     public function index()
     {
@@ -47,10 +54,44 @@ class AdministrativeRequestController extends Controller
         // Envoyer l'e-mail de notification pour la création de la demande
         Mail::to($employee->email_professionnel)->send(new NewAdministrativeRequestNotification($employee, $demande));
 
-        return redirect()->route('requests.index')->with('success', 'Demande administrative créée avec succès.');
+        $notificationMessageForEmployee = "Demande administrative créée avec succès : {$request->type}";
+
+        // Retrieve all subscription IDs for the employee
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        // Send push notifications to all subscription IDs
+        $this->sendOneSignalNotification($notificationMessageForEmployee, $employeeSubscriptions);
+            return redirect()->route('requests.index')->with('success', 'Demande administrative créée avec succès.');
     }
+    protected function sendOneSignalNotification($message, array $subscriptionIds)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+            $appUrl = config('app.url');
+            $route = 'requests';
+            $notificationUrl = "{$appUrl}/{$route}";
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl
+                );
 
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
 
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
+    }
 
     public function edit(AdministrativeRequest $request)
     {
@@ -124,8 +165,9 @@ class AdministrativeRequestController extends Controller
         $request->delete();
         return redirect()->route('requests.index')->with('success', 'Demande administrative supprimée avec succès.');
     }
-    public function __construct(PdfService $pdfService)
+    public function __construct(PdfService $pdfService, OneSignalClient $oneSignal)
     {
+        $this->oneSignal = $oneSignal;
         $this->pdfService = $pdfService;
         $this->middleware('auth');
     }
@@ -150,6 +192,14 @@ class AdministrativeRequestController extends Controller
 
             Mail::to($employee->email_professionnel)->send(new DocumentMail($employee, $administrativeRequest, $pdf));
 
+            $notificationMessageForApproval = "Your administrative request has been approved.";
+            $employeeSubscriptions = DB::table('push_subscriptions')
+                ->where('user_id', $employee->user_id)
+                ->pluck('subscription_id')
+                ->toArray();
+
+            $this->sendOneSignalNotification_($notificationMessageForApproval, $employeeSubscriptions, 'approved');
+
             return redirect()->route('requests.index')->with('success', 'Demande approuvée avec succès.');
         }
 
@@ -168,10 +218,51 @@ class AdministrativeRequestController extends Controller
 
             Mail::to($employee->email_professionnel)->send(new UpdateAdministrativeRequestStatusNotification($employee, $administrativeRequest));
 
+            $notificationMessageForRejection = "Your administrative request has been rejected.";
+            $employeeSubscriptions = DB::table('push_subscriptions')
+                ->where('user_id', $employee->user_id)
+                ->pluck('subscription_id')
+                ->toArray();
+
+            $this->sendOneSignalNotification_($notificationMessageForRejection, $employeeSubscriptions, 'rejected');
+
+
             return redirect()->route('requests.index')->with('success', 'Demande rejetée avec succès.');
         }
 
         return redirect()->route('requests.index')->with('error', 'La demande est déjà rejetée.');
+    }
+
+    protected function sendOneSignalNotification_($message, array $subscriptionIds, $status)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+
+            // Define the URL to which the user will be redirected when they click the notification
+            $appUrl = config('app.url'); // Fetch the APP_URL from .env
+
+            // Set route based on status
+            $route = $status === 'approved' ? 'requests.approved' : 'requests.rejected'; // Replace with actual route names
+            $notificationUrl = "{$appUrl}/{$route}"; // Construct the full URL
+
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl // Add the URL parameter
+                );
+
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
     }
 
 }
