@@ -11,6 +11,10 @@ use App\Mail\InterventionRequestCreated;
 use App\Mail\InterventionRequestApproved;
 use App\Mail\InterventionRequestRejected;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Berkayk\OneSignal\OneSignalClient;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 
 
 class InterventionRequestController extends Controller

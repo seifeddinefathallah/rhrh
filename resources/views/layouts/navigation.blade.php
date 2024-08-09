@@ -260,6 +260,21 @@
                 </a>
               </li>
 
+              <li class="menu-item {{ request()->is('leave_requests') ? 'active' : ''}}">
+                  <a href="{{ route('leave_requests.index') }}" class="menu-link">
+                      <i class="menu-icon tf-icons bx bx-collection"></i>
+                      <div data-i18n="Basic">Congés
+                      </div>
+                  </a>
+              </li>
+
+              <li class="menu-item {{ request()->is('leave_types') ? 'active' : ''}}">
+                  <a href="{{ route('leave_types.index') }}" class="menu-link">
+                      <i class="menu-icon tf-icons bx bx-collection"></i>
+                      <div data-i18n="Basic">Types Congés
+                      </div>
+                  </a>
+              </li>
 
 
              <!-- </li>

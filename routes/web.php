@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\ProviderController;
+use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +45,7 @@ Route::get('/auth/{provider}/callback', [ProviderController::class, 'callback'])
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified', 'twostep'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -220,4 +222,8 @@ Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
 Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');;
 
 Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
+
+Route::resource('leave_types', LeaveTypeController::class);
+Route::resource('leave_requests', LeaveRequestController::class);
+
 require __DIR__.'/auth.php';
