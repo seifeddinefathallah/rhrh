@@ -2,7 +2,7 @@
 
     @section('content')
       
-    <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class="layout-container" style="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class=" container-xxl flex-grow-1 container-p-y">  
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                

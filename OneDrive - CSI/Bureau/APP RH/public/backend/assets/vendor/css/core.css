@@ -15240,8 +15240,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .layout-container {
   width: 100%;
   display: flex;
-  flex: 1 1 auto;
-  align-items: stretch;
+  transition: margin-left 0.3s ease;
 }
 
 .layout-page,
@@ -15249,6 +15248,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .content-wrapper > *,
 .layout-menu {
   min-height: 1px;
+  display: flex;
 }
 
 .layout-navbar,
@@ -15339,7 +15339,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   }
 }
 .layout-navbar-fixed.layout-menu-collapsed .layout-navbar.navbar-detached {
-  width: calc(100% - calc(1.625rem * 2) - 5.25rem);
+  width: calc(100% - calc(0.625rem * 2) - 0.25rem);
 }
 @media (max-width: 1199.98px) {
   .layout-navbar.navbar-detached {
@@ -15432,7 +15432,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 
   .layout-menu-fixed:not(.layout-menu-collapsed) .layout-page,
 .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-page {
-    padding-left: 16.25rem;
+    padding-left: 1.25rem;
   }
 }
 html:not(.layout-navbar-fixed):not(.layout-menu-fixed):not(.layout-menu-fixed-offcanvas) .layout-page,

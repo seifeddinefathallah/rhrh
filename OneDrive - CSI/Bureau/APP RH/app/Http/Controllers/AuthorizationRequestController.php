@@ -97,7 +97,7 @@ class AuthorizationRequestController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'start_time' => 'required|string',
             'end_time' => 'required|string',
-            'duration_type' => $request->input('type') === 'Sortie' ? 'required|string' : 'nullable|string',
+           // 'duration_type' => $request->input('type') === 'Sortie' ? 'required|string' : 'nullable|string',
             //'duration' => 'nullable|string',
 
         ]);
@@ -119,7 +119,7 @@ class AuthorizationRequestController extends Controller
             $request->merge(['duration' => $duration]);
         }
 
-        $authorization->update($request->all());
+      // $authorization->update($request->all());
 
         // Notify the user about the status update
         $authorization->user->notify(new AuthorizationStatusNotification($authorization));

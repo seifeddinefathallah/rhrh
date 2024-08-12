@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Conteneur principal avec classes dynamiques -->
-    <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
+    <div class="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8" >
         <div class="container-xl flex-grow-1 container-p-y">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-3 bg-white border-b border-gray-200">
@@ -63,7 +63,7 @@
                     <div class="mb-3">
                         <a href="{{ route('employees.create') }}" class="btn btn-primary float-end">Create Employee</a>
                     </div>
-   </div>
+
         </div>
                     <!-- Livewire Component and Pagination -->
                     <div>
@@ -71,7 +71,7 @@
                         @livewire('employee-search')
 
                         <!-- Create Employee Button -->
-                        
+           </div>                
                     </div>
                 </div>
          

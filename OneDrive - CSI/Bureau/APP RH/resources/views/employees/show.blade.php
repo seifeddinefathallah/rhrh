@@ -2,9 +2,10 @@
 
 @section('content')
 
-<div class="layout-container" style="width: 85%; position: relative; left: 16%;">
-    <div class="container-xxl flex-grow-1 container-p-y">  
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg"> 
+<div class="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8" >
+    <div class="container-xl flex-grow-1 container-p-y">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-3 bg-white border-b border-gray-200">
             <h2 class="font-semibold text-xl text-center leading-tight custom-font" style="color: #03c3ec;">
                 {{ __('Details Employee') }}
             </h2>
@@ -180,8 +181,8 @@
                     </div>
                 </div>
                 <!-- Bouton de retour -->
-                <div class="mt-4">
-                    <a href="{{ route('employees.index') }}" class="btn btn-primary">Retour à la liste</a>
+                <div class="mt-4 d-flex justify-content-end gap-2">
+                    <a href="{{ route('employees.index') }}" class="btn btn-secondary">Retour à la liste</a>
                 </div>
             </div>
         </div>

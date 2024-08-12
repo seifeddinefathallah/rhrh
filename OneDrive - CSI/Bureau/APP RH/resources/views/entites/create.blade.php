@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
-    <div class=" container-xxl mx-auto flex-grow-1 container-p-y">  
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                
+<div class="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8" >
+    <div class="container-xl flex-grow-1 container-p-y">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-3 bg-white border-b border-gray-200">
                 <h1 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Ajouter une nouvelle entité</h1>
                 <form id="entity-form" action="{{ route('entites.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
               
@@ -58,22 +58,22 @@
                         <label>Identifiant de l’établissement </label>
                         <input class="form-control" type="text" name="identifiant_etablissement" required>
                     </div>
-                    <div>
- <div class="mt-4 d-flex justify-content-end gap-2"> 
+             
+                      <div class="mt-4 flex justify-content-end gap-2 float-end"> 
 
                         <button type="submit" class="btn btn-primary">Ajouter</button>
-                        <a href="{{ route('entites.index') }}" class="btn btn-secondary float-end">
+                        <a href="{{ route('entites.index') }}" class="btn btn-secondary ">
                             Retour à la liste
                         </a> 
                     </div>
-                </div>
-
+               </div>
+            </div>
                 </form>
             </div>
         </div>
     </div>
 @endsection
-=
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -97,7 +97,7 @@
         });
     </script>
 
-=  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('entity-form').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the default form submission
@@ -107,6 +107,7 @@
             let isValid = true;
             let firstInvalidField = null;
             let inputs = form.querySelectorAll('input[required]');
+            let imageInput = form.querySelector('input[name="image"]');
 
             inputs.forEach(function(input) {
                 input.classList.remove('input-invalid'); // Remove the red border class
@@ -118,6 +119,17 @@
                     }
                 }
             });
+
+            // Validate the image input
+            if (imageInput && imageInput.files.length === 0) {
+                isValid = false;
+                imageInput.classList.add('input-invalid'); // Add the red border class
+                if (!firstInvalidField) {
+                    firstInvalidField = imageInput;
+                }
+            } else {
+                imageInput.classList.remove('input-invalid'); // Remove the red border class if valid
+            }
 
             if (isValid) {
                 Swal.fire({
@@ -136,12 +148,12 @@
             } else {
                 Swal.fire({
                     title: 'Erreur',
-                    text: 'Veuillez remplir tous les champs requis.',
+                    text: 'Veuillez remplir tous les champs requis, y compris l\'image.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 }).then(() => {
                     if (firstInvalidField) {
-                        firstInvalidField.focus(); // Scroll to the first invalid field
+                        firstInvalidField.focus(); 
                     }
                 });
             }

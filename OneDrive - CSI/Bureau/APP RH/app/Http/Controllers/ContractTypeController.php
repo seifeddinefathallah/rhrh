@@ -49,9 +49,9 @@ class ContractTypeController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'country' => 'required|string|max:255',
-            'classification' => 'nullable|string|max:255',
-            'coefficient' => 'nullable|numeric',
-            'probation_period' => 'nullable|integer',
+            'classification' => 'required|nullable|string|max:255',
+            'coefficient' => 'required|nullable|numeric',
+            'probation_period' => 'required|nullable|integer',
             'renouvellement' => 'nullable|boolean',
             'cdt_renouv' => 'nullable|integer',
         ]);

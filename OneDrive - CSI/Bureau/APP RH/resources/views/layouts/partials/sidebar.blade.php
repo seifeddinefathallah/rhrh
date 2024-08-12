@@ -7,10 +7,10 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- User Profile -->
                 <li class="nav-item">
-                    <img src="{{ asset('storage/' . Auth::user()->employee->image) }}" class="img-fluid">
-                    <a href="{{ route('employees.show', Auth::user()->employee->id) }}" class="nav-link">
+                    <img src="" class="img-fluid">
+                    <a href="" class="nav-link">
                         <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                        <p>{{ Auth::user()->name }}</p>
+                        <p></p>
                     </a>
                 </li>
 
@@ -22,6 +22,7 @@
                     </a>
                 </li>
 
+                <!-- Additional Sidebar Links -->
                 <li class="nav-item">
                     <a href="{{ route('employees.index') }}" class="nav-link {{ request()->routeIs('employees.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
@@ -70,28 +71,27 @@
                         <p>Demandes Prêts et avances</p>
                     </a>
                 </li>
+
                 <li class="nav-item dropdown">
                     <a id="demandesDiversDropdown" href="#" class="nav-link dropdown-toggle {{ request()->is('demandes-divers/*') ? 'active' : '' }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="nav-icon fas fa-tasks"></i>
-                            <p>Demandes Divers</p>
+                        <p>Demandes Divers</p>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="demandesDiversDropdown">
                         <a href="{{ route('intervention-requests.index') }}" class="dropdown-item {{ request()->routeIs('intervention-requests.index') ? 'active' : '' }}">
-                                Demandes d'Interventions
+                            Demandes d'Interventions
                         </a>
                         <a href="{{ route('supply_requests.index') }}" class="dropdown-item {{ request()->routeIs('supply_requests.index') ? 'active' : '' }}">
-                                Demandes de Fournitures
+                            Demandes de Fournitures
                         </a>
                         <a href="{{ route('material_requests.index') }}" class="dropdown-item {{ request()->routeIs('materiel_requests.index') ? 'active' : '' }}">
-                                Demandes de Matériels Informatiques
+                            Demandes de Matériels Informatiques
                         </a>
                         <a href="{{ route('specific_requests.index') }}" class="dropdown-item {{ request()->routeIs('specific_requests.index') ? 'active' : '' }}">
-                                Autres Demandes Spécifiques
+                            Autres Demandes Spécifiques
                         </a>
                     </div>
                 </li>
-
-
             </ul>
         </nav>
     </div>

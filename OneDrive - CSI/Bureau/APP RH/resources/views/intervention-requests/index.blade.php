@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="main-layout" class="layout-container" style="width: 85%; position: relative; left: 16%;">
-    <div class="container-xxl flex-grow-1 container-p-y">  
+<div class="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8" >
+    <div class="container-xl flex-grow-1 container-p-y">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    
        
            
           
@@ -13,7 +15,7 @@
        
         @livewire('intervention-request-search')
         
-      
+                </div>
     </div>
 </div>
 @endsection

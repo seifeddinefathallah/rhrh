@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
       data-assets-path="../backend/assets/"
@@ -38,7 +39,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .container-expanded {
-            margin-left: 50px; /* Adjust as needed */
+            margin-left: 250px; /* Adjust as needed */
             transition: margin-left 0.3s ease;
             color: #03428e;
         }
@@ -52,22 +53,19 @@
         }
     </style>
 </head>
-<body>
-    <nav x-data="{ open: true }" :class="{ 'container-expanded': open, 'container-collapsed': !open }" class="bg-gray-50 border-b border-gray-500">
+<body x-data="{ open: true }">
+    <nav :class="{ 'container-expanded': open, 'container-collapsed': !open }" class="bg-gray-50 border-b border-gray-500">
         <div class="layout-wrapper layout-content-navbar d-flex">
-            <div class="layout-container container d-flex" >
-
-          <!-- Menu -->
-
-          <aside x-show="open"  id="layout-menu" class="layout-menu  menu-vertical menu bg-menu-theme " class="navbar-dark d-flex":class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden"  >
-
-            <div class="app-brand demo">
-
-                <a href="{{ request()->is('dashboard') }}" class="app-brand-link gap-2">
-                    <img src="{{ asset('../backend/image-removebg-preview.png') }}" alt="CSI Maghreb Logo" width="130" class="center-logo" />
-
-
-                </a>
+            <div class="layout-container container d-flex">
+                <!-- Menu -->
+                <aside x-show="open" id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                    <div class="app-brand demo">
+                        <a href="{{ request()->is('dashboard') }}" class="app-brand-link gap-2">
+                            <img src="{{ asset('../backend/image-removebg-preview.png') }}" alt="CSI Maghreb Logo" width="130" class="center-logo" />
+                        </a>
+                        <a href="javascript:void(0);" class="layout-menu-toggle menu-link ms-auto d-block" @click="open = !open">
+                            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                        </a>
 
                     <defs>
                       <path
@@ -114,13 +112,13 @@
                         </g>
                       </g>
                     </g>
-                  </svg>
+                 
                 </span>
 
               </a>
 
               <a href="javascript:void(0);" class="layout-menu-toggle menu-link  ms-auto d-block  toggle-navbar">
-                <i class="bx bx-chevron-left bx-sm align-middle" @click="open = !open" ></i>
+                <i class="bx bx-chevron-left bx-sm align-middle " @click="open = !open" ></i>
 
             </a>
 
@@ -128,9 +126,9 @@
 
 
 
-            <ul class="menu-inner py-1">
+            <ul class="menu-inner py-1 d-flex" >
                 <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                    <a href="{{ url('dashboard') }}" class="menu-link">
+                    <a href="{{ url('dashboard') }}" class="menu-link d-flex">
                         <i class="menu-icon tf-icons bx bx-home-circle "></i>
                         <div data-i18n="Analytics"  >Dashboard</div>
                     </a>
@@ -142,8 +140,6 @@
                         <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Layouts"  >Employees</div>
                     </a>
-
-
 
                   <ul class="menu-sub">
                     <li class="menu-item {{ request()->is('employees') ? 'active' : '' }}">
@@ -181,7 +177,7 @@
                       </li>
                       <li class="menu-item {{ request()->is('departements') || request()->is('departements/create') ? 'active' : '' }}">
                           <a href="#" class="menu-link1 menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-home-circle" style="margin-left: 45px;transform: translateY(25px); color: #00b5cc;"></i>
+                            <i class="menu-icon tf-icons bx bx-home-circle" style="margin-left: 45px;transform: translateY(25px); "></i>
 
 
                               <div data-i18n="Account Settings" style="display: block; text-align: center;">Departements</div>
@@ -269,8 +265,8 @@
               <!-- Forms -->
               <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
                 <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bx-credit-card"style="color: white;"></i>
-                  <div data-i18n="Boxicons"style="color: white;">Types Contrats</div>
+                  <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                  <div data-i18n="Boxicons">Types Contrats</div>
                 </a>
                 <ul class="menu-sub">
                   <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
@@ -279,7 +275,7 @@
                     </a>
                   </li>
 
-                  <li class="menu-item {{ request()->is('contract-types/create') ? 'active' : ''}}">
+                  <li class="menu-item d-flex {{ request()->is('contract-types/create') ? 'active' : ''}}">
                     <a href="{{ route('contract-types.create') }}" class="menu-link" >
                       <div data-i18n="Error">Create Type Contrat </div>
                     </a>
@@ -288,35 +284,26 @@
                 </ul>
               </li>
 
-          <!--  <li class="menu-item {{ request()->is('intervention-requests/*') || request()->is('supply_requests/*') || request()->is('material_requests/*') || request()->is('specific_requests/*') ? 'active' : '' }}">
-                <a href="#" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bx-show-alt "style="color: white;"></i>
-                    <div data-i18n="Boxicons"style="color: white;">Demandes Divers</div>
+              <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
+                <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-edit-alt"></i>
+                  <div data-i18n="Boxicons">Congé annuel</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class="menu-item {{ request()->routeIs('intervention-requests.index') ? 'active' : '' }}">
-                        <a href="{{ route('intervention-requests.index') }}" class="menu-link">
-                            <div data-i18n="Intervention Requests" style="display: block; text-align: center;">Demandes d'Interventions</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ request()->routeIs('supply_requests.index') ? 'active' : '' }}">
-                        <a href="{{ route('supply_requests.index') }}" class="menu-link">
-                            <div data-i18n="Supply Requests" style="display: block; text-align: center;">Demandes de Fournitures</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ request()->routeIs('material_requests.index') ? 'active' : '' }}">
-                        <a href="{{ route('material_requests.index') }}" class="menu-link">
-                            <div data-i18n="Material Requests" style="display: block; text-align: center;">Demandes de Matériels Informatiques</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ request()->routeIs('specific_requests.index') ? 'active' : '' }}">
-                        <a href="{{ route('specific_requests.index') }}" class="menu-link">
-                            <div data-i18n="Specific Requests" style="display: block; text-align: center;">Autres Demandes Spécifiques</div>
-                        </a>
-                    </li>
-                </ul>
-            </li>-->
+                  <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
+                    <a href="{{ route('contract-types.index') }}" class="menu-link" >
+                      <div data-i18n="Error"> Liste des demmandes</div>
+                    </a>
+                  </li>
 
+                  <li class="menu-item d-flex {{ request()->is('contract-types/create') ? 'active' : ''}}">
+                    <a href="{{ route('contract-types.create') }}" class="menu-link" >
+                      <div data-i18n="Error">Demmande de congé </div>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
           </aside>
 
           <!-- / Menu -->
@@ -330,8 +317,12 @@
             id="layout-navbar"
           >
           <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0" data-testid="menu-hamburger">
-            <a @click="open = !open" class="nav-item nav-link px-0 me-xl-4 toggle-sidebar-btn">
+            <a @click="open = !open" class="nav-item nav-link px-0 me-xl-4 ">
                 <i class="bx bx-menu bx-sm"></i>
+                <svg   fill="none" viewBox="0 0 24 24">
+                  <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                  <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </a>
           </div>
 
@@ -433,8 +424,7 @@
                   <!--/ User -->
                 </ul>
               </div>
-            </nav>
-
+         
             <!-- / Navbar -->
     <!-- Responsive Navigation Menu -->
     <!--

@@ -1,10 +1,10 @@
     @extends('layouts.app')
 
     @section('content')
-     
-    <div class="layout-container" style="width: 85%; position: relative; left: 16%;">
-            <div class=" container-xxl flex-grow-1 container-p-y">  
+    <div class="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8" >
+        <div class="container-xl flex-grow-1 container-p-y">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-3 bg-white border-b border-gray-200">
                 <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">
             Modifier l'entité
         </h2>
@@ -13,10 +13,12 @@
                         @csrf
                         @method('PUT')
     
-                        <div class="form-group mb-4">
-                            <label for="image" class="block text-sm font-medium text-gray-700">Image de l'entité</label>
-                            <input type="file" class="form-control-file mt-1 block w-full border-gray-300 rounded-md shadow-sm" id="image" name="image">
+                        <div class="mb-3">
+                         
+                            <label for="image">Image</label>
+                            <input type="file" class="form-control" id="image" name="image">
                         </div>
+                        
     
                         <div class="mb-4">
                             <label for="nom" class="block text-sm font-medium text-gray-700">Nom :</label>

@@ -12,10 +12,8 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-
-
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function(OneSignal) {
@@ -49,28 +47,29 @@
             }
         });
     </script>
-     @livewireStyles
+
+    @livewireStyles
 </head>
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+<body class="hold-transition sidebar-mini ">
+    <div class="wrapper">
+     
         @include('layouts.navigation')
 
-        <!-- Page Heading -->
+        <!-- Page Heading    include('layouts.partials.navbar')-->
         @isset($header)
         <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="content-wrapper">
                 {{ $header }}
             </div>
         </header>
         @endisset
 
-    <!-- Page Content -->
-<main id="main-content" class="container-fluid" >
-    @yield('content')
-</main>
+        <!-- Page Content -->
+        <section class="container-fluid d-flex flex-row align-items-center ms-auto">
+            @yield('content')
+        </section>
 
-@livewireScripts
-
-
+        @livewireScripts
+    </div>
 </body>
 </html>
