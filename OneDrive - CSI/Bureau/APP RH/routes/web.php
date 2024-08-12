@@ -27,6 +27,8 @@ use App\Http\Controllers\SpecificRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DiversController;
 use App\Http\Controllers\OneSignalController;
+use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\LeaveRequestController;
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -220,4 +222,11 @@ Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
 
 Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');
+
+Route::resource('leave_types', LeaveTypeController::class);
+Route::resource('leave_requests', LeaveRequestController::class);
+Route::put('/leave_requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
+Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
+
+
 require __DIR__.'/auth.php';

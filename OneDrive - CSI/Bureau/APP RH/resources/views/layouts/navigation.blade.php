@@ -283,24 +283,35 @@
 
                 </ul>
               </li>
-
-              <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
-                <a href="{{ route('contract-types.index') }}" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons bx bx-edit-alt"></i>
-                  <div data-i18n="Boxicons">Congé annuel</div>
+              <li class="menu-item {{ request()->is('leave_types') ? 'active' : ''}}">
+                <a href="{{ route('leave_types.index') }}" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-menu"></i>
+                  <div data-i18n="Boxicons">Type de congé</div>
                 </a>
                 <ul class="menu-sub">
-                  <li class="menu-item {{ request()->is('contract-types') ? 'active' : ''}}">
-                    <a href="{{ route('contract-types.index') }}" class="menu-link" >
-                      <div data-i18n="Error"> Liste des demmandes</div>
+                  <li class="menu-item {{ request()->is('leave_types') ? 'active' : ''}}">
+                    <a href="{{ route('leave_types.index') }}" class="menu-link" >
+                      <div data-i18n="Error"> Liste </div>
                     </a>
                   </li>
 
-                  <li class="menu-item d-flex {{ request()->is('contract-types/create') ? 'active' : ''}}">
-                    <a href="{{ route('contract-types.create') }}" class="menu-link" >
-                      <div data-i18n="Error">Demmande de congé </div>
+                 
+
+                </ul>
+              </li>
+              <li class="menu-item {{ request()->is('leave_requests') ? 'active' : ''}}">
+                <a href="{{ route('leave_requests.index') }}" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-edit-alt"></i>
+                  <div data-i18n="Boxicons">Demmande de Congé </div>
+                </a>
+                <ul class="menu-sub">
+                  <li class="menu-item {{ request()->is('leave_requests') ? 'active' : ''}}">
+                    <a href="{{ route('leave_requests.index') }}" class="menu-link" >
+                      <div data-i18n="Error"> Liste des congés</div>
                     </a>
                   </li>
+
+                
 
                 </ul>
               </li>
