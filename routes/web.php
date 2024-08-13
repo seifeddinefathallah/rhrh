@@ -45,7 +45,7 @@ Route::get('/auth/{provider}/callback', [ProviderController::class, 'callback'])
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'twostep'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -225,5 +225,7 @@ Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 
 Route::resource('leave_types', LeaveTypeController::class);
 Route::resource('leave_requests', LeaveRequestController::class);
+Route::put('/leave_requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
+Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
 
 require __DIR__.'/auth.php';
