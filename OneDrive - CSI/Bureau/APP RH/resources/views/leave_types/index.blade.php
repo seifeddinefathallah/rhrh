@@ -63,7 +63,16 @@
                                             <form action="{{ route('leave_types.destroy', $type) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger
+                                                 <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+</td>
+
                     </tr>
                 @endforeach
                 </tbody>

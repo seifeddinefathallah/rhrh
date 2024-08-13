@@ -30,6 +30,7 @@ use App\Http\Controllers\OneSignalController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\LeaveRequestController;
 
+
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
     return view('welcome');
@@ -229,4 +230,11 @@ Route::put('/leave_requests/{leaveRequest}/approve', [LeaveRequestController::cl
 Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
 
 
+
+Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
+
+Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');;
+
+
+Route::get('/dashboard', [LeaveRequestController::class, 'dashboard'])->name('dashboard');
 require __DIR__.'/auth.php';

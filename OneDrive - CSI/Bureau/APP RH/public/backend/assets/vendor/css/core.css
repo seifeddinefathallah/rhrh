@@ -153,7 +153,27 @@ p {
   height: 12px;
   border-radius: 50%; /* Cette propriété rendra l'image ronde */
 }
+.card-style-0 {
+  background-color: #f8f9fa; /* Light background */
+}
 
+.card-style-1 {
+  background-color: #e9ecef; /* Slightly darker background */
+}
+
+/* Add more styles as needed */
+
+/* Default avatar style */
+.avatar-style-0 {
+  border: 2px solid #912b6a; /* Blue border */
+}
+
+.avatar-style-1 {
+  border: 2px solid #03c3ec; /* Green border */
+}
+.avatar-style-2 {
+  border: 2px solid #ffab00; /* Green border */
+}
 .input-invalid {
   border: 2px solid #dc3545; /* Bordure rouge pour l'erreur */
   background-color: #f8d7da; /* Fond légèrement rose */

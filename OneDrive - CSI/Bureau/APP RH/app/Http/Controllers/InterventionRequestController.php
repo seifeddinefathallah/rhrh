@@ -11,10 +11,18 @@ use App\Mail\InterventionRequestCreated;
 use App\Mail\InterventionRequestApproved;
 use App\Mail\InterventionRequestRejected;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Berkayk\OneSignal\OneSignalClient;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 
 
 class InterventionRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $requests = InterventionRequest::all();
@@ -58,6 +66,7 @@ class InterventionRequestController extends Controller
             return redirect()->route('intervention-requests.create')
                 ->with('error', 'Une erreur est survenue lors de la création de la demande: ' . $e->getMessage());
         }
+
     }
 
     public function edit(InterventionRequest $interventionRequest)
@@ -110,6 +119,13 @@ class InterventionRequestController extends Controller
         try {
             $interventionRequest->update(['status' => 'approved']);
             Mail::to($interventionRequest->employee->email_professionnel)->send(new InterventionRequestApproved($interventionRequest));
+            $notificationMessageForApproval = "Demande d\'intervention approuvée.";
+            $employeeSubscriptions = DB::table('push_subscriptions')
+                ->where('user_id', $interventionRequest->employee->user_id)
+                ->pluck('subscription_id')
+                ->toArray();
+
+            $this->sendOneSignalNotification_($notificationMessageForApproval, $employeeSubscriptions, 'approved');
             return redirect()->route('intervention-requests.index')
                 ->with('success', 'Demande d\'intervention approuvée avec succès.');
         } catch (\Exception $e) {
@@ -123,6 +139,13 @@ class InterventionRequestController extends Controller
         try {
             $interventionRequest->update(['status' => 'rejected']);
             Mail::to($interventionRequest->employee->email_professionnel)->send(new InterventionRequestRejected($interventionRequest));
+            $notificationMessageForRejection = "Demande d\'intervention rejetée.";
+            $employeeSubscriptions = DB::table('push_subscriptions')
+                ->where('user_id', $interventionRequest->employee->user_id)
+                ->pluck('subscription_id')
+                ->toArray();
+
+            $this->sendOneSignalNotification_($notificationMessageForRejection, $employeeSubscriptions, 'rejected');
             return redirect()->route('intervention-requests.index')
                 ->with('success', 'Demande d\'intervention rejetée avec succès.');
         } catch (\Exception $e) {
@@ -130,4 +153,37 @@ class InterventionRequestController extends Controller
                 ->with('error', 'Une erreur est survenue lors du rejet de la demande: ' . $e->getMessage());
         }
     }
+
+    protected function sendOneSignalNotification_($message, array $subscriptionIds, $status)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+
+            // Define the URL to which the user will be redirected when they click the notification
+            $appUrl = config('app.url'); // Fetch the APP_URL from .env
+
+            // Set route based on status
+            $route = $status === 'approved' ? 'intervention-requests.approved' : 'intervention-requests.rejected'; // Replace with actual route names
+            $notificationUrl = "{$appUrl}/{$route}"; // Construct the full URL
+
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl // Add the URL parameter
+                );
+
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
+    }
+
 }
