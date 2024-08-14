@@ -50,6 +50,18 @@ class Employee extends Model
     {
         parent::boot();
 
+        static::created(function ($employee) {
+            $leaveTypes = LeaveType::all();
+
+            foreach ($leaveTypes as $leaveType) {
+                LeaveBalance::create([
+                    'employee_id' => $employee->id,
+                    'leave_type_id' => $leaveType->id,
+                    'remaining_days' => $leaveType->max_days,
+                ]);
+            }
+        });
+
         static::deleting(function ($employee) {
             if ($employee->user) {
                 $employee->user->delete();
@@ -88,7 +100,7 @@ class Employee extends Model
         'debut_contrat',
         'duree_contrat',
         'fin_contrat' ,
-        'contract_type_id', 
+        'contract_type_id',
        'image',
         'sortie_balance',
         'teletravail_days_balance',

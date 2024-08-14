@@ -52,9 +52,11 @@
                                 <i class="bx bx-dots-vertical-rounded text-primary"></i>
                             </button>
                             <div class="dropdown-menu">
+                                @if ($request->status === 'pending')
                                 <a class="dropdown-item" href="{{ route('leave_requests.edit', $request) }}">
                                     <i class="bx bx-edit-alt me-1 text-warning"></i> Modifier
                                 </a>
+                                @endif
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $request->id }}">
                                     <i class="bx bx-trash me-1 text-danger"></i> Supprimer
                                 </a>

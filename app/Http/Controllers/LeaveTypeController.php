@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeaveType;
+use App\Models\Employee;
+use App\Models\LeaveBalance;
 use Illuminate\Http\Request;
+//use App\Http\Controllers\Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LeaveTypeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $leaveTypes = LeaveType::all();
@@ -31,7 +31,7 @@ class LeaveTypeController extends Controller
             'max_days' => 'nullable|integer|min:0',
         ]);
 
-        LeaveType::create($request->all());
+        $leaveType = LeaveType::create($request->all());
 
         $employees = Employee::all();
         foreach ($employees as $employee) {
@@ -41,7 +41,6 @@ class LeaveTypeController extends Controller
                 'remaining_days' => $leaveType->max_days,
             ]);
         }
-
 
         return redirect()->route('leave_types.index')
             ->with('success', 'Type de congé créé avec succès.');
@@ -78,4 +77,34 @@ class LeaveTypeController extends Controller
         return redirect()->route('leave_types.index')
             ->with('success', 'Type de congé supprimé avec succès.');
     }
+
+
+    public function dashboard(Request $request)
+    {
+
+        $leaveTypeId = $request->input('leave_type_id');
+        Log::info('Leave Type ID récupéré à partir de la requête', ['leave_type_id' => $leaveTypeId]);
+
+
+        $employee = Auth::user(); // En supposant que Auth::user() renvoie le modèle Employee
+        Log::info('Employé actuellement authentifié', ['employee_id' => $employee->id]);
+
+        // Récupérer les enregistrements de LeaveBalance pour l'employé authentifié
+        $leaveBalances = LeaveBalance::where('employee_id', $employee->id)->get();
+        Log::info('Enregistrements de LeaveBalance récupérés', ['count' => $leaveBalances->count()]);
+
+        // Filtrer les enregistrements en fonction de leave_type_id
+        $filteredLeaveBalances = $leaveBalances->filter(function($leaveBalance) use ($leaveTypeId) {
+            return $leaveBalance->leave_type_id == $leaveTypeId;
+        });
+        Log::info('Enregistrements de LeaveBalance filtrés', ['count' => $filteredLeaveBalances->count()]);
+
+        // Extraire les remaining_days des enregistrements filtrés
+        $remainingDaysList = $filteredLeaveBalances->pluck('remaining_days');
+        Log::info('Liste des jours restants extraite', ['remaining_days_list' => $remainingDaysList]);
+
+        // Passer la liste des remaining days à la vue
+        return view('dashboard', compact('remainingDaysList'));
+    }
+
 }

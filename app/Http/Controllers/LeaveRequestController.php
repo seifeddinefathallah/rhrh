@@ -126,7 +126,7 @@ class LeaveRequestController extends Controller
                 Storage::delete($medicalCertificatePath);
                 Log::info('Old medical certificate deleted: ' . $medicalCertificatePath);
             }
-            $medicalCertificatePath = $request->file('medical_certificate')->store('medical_certificates');
+            $medicalCertificatePath = $request->file('medical_certificate')->store('public/medical_certificates');
             Log::info('New medical certificate uploaded to: ' . $medicalCertificatePath);
         }
 
