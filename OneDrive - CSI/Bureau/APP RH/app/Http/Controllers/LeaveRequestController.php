@@ -273,4 +273,62 @@ public function dashboard()
         return redirect()->back()->withErrors('Une erreur est survenue lors de la récupération des jours restants.');
     }
 }
+public function getApprovedLeaveRequests()
+{
+    Log::info('Méthode getApprovedLeaveRequests appelée');
+    try {
+        // Récupérer l'ID de l'employé connecté
+        $employeeId = Auth::user()->employee->id;
+
+        // Log de l'identifiant de l'employé connecté
+        Log::info('Récupération des jours restants pour l\'employé avec ID: ' . $employeeId);
+
+        // Récupérer les demandes de congés approuvées pour l'employé connecté
+        $approvedRequests = LeaveRequest::where('leave_requests.status', 'approved')
+            ->where('leave_requests.employee_id', $employeeId)
+            ->join('leave_types', 'leave_requests.leave_type_id', '=', 'leave_types.id')
+            ->select('leave_requests.*', 'leave_types.name as leave_type_name', 'leave_types.id as leave_type_id')
+            ->get();
+        
+        Log::info('Nombre de demandes récupérées: ' . $approvedRequests->count());
+
+        // Fonction pour générer une couleur basée sur l'ID
+        function generateColorFromId($id) {
+            $colors = [
+                '#93c3fd', '#00b5cc', '#fdb913', '#F25757', '#912b6a', '#0570f2',
+                '#ff7f7f', '#7fff7f', '#7f7fff', '#ffff7f', '#ff7fff', '#7fffff'
+            ];
+            return $colors[$id % count($colors)];
+        }
+
+        $events = $approvedRequests->map(function ($request) {
+            // Assigner une couleur basée sur l'ID du type de congé
+            $backgroundColor = generateColorFromId($request->leave_type_id);
+
+            return [
+                'id' => $request->id,
+                'title' => $request->leave_type_name,
+                'start' => $request->start_date->toDateString(),
+                'end' => $request->end_date->toDateString(),
+                'backgroundColor' => $backgroundColor // Utiliser la couleur générée
+            ];
+        });
+
+        return response()->json($events);
+    } catch (\Exception $e) {
+        Log::error('Erreur lors de la récupération des demandes de congés approuvées: ' . $e->getMessage());
+        return response()->json(['error' => 'Une erreur est survenue.'], 500);
+    }
+}
+
+
+ // Method to generate the create leave request URL with a specific start date
+ public function generateCreateRequestUrl(Request $request)
+{
+    $startDate = $request->query('start');
+    return response()->json([
+        'url' => route('leave_requests.create') . '?start=' . urlencode($startDate),
+    ]);
+}
+
 }

@@ -229,6 +229,9 @@ Route::resource('leave_requests', LeaveRequestController::class);
 Route::put('/leave_requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
 Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
 
+Route::get('/leave-requests/approved', [LeaveRequestController::class, 'getApprovedLeaveRequests']);
+Route::get('/leave-requests/generate-create-url', [LeaveRequestController::class, 'generateCreateRequestUrl'])
+    ->name('leave_requests.generateCreateRequestUrl');
 
 
 Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);

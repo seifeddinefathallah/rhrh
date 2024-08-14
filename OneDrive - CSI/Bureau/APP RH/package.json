@@ -16,6 +16,9 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.15",
+        "@fullcalendar/daygrid": "^6.1.15",
+        "@fullcalendar/interaction": "^6.1.15",
         "laravel-echo": "^1.16.1",
         "libphonenumber-js": "^1.11.4",
         "maz-ui": "^3.44.3",
