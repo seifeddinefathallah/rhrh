@@ -33,6 +33,16 @@ class LeaveTypeController extends Controller
 
         LeaveType::create($request->all());
 
+        $employees = Employee::all();
+        foreach ($employees as $employee) {
+            LeaveBalance::create([
+                'employee_id' => $employee->id,
+                'leave_type_id' => $leaveType->id,
+                'remaining_days' => $leaveType->max_days,
+            ]);
+        }
+
+
         return redirect()->route('leave_types.index')
             ->with('success', 'Type de congé créé avec succès.');
     }

@@ -239,24 +239,57 @@ class LeaveRequestController extends Controller
                 return;
             }
 
-            $appUrl = config('app.url');
-            $route = $status === 'approved' ? 'leave_requests.show' : 'leave_requests.index';
-            $notificationUrl = "{$appUrl}/{$route}";
+            // Define the URL to which the user will be redirected when they click the notification
+            $appUrl = config('app.url'); // Fetch the APP_URL from .env
+
+            // Set route based on status
+            $route = $status === 'approved' ? 'leave_requests.index' : 'leave_requests.show'; // Replace with actual route names
+            $notificationUrl = "{$appUrl}/{$route}"; // Construct the full URL
 
             foreach ($subscriptionIds as $subscriptionId) {
                 $response = OneSignal::sendNotificationToUser(
                     $message,
                     $subscriptionId,
-                    null,
-                    ["notificationUrl" => $notificationUrl]
+                    $url = $notificationUrl // Add the URL parameter
                 );
 
-                if ($response->getStatusCode() !== 200) {
-                    Log::error("Failed to send notification to subscription ID: $subscriptionId");
-                }
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
             }
+
         } catch (\Exception $e) {
-            Log::error('Error sending OneSignal notification: ' . $e->getMessage());
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
+    }
+    public function dashboard()
+    {
+        try {
+            // Récupérer l'identifiant de l'employé connecté
+            $employeeId = Auth::user()->employee->id; // ou Auth::user()->id si vous utilisez une autre méthode pour obtenir l'ID
+
+            // Log de l'identifiant de l'employé connecté
+            Log::info('Récupération des jours restants pour l\'employé avec ID: ' . $employeeId);
+
+            // Récupérer les jours restants pour l'employé connecté avec les noms des types de congé
+            $leaveBalances = LeaveBalance::where('employee_id', $employeeId)
+                ->join('leave_types', 'leave_balances.leave_type_id', '=', 'leave_types.id')
+                ->select('leave_types.name', 'leave_balances.remaining_days')
+                ->get();
+
+            // Log du nombre de jours restants récupérés
+            Log::info('Nombre de jours restants récupérés: ' . $leaveBalances->count());
+
+            // Log des données récupérées
+            Log::info('Jours restants récupérés: ', $leaveBalances->toArray());
+
+            return view('dashboard', compact('leaveBalances'));
+        } catch (\Exception $e) {
+            // Log des erreurs éventuelles
+            Log::error('Erreur lors de la récupération des jours restants: ' . $e->getMessage());
+
+            // Vous pouvez également retourner une vue d'erreur ou rediriger l'utilisateur
+            return redirect()->back()->withErrors('Une erreur est survenue lors de la récupération des jours restants.');
         }
     }
 }
