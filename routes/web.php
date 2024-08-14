@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\ProviderController;
-use App\Http\Controllers\LeaveRequestController;
-use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +26,10 @@ use App\Http\Controllers\MaterialRequestController;
 use App\Http\Controllers\SpecificRequestController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DiversController;
+use App\Http\Controllers\OneSignalController;
+use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\LeaveRequestController;
+
 
 Route::get('/', function () {
     connectify('success', 'Connection Found', 'Connected');
@@ -97,8 +99,9 @@ Route::post('/requests', [AdministrativeRequestController::class, 'store'])->nam
 Route::get('/requests/{request}/edit', [AdministrativeRequestController::class, 'edit'])->name('requests.edit');
 Route::put('/requests/{administrativeRequest}', [AdministrativeRequestController::class, 'update'])->name('requests.update');
 Route::delete('/requests/{request}', [AdministrativeRequestController::class, 'destroy'])->name('requests.destroy');
-Route::post('requests/{id}/approve', [AdministrativeRequestController::class, 'approveRequest'])->name('requests.approve');
-Route::post('requests/{id}/reject', [AdministrativeRequestController::class, 'rejectRequest'])->name('requests.reject');
+Route::get('/requests/{id}/approve', [AdministrativeRequestController::class, 'approveRequest']);
+Route::put('/requests/{request}/approve', [AdministrativeRequestController::class, 'approveRequest'])->name('requests.approve');
+Route::put('/requests/{request}/reject', [AdministrativeRequestController::class, 'rejectRequest'])->name('requests.reject');
 
 Route::resource('entites', EntiteController::class);
 
@@ -145,13 +148,12 @@ Route::post('/send-generated-pdf', [DocumentController::class, 'sendGeneratedPdf
 
 
 
-
 Route::middleware(['auth'])->group(function () {
     Route::resource('loan_requests', LoanRequestController::class);
     Route::post('/loan_requests/{loanRequest}/update-status', [ApprovalHistoryController::class, 'update'])->name('loan_requests.update_status');
 });
-Route::post('loan_requests/{loanRequest}/approve', [LoanRequestController::class, 'approve'])->name('loan_requests.approve');
-Route::post('loan_requests/{loanRequest}/reject', [LoanRequestController::class, 'reject'])->name('loan_requests.reject');
+Route::put('/loan_requests/{id}/approve', [LoanRequestController::class, 'approve'])->name('loan_requests.approve');
+Route::put('/loan_requests/{id}/reject', [LoanRequestController::class, 'reject'])->name('loan_requests.reject');
 
 
 Route::resource('contract-types', 'App\Http\Controllers\ContractTypeController');
@@ -215,17 +217,24 @@ Route::put('/specific-requests/{specificRequest}/approve', [SpecificRequestContr
 Route::put('/specific-requests/{specificRequest}/reject', [SpecificRequestController::class, 'reject'])->name('specific_requests.reject');
 
 Route::get('/select-demande', [DiversController::class, 'showSelectDemande'])->name('select-demande');
-use App\Http\Controllers\OneSignalController;
+
+Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
 
 Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
 
-Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');;
-
-Route::post('/save-subscription-id', [SubscriptionController::class, 'store']);
+Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');
 
 Route::resource('leave_types', LeaveTypeController::class);
 Route::resource('leave_requests', LeaveRequestController::class);
 Route::put('/leave_requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
 Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
 
+
+
+Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
+
+Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');;
+
+
+Route::get('/dashboard', [LeaveRequestController::class, 'dashboard'])->name('dashboard');
 require __DIR__.'/auth.php';

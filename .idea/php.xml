@@ -188,6 +188,7 @@
       <path value="$PROJECT_DIR$/vendor/berkayk/onesignal-laravel" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/rinvex/country" />
+      <path value="$PROJECT_DIR$/vendor/parse/php-sdk" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">

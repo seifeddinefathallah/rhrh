@@ -3,8 +3,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Créer une Demande de Congé</h1>
+<div class="layout-container" style="layout-container max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class=" container-xxl flex-grow-1 container-p-y">
+    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Créer une Demande de Congé</h2>
         <form action="{{ route('leave_requests.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -49,16 +51,20 @@
 
             <div id="medical_certificate_div" class="form-group" style="display:none;">
                 <label for="medical_certificate">Certificat Médical (à télécharger dans les 48 heures)</label>
-                <input type="file" name="medical_certificate" id="medical_certificate" class="form-control @error('medical_certificate') is-invalid @enderror">
+                <input type="file" name="medical_certificate" id="medical_certificate" class="form-control  @error('medical_certificate') is-invalid @enderror">
                 @error('medical_certificate')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary">Soumettre</button>
+            <div class="mt-4 d-flex justify-content-end gap-2 float-end">
+                <button type="submit" class="btn btn-primary">Soumettre</button>
+                <a href="{{ route('leave_requests.index') }}" class="btn btn-secondary">Retour à la Liste</a>
+            </div>
         </form>
     </div>
-
+    </div>
+</div>
     <script>
         document.getElementById('leave_type_id').addEventListener('change', function() {
             var medicalCertificateDiv = document.getElementById('medical_certificate_div');

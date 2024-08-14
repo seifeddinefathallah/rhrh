@@ -3,7 +3,7 @@
   --bs-blue: #007bff;
   --bs-indigo: #6610f2;
   --bs-purple: #696cff;
-  --bs-pink: #e83e8c;
+  --bs-pink: #912b6a;
   --bs-red: #ff3e1d;
   --bs-orange: #fd7e14;
   --bs-yellow: #ffab00;
@@ -148,7 +148,32 @@ p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
+.avatar img {
+  width: 12px; /* Assurez-vous que la largeur et la hauteur sont égales */
+  height: 12px;
+  border-radius: 50%; /* Cette propriété rendra l'image ronde */
+}
+.card-style-0 {
+  background-color: #f8f9fa; /* Light background */
+}
 
+.card-style-1 {
+  background-color: #e9ecef; /* Slightly darker background */
+}
+
+/* Add more styles as needed */
+
+/* Default avatar style */
+.avatar-style-0 {
+  border: 2px solid #912b6a; /* Blue border */
+}
+
+.avatar-style-1 {
+  border: 2px solid #03c3ec; /* Green border */
+}
+.avatar-style-2 {
+  border: 2px solid #ffab00; /* Green border */
+}
 .input-invalid {
   border: 2px solid #dc3545; /* Bordure rouge pour l'erreur */
   background-color: #f8d7da; /* Fond légèrement rose */
@@ -15235,8 +15260,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .layout-container {
   width: 100%;
   display: flex;
-  flex: 1 1 auto;
-  align-items: stretch;
+  transition: margin-left 0.3s ease;
 }
 
 .layout-page,
@@ -15244,6 +15268,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 .content-wrapper > *,
 .layout-menu {
   min-height: 1px;
+  display: flex;
 }
 
 .layout-navbar,
@@ -15334,7 +15359,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   }
 }
 .layout-navbar-fixed.layout-menu-collapsed .layout-navbar.navbar-detached {
-  width: calc(100% - calc(1.625rem * 2) - 5.25rem);
+  width: calc(100% - calc(0.625rem * 2) - 0.25rem);
 }
 @media (max-width: 1199.98px) {
   .layout-navbar.navbar-detached {
@@ -15427,7 +15452,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 
   .layout-menu-fixed:not(.layout-menu-collapsed) .layout-page,
 .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-page {
-    padding-left: 16.25rem;
+    padding-left: 1.25rem;
   }
 }
 html:not(.layout-navbar-fixed):not(.layout-menu-fixed):not(.layout-menu-fixed-offcanvas) .layout-page,

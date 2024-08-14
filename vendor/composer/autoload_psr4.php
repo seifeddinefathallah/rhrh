@@ -71,6 +71,7 @@ return array(
     'Pest\\Plugin\\' => array($vendorDir . '/pestphp/pest-plugin/src'),
     'Pest\\Laravel\\' => array($vendorDir . '/pestphp/pest-plugin-laravel/src'),
     'Pest\\' => array($vendorDir . '/pestphp/pest/src'),
+    'Parse\\' => array($vendorDir . '/parse/php-sdk/src/Parse'),
     'ParagonIE\\ConstantTime\\' => array($vendorDir . '/paragonie/constant_time_encoding/src'),
     'NunoMaduro\\Collision\\' => array($vendorDir . '/nunomaduro/collision/src'),
     'NotificationChannels\\OneSignal\\' => array($vendorDir . '/laravel-notification-channels/onesignal/src'),
