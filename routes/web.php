@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ProviderController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -231,9 +232,18 @@ Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::cla
 
 
 
+
 Route::post('/save-user-id', [OneSignalController::class, 'saveUserId']);
 
 Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePushSubscriptionId'])->middleware('auth');;
+
+Route::get('/leave-requests/approved', [LeaveRequestController::class, 'getApprovedLeaveRequests']);
+Route::get('/leave-requests/generate-create-url', [LeaveRequestController::class, 'generateCreateRequestUrl'])->name('leave_requests.generateCreateRequestUrl');
+
+Route::resource('events', EventController::class);
+
+
+
 
 
 Route::get('/dashboard', [LeaveRequestController::class, 'dashboard'])->name('dashboard');

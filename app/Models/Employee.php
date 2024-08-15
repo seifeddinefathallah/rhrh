@@ -45,6 +45,10 @@ class Employee extends Model
     {
         return $this->belongsTo(ContractType::class); // Assuming one-to-one relationship
     }
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_employee');
+    }
 
     protected static function boot()
     {

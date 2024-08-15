@@ -49,10 +49,11 @@
     </script>
 
     @livewireStyles
+    @stack('styles')
 </head>
 <body class="hold-transition sidebar-mini ">
     <div class="wrapper">
-     
+
         @include('layouts.navigation')
 
         <!-- Page Heading    include('layouts.partials.navbar')-->
@@ -71,5 +72,6 @@
 
         @livewireScripts
     </div>
+    @stack('scripts')
 </body>
 </html>

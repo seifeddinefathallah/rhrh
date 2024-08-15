@@ -27,6 +27,10 @@ class LeaveRequest extends Model
         'certificate_upload_deadline' => 'datetime',
     ];
 
+    public function getDurationAttribute()
+    {
+        return $this->start_date->diffInDays($this->end_date) + 1;
+    }
     public function leaveType()
     {
         return $this->belongsTo(LeaveType::class);
