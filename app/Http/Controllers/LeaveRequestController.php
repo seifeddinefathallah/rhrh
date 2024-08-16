@@ -28,12 +28,42 @@ class LeaveRequestController extends Controller
     }
 
     // Afficher la liste des demandes de congés
-    public function index()
+    /*public function index()
     {
         $leaveRequests = LeaveRequest::with('leaveType')->get();
         return view('leave_requests.index', compact('leaveRequests'));
-    }
+    }*/
 
+    public function index()
+    {
+        // Total number of approved leave requests
+        $totalApproved = LeaveRequest::where('status', 'approved')->count();
+
+        // Total number of pending leave requests grouped by type
+        $pendingByType = \DB::table('leave_requests')
+            ->join('leave_types', 'leave_requests.leave_type_id', '=', 'leave_types.id') // Assuming leave_type_id is the foreign key
+            ->where('leave_requests.status', 'pending')
+            ->select('leave_types.name', \DB::raw('count(*) as total'))
+            ->groupBy('leave_types.name')
+            ->get()
+            ->keyBy('name');
+
+        // Fetch all leave types
+        $leaveTypes = \DB::table('leave_types')->select('name')->get();
+
+        // Initialize array to hold the final result
+        $pendingByTypeWithNames = [];
+
+        // Loop through each leave type and merge with pending counts
+        foreach ($leaveTypes as $leaveType) {
+            $pendingByTypeWithNames[] = [
+                'name' => $leaveType->name,
+                'total' => $pendingByType->has($leaveType->name) ? $pendingByType[$leaveType->name]->total : 0,
+            ];
+        }
+
+        return view('leave_requests.index', compact('totalApproved', 'pendingByTypeWithNames'));
+    }
 
 
     // Afficher le formulaire de création
@@ -328,6 +358,26 @@ class LeaveRequestController extends Controller
         $startDate = $request->query('start');
         return response()->json([
             'url' => route('leave_requests.create') . '?start=' . urlencode($startDate),
+        ]);
+    }
+
+    // LeaveRequestController.php
+    public function showPendingByType($name)
+    {
+        $leaveType = LeaveType::where('name', $name)->first();
+
+        if (!$leaveType) {
+            abort(404, 'Type de congé non trouvé');
+        }
+
+        $leaveRequests = LeaveRequest::with('employee', 'leaveType') // Eager load relationships
+        ->where('leave_type_id', $leaveType->id)
+            ->where('status', 'pending')
+            ->get();
+
+        return view('leave_requests.pending_by_type', [
+            'leaveRequests' => $leaveRequests,
+            'name' => $name
         ]);
     }
 

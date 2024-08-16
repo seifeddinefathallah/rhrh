@@ -229,6 +229,7 @@ Route::resource('leave_types', LeaveTypeController::class);
 Route::resource('leave_requests', LeaveRequestController::class);
 Route::put('/leave_requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave_requests.approve');
 Route::put('/leave_requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject'])->name('leave_requests.reject');
+Route::get('/leave_requests/type/{name}', [LeaveRequestController::class, 'showPendingByType'])->name('leave_requests.pending_by_type');
 
 
 
@@ -239,12 +240,13 @@ Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePush
 
 Route::get('/leave-requests/approved', [LeaveRequestController::class, 'getApprovedLeaveRequests']);
 Route::get('/leave-requests/generate-create-url', [LeaveRequestController::class, 'generateCreateRequestUrl'])->name('leave_requests.generateCreateRequestUrl');
+Route::get('/authorization_requests/pending/{type}', [AuthorizationRequestController::class, 'showPendingByType'])->name('authorization_requests.pending_by_type');
 
 Route::resource('events', EventController::class);
 
 
 
 
-
+Route::get('/dashboard', [EmployeeController::class, 'dashboard'])->name('dashboard');
 Route::get('/dashboard', [LeaveRequestController::class, 'dashboard'])->name('dashboard');
 require __DIR__.'/auth.php';

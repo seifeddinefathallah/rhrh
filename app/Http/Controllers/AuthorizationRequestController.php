@@ -26,15 +26,47 @@ class AuthorizationRequestController extends Controller
     public function index()
     {
         // Query all AuthorizationRequests, sorted by latest
+        $totalApprovedRequests = $this->getTotalApprovedRequests();
+        $pendingRequestsByType = $this->getPendingRequestsByType();
         $authorizations = AuthorizationRequest::latest()->paginate(10);
 
-        return view('authorizations.index', compact('authorizations'));
+        return view('authorizations.index', compact('authorizations', 'pendingRequestsByType', 'totalApprovedRequests'));
+    }
+
+    public function getPendingRequestsByType()
+    {
+        // Get the count of pending requests grouped by authorization type
+        $pendingRequestsByType = AuthorizationRequest::select('type', DB::raw('count(*) as total'))
+            ->where('status', 'pending')
+            ->groupBy('type')
+            ->get();
+
+        return $pendingRequestsByType;
+    }
+    public function showPendingByType($type)
+    {
+        // Fetch all pending requests of the selected type
+        $pendingRequests = AuthorizationRequest::where('type', $type)
+            ->where('status', 'pending')
+            ->paginate(10);
+
+        return view('authorizations.pending_by_type', compact('pendingRequests', 'type'));
     }
 
     public function create()
     {
         return view('authorizations.create');
     }
+
+    public function getTotalApprovedRequests()
+    {
+        // Calculate the total number of approved requests
+        $totalApprovedRequests = AuthorizationRequest::where('status', 'approved')
+            ->count();
+
+        return $totalApprovedRequests;
+    }
+
 
     public function store(Request $request)
     {
@@ -101,7 +133,7 @@ class AuthorizationRequestController extends Controller
                 return;
             }
             $appUrl = config('app.url');
-            $route = 'requests';
+            $route = 'authorization';
             $notificationUrl = "{$appUrl}/{$route}";
             foreach ($subscriptionIds as $subscriptionId) {
                 $response = OneSignal::sendNotificationToUser(
@@ -539,4 +571,26 @@ class AuthorizationRequestController extends Controller
                 return 1;
         }
     }
+
+    public function getAuthorizationStats()
+    {
+        // Calculate total approved requests grouped by type
+        $approvedRequests = AuthorizationRequest::select('type', DB::raw('count(*) as total'))
+            ->where('status', 'approved')
+            ->groupBy('type')
+            ->get();
+
+        // Get pending requests grouped by type
+        $pendingRequests = AuthorizationRequest::select('type', DB::raw('count(*) as total'))
+            ->where('status', 'pending')
+            ->groupBy('type')
+            ->get();
+
+        // Return the statistics
+        return [
+            'approvedRequests' => $approvedRequests,
+            'pendingRequests' => $pendingRequests,
+        ];
+    }
+
 }
