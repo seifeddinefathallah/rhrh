@@ -26,8 +26,31 @@ class InterventionRequestController extends Controller
     public function index()
     {
         $requests = InterventionRequest::all();
-        return view('intervention-requests.index', compact('requests'));
+        $approvedCount = InterventionRequest::where('status', 'approved')->count();
+        $pendingCount = InterventionRequest::where('status', 'pending')->count();
+        $rejectedCount = InterventionRequest::where('status', 'rejected')->count();
+
+        return view('intervention-requests.index', compact('requests', 'approvedCount', 'pendingCount', 'rejectedCount'));
     }
+
+    public function filterByStatus($status)
+    {
+        // Validate that the status is one of the allowed values
+        if (!in_array($status, ['approved', 'pending', 'rejected'])) {
+            return redirect()->route('intervention-requests.index')
+                ->with('error', 'Invalid status.');
+        }
+
+        // Fetch requests by status
+        $requests = InterventionRequest::where('status', $status)->get();
+
+        $approvedCount = InterventionRequest::where('status', 'approved')->count();
+        $pendingCount = InterventionRequest::where('status', 'pending')->count();
+        $rejectedCount = InterventionRequest::where('status', 'rejected')->count();
+
+        return view('intervention-requests.index', compact('requests', 'approvedCount', 'pendingCount', 'rejectedCount'));
+    }
+
 
     public function create()
     {

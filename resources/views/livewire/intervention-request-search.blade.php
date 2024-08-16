@@ -1,13 +1,14 @@
 <div class="container my-4">
     <div class="row">
-        
-        <div class="mt-4 d-flex justify-content-end gap-2"> 
+
+        <div class="mt-4 d-flex justify-content-end gap-2">
              <a href="{{ route('intervention-requests.create') }}" class="btn btn-primary float-end">Créer</a>
                 <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour </a>
             </div>
+
         <div class="col-md-12">
-            
-           
+
+
             <!-- Search Form -->
             <input type="text" wire:model.debounce.300ms="search" placeholder="Chercher par nom ou prénom de l'employé" class="form-control form-control-navbar" aria-label="Search" />
 
@@ -57,14 +58,14 @@
                                     <a class="dropdown-item" href="#" onclick="confirmApprove(event, '{{ $request->id }}')">
                                         <i class="bx bx-check-circle me-1 text-success"></i> Approve
                                     </a>
-                        
+
                                     <a class="dropdown-item" href="#" onclick="confirmReject(event, '{{ $request->id }}')">
                                         <i class="bx bx-x-circle me-1 text-danger"></i> Reject
                                     </a>
                                     @endif
                                 </div>
                             </div>
-                        
+
                             <!-- Delete Modal -->
                             <div class="modal fade" id="deleteModal{{ $request->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $request->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -87,20 +88,20 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                             <!-- Approve Form -->
                             <form id="approve-form-{{ $request->id }}" action="{{ route('intervention-requests.approve', $request->id) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('PATCH')
                             </form>
-                        
+
                             <!-- Reject Form -->
                             <form id="reject-form-{{ $request->id }}" action="{{ route('intervention-requests.reject', $request->id) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('PATCH')
                             </form>
                         </td>
-                        
+
                     </tr>
                 @empty
                     <tr>
@@ -151,7 +152,7 @@
             });
         });
 
-        
+
     </script>
     <script>
         // Function for handling approve action
@@ -178,7 +179,7 @@
                 }
             });
         }
-    
+
         // Function for handling reject action
         function confirmReject(event, id) {
             event.preventDefault(); // Prevent the default form submission

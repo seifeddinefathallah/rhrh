@@ -14,7 +14,7 @@
                             <div class="row">
                                 <!-- Display total approved requests -->
                                 <div class="col-md-12 mb-3">
-                                    <div class="card">
+                                    <div class="card bg-success text-white mb-3">
                                         <div class="card-body text-center">
                                             <h2>Total Approved Requests</h2>
                                             <p class="display-4">{{ $approvedCount }}</p>

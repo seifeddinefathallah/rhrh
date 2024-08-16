@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoanRequest;
+use App\Models\SpecificRequest;
 use Illuminate\Http\Request;
 use App\Models\AdministrativeRequest;
 use App\Models\Employee;
@@ -29,14 +30,12 @@ class AdministrativeRequestController extends Controller
 
     public function index()
     {
-        $statusCounts = [
-            'approved' => AdministrativeRequest::where('status', 'approuvé')->count(),
-            'pending' => AdministrativeRequest::where('status', 'en attente')->count(),
-            'rejected' => AdministrativeRequest::where('status', 'rejeté')->count(),
-        ];
+        $approvedCount = AdministrativeRequest::where('status', 'approuvé')->count();
+        $rejectedCount = AdministrativeRequest::where('status', 'rejeté')->count();
+        $pendingCount = AdministrativeRequest::where('status', 'En attente')->count();
 
         $requests = AdministrativeRequest::latest()->paginate(10);
-        return view('requests.index', compact('requests', 'statusCounts'));
+        return view('requests.index', compact('requests',  'approvedCount', 'pendingCount', 'rejectedCount'));
     }
 
     public function requestsByStatus($status)

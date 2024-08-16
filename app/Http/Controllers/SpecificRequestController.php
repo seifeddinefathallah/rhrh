@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\SpecificRequestCreated;
 use Illuminate\Support\Facades\Mail;
+use Berkayk\OneSignal\OneSignalClient;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class SpecificRequestController extends Controller
 {
@@ -20,8 +24,27 @@ class SpecificRequestController extends Controller
     }
     public function index()
     {
+        $approvedCount = SpecificRequest::where('status', 'approved')->count();
+        $rejectedCount = SpecificRequest::where('status', 'rejected')->count();
+        $pendingCount = SpecificRequest::where('status', 'pending')->count();
         $requests = SpecificRequest::with('employee')->paginate(10);
-        return view('specific_requests.index', compact('requests'));
+        return view('specific_requests.index', compact('requests', 'approvedCount', 'rejectedCount', 'pendingCount'));
+    }
+
+    public function status($status)
+    {
+        $validStatuses = ['approved', 'rejected', 'pending'];
+        if (!in_array($status, $validStatuses)) {
+            abort(404); // Or handle the error as needed
+        }
+
+        $requests = SpecificRequest::where('status', $status)->paginate(10);
+
+        $approvedCount = SpecificRequest::where('status', 'approved')->count();
+        $rejectedCount = SpecificRequest::where('status', 'rejected')->count();
+        $pendingCount = SpecificRequest::where('status', 'pending')->count();
+
+        return view('specific_requests.index', compact('requests', 'approvedCount', 'rejectedCount', 'pendingCount'));
     }
 
     public function create()
@@ -58,7 +81,16 @@ class SpecificRequestController extends Controller
         if ($user) {
             Mail::to($employee->email_professionnel)->send(new SpecificRequestCreated($employee, $specificRequest));
         }
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
 
+        $this->sendOneSignalNotification(
+            'A new specific request has been created.',
+            $employeeSubscriptions,
+            'pending'
+        );
         return redirect()->route('specific_requests.index')->with('success', 'Specific request created successfully!');
     }
 
@@ -109,6 +141,16 @@ class SpecificRequestController extends Controller
         if ($user) {
             Mail::to($employee->email_professionnel)->send(new SpecificRequestStatusUpdated($employee, $specificRequest));
         }
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        $this->sendOneSignalNotification(
+            'Your specific request has been approved.',
+            $employeeSubscriptions,
+            'approved'
+        );
         return redirect()->route('specific_requests.index')->with('success', 'Specific request approved successfully.');
     }
 
@@ -130,7 +172,49 @@ class SpecificRequestController extends Controller
         if ($user) {
             Mail::to($employee->email_professionnel)->send(new SpecificRequestStatusUpdated($employee, $specificRequest));
         }
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        $this->sendOneSignalNotification(
+            'Your specific request has been rejected.',
+            $employeeSubscriptions,
+            'rejected'
+        );
         return redirect()->route('specific_requests.index')->with('success', 'Specific request rejected successfully.');
+    }
+
+    protected function sendOneSignalNotification($message, array $subscriptionIds, $status)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+
+            // Define the URL to which the user will be redirected when they click the notification
+            $appUrl = config('app.url'); // Fetch the APP_URL from .env
+
+            // Set route based on status
+            $route = 'specific_requests.status';
+            $notificationUrl = "{$appUrl}/{$route}/{$status}"; // Construct the full URL
+
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl // Add the URL parameter
+                );
+
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
     }
 }
 

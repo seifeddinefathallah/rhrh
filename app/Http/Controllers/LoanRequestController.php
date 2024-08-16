@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoanRequest;
-use App\Services\PdfService;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\LoanRequestNotification;
 use App\Notifications\LoanRequestUpdateNotification;
 use App\Mail\LoanRequestStatusUpdated;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Mail;
@@ -84,6 +86,8 @@ class LoanRequestController extends Controller
 
         // Notify approvers
         // Notification::send(User::role(['DG', 'FINANCE'])->get(), new LoanRequestNotification($loanRequest));
+        $notificationMessage = "Une nouvelle demande de prêt a été soumise.";
+        $this->sendOneSignalNotification($notificationMessage, $loanRequest->employee->user_id);
 
         return redirect()->route('loan_requests.index')->with('success', 'Demande soumise avec succès.');
     }
@@ -93,6 +97,29 @@ class LoanRequestController extends Controller
         $loanRequest = LoanRequest::findOrFail($id);
         // You can add authorization logic here if needed
         return view('loan_requests.show', compact('loanRequest'));
+    }
+
+    private function sendOneSignalNotification($message, $userId)
+    {
+        $subscriptionIds = DB::table('push_subscriptions')
+            ->where('user_id', $userId)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        if (empty($subscriptionIds)) {
+            return;
+        }
+
+        $notification = [
+            'contents' => ['en' => $message],
+            'include_player_ids' => $subscriptionIds,
+        ];
+
+        try {
+            OneSignal::sendNotificationCustom($notification);
+        } catch (\Exception $e) {
+            \Log::error('Error sending OneSignal notification: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)
@@ -133,6 +160,9 @@ class LoanRequestController extends Controller
             Mail::to($loanRequest->employee->email_professionnel)
                 ->send(new LoanRequestStatusUpdated($loanRequest));
 
+            $notificationMessage = "Votre demande de prêt a été approuvée.";
+            $this->sendOneSignalNotification($notificationMessage, $loanRequest->employee->user_id);
+
             return redirect()->route('loan_requests.index')
                 ->with('success', 'La demande a été approuvée.');
         } else {
@@ -153,6 +183,9 @@ class LoanRequestController extends Controller
             // Send email notification to the requester
             Mail::to($loanRequest->employee->email_professionnel)
                 ->send(new LoanRequestStatusUpdated($loanRequest));
+
+            $notificationMessage = "Votre demande de prêt a été rejetée.";
+            $this->sendOneSignalNotification($notificationMessage, $loanRequest->employee->user_id);
 
             return redirect()->route('loan_requests.index')
                 ->with('success', 'La demande a été rejetée.');

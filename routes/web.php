@@ -150,17 +150,26 @@ Route::post('/send-generated-pdf', [DocumentController::class, 'sendGeneratedPdf
 
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('loan_requests', LoanRequestController::class);
-    Route::post('/loan_requests/{loanRequest}/update-status', [ApprovalHistoryController::class, 'update'])->name('loan_requests.update_status');
-});
-Route::put('/loan_requests/{id}/approve', [LoanRequestController::class, 'approve'])->name('loan_requests.approve');
-Route::put('/loan_requests/{id}/reject', [LoanRequestController::class, 'reject'])->name('loan_requests.reject');
+Route::get('loan-requests', [LoanRequestController::class, 'index'])->name('loan_requests.index');
+Route::get('loan-requests/type/{type}', [LoanRequestController::class, 'byType'])->name('loan_requests.pending_by_type');
+Route::get('loan-requests/create', [LoanRequestController::class, 'create'])->name('loan_requests.create');
+Route::post('loan-requests', [LoanRequestController::class, 'store'])->name('loan_requests.store');
+Route::get('loan-requests/{id}', [LoanRequestController::class, 'show'])->name('loan_requests.show');
+Route::get('loan-requests/{id}/edit', [LoanRequestController::class, 'edit'])->name('loan_requests.edit');
+Route::put('loan-requests/{id}', [LoanRequestController::class, 'update'])->name('loan_requests.update');
+Route::delete('loan-requests/{id}', [LoanRequestController::class, 'destroy'])->name('loan_requests.destroy');
+Route::resource('loan_requests', LoanRequestController::class);
+Route::post('/loan_requests/{loanRequest}/update-status', [ApprovalHistoryController::class, 'update'])->name('loan_requests.update_status');
 
+Route::put('/loan_requests/{loanRequest}/approve', [LoanRequestController::class, 'approve'])->name('loan_requests.approve');
+Route::put('/loan_requests/{loanRequest}/reject', [LoanRequestController::class, 'reject'])->name('loan_requests.reject');
+Route::get('/material-requests/status/{status}', [MaterialRequestController::class, 'status'])->name('material_requests.status');
+Route::get('/specific-requests/status/{status}', [SpecificRequestController::class, 'status'])->name('specific_requests.status');
 
 Route::resource('contract-types', 'App\Http\Controllers\ContractTypeController');
 
-
+Route::get('/intervention-requests/status/{status}', [InterventionRequestController::class, 'filterByStatus'])->name('intervention-requests.status');
+Route::get('/supply-requests/status/{status}', [SupplyRequestController::class, 'filterByStatus'])->name('supply_requests.status');
 
 Route::get('/contract-types', [ContractTypeController::class, 'index'])->name('contract-types.index');
 Route::get('/contract-types/create', [ContractTypeController::class, 'create'])->name('contract-types.create');

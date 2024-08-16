@@ -8,6 +8,11 @@ use App\Notifications\EventUpdatedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\EventInvitationNotification;
+use Illuminate\Support\Facades\Log;
+use Berkayk\OneSignal\OneSignalClient;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
+use Illuminate\Support\Facades\DB;
+
 
 class EventController extends Controller
 {
@@ -48,6 +53,18 @@ class EventController extends Controller
         // Attach selected employees to the event
         if ($request->has('employees')) {
             $event->employees()->sync($request->employees);
+            // Fetch subscription IDs for OneSignal
+            $subscriptionIds = DB::table('push_subscriptions')
+                ->whereIn('user_id', Employee::whereIn('id', $request->employees)->pluck('user_id'))
+                ->pluck('subscription_id')
+                ->toArray();
+
+            // Send OneSignal notification
+            $this->sendOneSignalNotification(
+                'You are invited to a new event!',
+                $subscriptionIds
+            );
+
 
             // Notify each selected employee
             foreach ($request->employees as $employeeId) {
@@ -100,6 +117,16 @@ class EventController extends Controller
         // Sync the employees with the updated event
         $event->employees()->sync($request->employees);
 
+        $subscriptionIds = DB::table('push_subscriptions')
+            ->whereIn('user_id', Employee::whereIn('id', $request->employees)->pluck('user_id'))
+            ->pluck('subscription_id')
+            ->toArray();
+
+        // Send OneSignal notification
+        $this->sendOneSignalNotification(
+            'The event has been updated!',
+            $subscriptionIds
+        );
         // Notify each selected employee of the update
         foreach ($request->employees as $employeeId) {
             $employee = Employee::find($employeeId);
@@ -113,5 +140,31 @@ class EventController extends Controller
     {
         $event->delete();
         return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
+    }
+
+    protected function sendOneSignalNotification($message, array $subscriptionIds)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscription IDs provided.');
+                return;
+            }
+
+            foreach ($subscriptionIds as $subscriptionId) {
+                OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId
+                );
+            }
+
+            Log::info('Notifications sent successfully.', [
+                'subscription_ids' => $subscriptionIds,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error sending notification.', [
+                'exception' => $e->getMessage(),
+                'subscription_ids' => $subscriptionIds,
+            ]);
+        }
     }
 }

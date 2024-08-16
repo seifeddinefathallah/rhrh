@@ -112,6 +112,12 @@ class LeaveRequestController extends Controller
             'certificate_upload_deadline' => $certificateUploadDeadline,
         ]);
         Mail::to($leaveRequest->employee->user->email)->send(new LeaveRequestCreated($leaveRequest));
+        $notificationMessageForCreation = "Votre demande de congé a été créée avec succès.";
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $leaveRequest->employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+        $this->sendOneSignalNotification_($notificationMessageForCreation, $employeeSubscriptions, 'created');
         return redirect()->route('leave_requests.index')
             ->with('success', 'Demande de congé soumise avec succès. Vous avez 48 heures pour uploader le certificat médical.');
     }
@@ -234,6 +240,26 @@ class LeaveRequestController extends Controller
                 ->with('error', 'Une erreur est survenue lors du rejet de la demande: ' . $e->getMessage());
         }
     }
+
+    private function sendOneSignalNotification_($message, $subscriptionIds, $action)
+    {
+        if (empty($subscriptionIds)) {
+            return;
+        }
+
+        $notification = [
+            'contents' => ['en' => $message],
+            'include_player_ids' => $subscriptionIds,
+            'data' => ['action' => $action],
+        ];
+
+        try {
+            OneSignal::sendNotificationCustom($notification);
+        } catch (\Exception $e) {
+            Log::error('Error sending OneSignal notification: ' . $e->getMessage());
+        }
+    }
+
     public function dashboard()
     {
         try {

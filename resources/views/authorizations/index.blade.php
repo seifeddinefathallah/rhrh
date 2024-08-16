@@ -47,7 +47,7 @@
                     <h1>Authorization Requests Summary</h1>
 
                     <!-- Total Approved Authorization Requests -->
-                    <div class="card mb-3">
+                    <div class="card bg-success text-white mb-3">
                         <div class="card-body text-center">
                             <h2>Total Approved</h2>
                             <p class="display-4">{{ $totalApprovedRequests }}</p>
@@ -64,7 +64,7 @@
                         @foreach ($pendingRequestsByType as $pending)
                             <div class="col-md-3 mb-3">
                                 <a href="{{ route('authorization_requests.pending_by_type', $pending['type']) }}">
-                                    <div class="card">
+                                    <div class="card bg-warning text-dark mb-3">
                                         <div class="card-body text-center">
                                             <h4>{{ $pending['type'] }}</h4>
                                             <p class="display-4">{{ $pending['total'] }}</p>

@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Mail\MaterialRequestCreated;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MaterialRequestStatusUpdated;
+use Berkayk\OneSignal\OneSignalClient;
+use Berkayk\OneSignal\OneSignalFacade as OneSignal;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class MaterialRequestController extends Controller
 {
@@ -18,7 +22,10 @@ class MaterialRequestController extends Controller
     public function index()
     {
         $requests = MaterialRequest::all();
-        return view('material_requests.index', compact('requests'));
+        $approvedCount = MaterialRequest::where('status', 'approved')->count();
+        $rejectedCount = MaterialRequest::where('status', 'rejected')->count();
+        $pendingCount = MaterialRequest::where('status', 'pending')->count();
+        return view('material_requests.index', compact('requests', 'approvedCount', 'rejectedCount', 'pendingCount'));
     }
 
     public function create()
@@ -43,6 +50,17 @@ class MaterialRequestController extends Controller
         ]);
         Mail::to($materialRequest->employee->email_professionnel)
             ->send(new MaterialRequestCreated($materialRequest));
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', Auth::id()) // or $employeeId if your subscription IDs are linked to employees
+            ->pluck('subscription_id')
+            ->toArray();
+
+        // Send OneSignal notification
+        $this->sendOneSignalNotification_(
+            "New Material Request Created: {$materialRequest->material_name}",
+            $employeeSubscriptions,
+            'created'
+        );
 
         return redirect()->route('material_requests.index')->with('success', 'Request created successfully.');
     }
@@ -82,6 +100,17 @@ class MaterialRequestController extends Controller
         $materialRequest->update(['status' => 'approved']);
         Mail::to($materialRequest->employee->email_professionnel)
             ->send(new MaterialRequestStatusUpdated($materialRequest));
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $materialRequest->employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        // Send OneSignal notification
+        $this->sendOneSignalNotification_(
+            "Material Request Approved: {$materialRequest->material_name}",
+            $employeeSubscriptions,
+            'approved'
+        );
         return redirect()->route('material_requests.index')->with('success', 'Request approved successfully.');
     }
 
@@ -90,7 +119,49 @@ class MaterialRequestController extends Controller
         $materialRequest->update(['status' => 'rejected']);
         Mail::to($materialRequest->employee->email_professionnel)
             ->send(new MaterialRequestStatusUpdated($materialRequest));
+        $employeeSubscriptions = DB::table('push_subscriptions')
+            ->where('user_id', $materialRequest->employee->user_id)
+            ->pluck('subscription_id')
+            ->toArray();
+
+        // Send OneSignal notification
+        $this->sendOneSignalNotification_(
+            "Material Request Rejected: {$materialRequest->material_name}",
+            $employeeSubscriptions,
+            'rejected'
+        );
         return redirect()->route('material_requests.index')->with('success', 'Request rejected successfully.');
+    }
+
+    protected function sendOneSignalNotification_($message, array $subscriptionIds, $status)
+    {
+        try {
+            if (empty($subscriptionIds)) {
+                Log::warning('No subscriptions found.');
+                return;
+            }
+
+            $appUrl = config('app.url'); // Fetch the APP_URL from .env
+
+            // Set route based on status
+            $route = $status === 'approved' ? 'material_requests.status' : 'material_requests.status'; // Replace with actual route names
+            $notificationUrl = "{$appUrl}/{$route}"; // Construct the full URL
+
+            foreach ($subscriptionIds as $subscriptionId) {
+                $response = OneSignal::sendNotificationToUser(
+                    $message,
+                    $subscriptionId,
+                    $url = $notificationUrl // Add the URL parameter
+                );
+
+                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
+                    'response' => $response
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error sending notification: ' . $e->getMessage());
+        }
     }
 }
 

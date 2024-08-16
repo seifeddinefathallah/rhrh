@@ -9,25 +9,44 @@
                     {{ __('Liste des demandes administratives') }}
                 </h2>
                 <div class="container">
-                    <div class="row">
-                        <div class="card-body text-center">
-                            <h2>Total Requests For Each Status</h2>
-                            <h5>Click On Them to See the Requests</h5>
-                        </div>
-
-                        @foreach ($statusCounts as $status => $count)
-                            <div class="col-md-3 mb-3">
-                                <a href="{{ route('requests.by_status', $status) }}">
-                                    <div class="card">
-                                        <div class="card-body text-center">
-                                            <h4>{{ ucfirst($status) }}</h4>
-                                            <p class="display-4">{{ $count }}</p>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h1>Requests Overview</h1>
+                            <div class="row">
+                                <!-- Approved Requests Card -->
+                                <div class="col-md-4 mb-3">
+                                    <a href="{{ route('requests.by_status', 'approved') }}">
+                                        <div class="card bg-success text-white mb-3">
+                                            <div class="card-body text-center">
+                                                <h4>Approved</h4>
+                                                <p class="display-4">{{ $approvedCount }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <a href="{{ route('requests.by_status', 'pending') }}">
+                                        <div class="card bg-warning text-dark mb-3">
+                                            <div class="card-body text-center">
+                                                <h4>Pending</h4>
+                                                <p class="display-4">{{ $pendingCount }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <!-- Rejected Requests Card -->
+                                <div class="col-md-4 mb-3">
+                                    <a href="{{ route('requests.by_status', 'rejected') }}">
+                                        <div class="card bg-danger text-white mb-3">
+                                            <div class="card-body text-center">
+                                                <h4>Rejected</h4>
+                                                <p class="display-4">{{ $rejectedCount }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        @endforeach
-                    </div>
 
 
                 <!-- SweetAlert2 Notification -->

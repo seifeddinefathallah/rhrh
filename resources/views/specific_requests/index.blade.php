@@ -7,6 +7,33 @@
             <div class="p-3 bg-white border-b border-gray-200">
 
             <h2 class="font-semibold text-xl leading-tight mb-4 text-center" style="color: #03428e;">Specific Requests</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Approved Requests</h5>
+                                <p class="card-text">{{ $approvedCount }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-dark mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Requests</h5>
+                                <p class="card-text">{{ $pendingCount }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-danger text-white mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Rejected Requests</h5>
+                                <p class="card-text">{{ $rejectedCount }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
     @if(session('success'))
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
@@ -22,12 +49,12 @@
             </script>
         @endif
 
-       
+
         <div class="col-md-12">
             @livewire('specific-request-search')
         </div>
 
-        <div class="mt-4 d-flex justify-content-end gap-2">  
+        <div class="mt-4 d-flex justify-content-end gap-2">
                <a href="{{ route('specific_requests.create') }}"  class="btn btn-primary float-end">Créer</a>
             <a href="{{ route('select-demande') }}" class="btn btn-secondary float-end">Retour</a>
         </div>
