@@ -29,8 +29,33 @@ class AdministrativeRequestController extends Controller
 
     public function index()
     {
+        $statusCounts = [
+            'approved' => AdministrativeRequest::where('status', 'approuvé')->count(),
+            'pending' => AdministrativeRequest::where('status', 'en attente')->count(),
+            'rejected' => AdministrativeRequest::where('status', 'rejeté')->count(),
+        ];
+
         $requests = AdministrativeRequest::latest()->paginate(10);
-        return view('requests.index', compact('requests'));
+        return view('requests.index', compact('requests', 'statusCounts'));
+    }
+
+    public function requestsByStatus($status)
+    {
+        $statusMap = [
+            'approved' => 'approuvé',
+            'pending' => 'en attente',
+            'rejected' => 'rejeté',
+        ];
+
+        $statusValue = $statusMap[$status] ?? null;
+
+        if (!$statusValue) {
+            abort(404, 'Status not found');
+        }
+
+        $requests = AdministrativeRequest::where('status', $statusValue)->latest()->paginate(10);
+
+        return view('requests.by_status', compact('requests', 'status'));
     }
 
     public function create()

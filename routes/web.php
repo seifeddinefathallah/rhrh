@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -241,6 +242,11 @@ Route::post('/save-push-subscription-id', [OneSignalController::class, 'savePush
 Route::get('/leave-requests/approved', [LeaveRequestController::class, 'getApprovedLeaveRequests']);
 Route::get('/leave-requests/generate-create-url', [LeaveRequestController::class, 'generateCreateRequestUrl'])->name('leave_requests.generateCreateRequestUrl');
 Route::get('/authorization_requests/pending/{type}', [AuthorizationRequestController::class, 'showPendingByType'])->name('authorization_requests.pending_by_type');
+Route::get('/requests/by-status/{status}', [AdministrativeRequestController::class, 'requestsByStatus'])->name('requests.by_status');
+//Route::get('/loan-requests/pending-by-type', [LoanRequestController::class, 'pendingRequestsByType'])->name('loan_requests.pending_by_type');
+Route::get('/loan-requests/by-type/{type}', [LoanRequestController::class, 'byType'])->name('loan_requests.pending_by_type');
+
+Route::resource('holidays', HolidayController::class);
 
 Route::resource('events', EventController::class);
 

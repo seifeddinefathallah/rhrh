@@ -24,10 +24,36 @@ class LoanRequestController extends Controller
     {
         // Retrieve all loan requests
         $loanRequests = LoanRequest::all();
+        $approvedCount = LoanRequest::where('status', 'Approuvé')->count();
+
+        // Retrieve count of pending requests for each type
+        $pendingByType = LoanRequest::where('status', 'En attente')
+            ->select('type', \DB::raw('count(*) as total'))
+            ->groupBy('type')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->type => $item->total];
+            });
 
         // Return the view with the retrieved loan requests
-        return view('loan_requests.index', compact('loanRequests'));
+        return view('loan_requests.index', compact('loanRequests', 'approvedCount', 'pendingByType'));
     }
+    public function byType($type)
+    {
+        // Validate type if necessary
+        $types = ['Prêt', 'Avances']; // Add other types as needed
+        if (!in_array($type, $types)) {
+            return redirect()->route('loan_requests.index')->with('error', 'Type de demande invalide.');
+        }
+
+        // Retrieve pending loan requests by type
+        $loanRequests = LoanRequest::where('status', 'En attente')
+            ->where('type', $type)
+            ->get();
+
+        return view('loan_requests.pending_by_type', compact('loanRequests', 'type'));
+    }
+
 
     public function create()
     {
@@ -143,4 +169,18 @@ class LoanRequestController extends Controller
 
         return redirect()->route('loan_requests.index')->with('success', 'Demande supprimée avec succès.');
     }
+
+    /*public function pendingRequestsByType()
+    {
+        // Count pending requests grouped by type
+        $pendingByType = LoanRequest::where('status', 'En attente')
+            ->select('type', \DB::raw('count(*) as total'))
+            ->groupBy('type')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->type => $item->total];
+            });
+
+        return view('loan_requests.pending_by_type', compact('pendingByType'));
+    }*/
 }

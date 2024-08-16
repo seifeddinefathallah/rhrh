@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\InterventionRequestRejected;
-use App\Mail\MaterialRequestStatusUpdated;
+
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
-use App\Models\MaterialRequest;
+use App\Models\LeaveBalance;
+use App\Services\HolidayService; // Importer le service HolidayService
 use Berkayk\OneSignal\OneSignalFacade as OneSignal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,47 +14,36 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Models\LeaveBalance;
 use App\Mail\LeaveRequestRejected;
 use App\Mail\LeaveRequestApproved;
 use App\Mail\LeaveRequestCreated;
 
 class LeaveRequestController extends Controller
 {
+    protected $holidayService;
 
-    public  function  __construct()
+    public function __construct(HolidayService $holidayService)
     {
         $this->middleware('auth');
+        $this->holidayService = $holidayService; // Injecter le service HolidayService
     }
-
-    // Afficher la liste des demandes de congés
-    /*public function index()
-    {
-        $leaveRequests = LeaveRequest::with('leaveType')->get();
-        return view('leave_requests.index', compact('leaveRequests'));
-    }*/
 
     public function index()
     {
-        // Total number of approved leave requests
         $totalApproved = LeaveRequest::where('status', 'approved')->count();
 
-        // Total number of pending leave requests grouped by type
         $pendingByType = \DB::table('leave_requests')
-            ->join('leave_types', 'leave_requests.leave_type_id', '=', 'leave_types.id') // Assuming leave_type_id is the foreign key
+            ->join('leave_types', 'leave_requests.leave_type_id', '=', 'leave_types.id')
             ->where('leave_requests.status', 'pending')
             ->select('leave_types.name', \DB::raw('count(*) as total'))
             ->groupBy('leave_types.name')
             ->get()
             ->keyBy('name');
 
-        // Fetch all leave types
         $leaveTypes = \DB::table('leave_types')->select('name')->get();
 
-        // Initialize array to hold the final result
         $pendingByTypeWithNames = [];
 
-        // Loop through each leave type and merge with pending counts
         foreach ($leaveTypes as $leaveType) {
             $pendingByTypeWithNames[] = [
                 'name' => $leaveType->name,
@@ -65,15 +54,23 @@ class LeaveRequestController extends Controller
         return view('leave_requests.index', compact('totalApproved', 'pendingByTypeWithNames'));
     }
 
-
-    // Afficher le formulaire de création
-    public function create()
+    /*public function create()
     {
         $leaveTypes = LeaveType::all();
         return view('leave_requests.create', compact('leaveTypes'));
+    }*/
+
+    public function create()
+    {
+        // Remplacez 1 par l'ID de l'employé connecté
+        $employeeId = auth()->user()->id;
+
+        $leaveTypes = LeaveType::all();
+        $leaveBalances = LeaveBalance::where('employee_id', $employeeId)->get();
+
+        return view('leave_requests.create', compact('leaveTypes', 'leaveBalances'));
     }
 
-    // Stocker une nouvelle demande de congé
     public function store(Request $request)
     {
         $leaveType = LeaveType::find($request->leave_type_id);
@@ -118,14 +115,13 @@ class LeaveRequestController extends Controller
         return redirect()->route('leave_requests.index')
             ->with('success', 'Demande de congé soumise avec succès. Vous avez 48 heures pour uploader le certificat médical.');
     }
-    // Afficher le formulaire d'édition
+
     public function edit(LeaveRequest $leaveRequest)
     {
         $leaveTypes = LeaveType::all();
         return view('leave_requests.edit', compact('leaveRequest', 'leaveTypes'));
     }
 
-    // Mettre à jour une demande de congé existante
     public function update(Request $request, LeaveRequest $leaveRequest)
     {
         $leaveType = LeaveType::findOrFail($request->leave_type_id);
@@ -160,7 +156,6 @@ class LeaveRequestController extends Controller
             ->with('success', 'Demande de congé mise à jour avec succès.');
     }
 
-    // Supprimer une demande de congé
     public function destroy(LeaveRequest $leaveRequest)
     {
         $leaveRequest->delete();
@@ -172,24 +167,29 @@ class LeaveRequestController extends Controller
     public function approve(LeaveRequest $leaveRequest)
     {
         try {
-            // Calculate the duration of the leave in days
             $startDate = Carbon::parse($leaveRequest->start_date);
             $endDate = Carbon::parse($leaveRequest->end_date);
-            $duration = $startDate->diffInDays($endDate) + 1; // +1 to include the end date
+            $duration = $startDate->diffInDays($endDate) + 1;
 
-            // Get the associated leave type and employee
             $leaveType = $leaveRequest->leaveType;
             $employee = $leaveRequest->employee;
 
-            // Find the leave balance for the employee and leave type
             $leaveBalance = LeaveBalance::where('employee_id', $employee->id)
                 ->where('leave_type_id', $leaveType->id)
                 ->first();
 
-            // Check if the leave balance exists and if the remaining balance is sufficient
             if (!$leaveBalance || $leaveBalance->remaining_days < $duration) {
                 return redirect()->route('leave_requests.index')
                     ->withErrors('Insufficient leave balance for this leave type.');
+            }
+
+            // Calculate holidays within the leave period
+            $currentDate = $startDate->copy();
+            while ($currentDate->lte($endDate)) {
+                if ($this->holidayService->isHoliday($currentDate)) {
+                    $duration--; // Reduce duration if it's a holiday
+                }
+                $currentDate->addDay();
             }
 
             // Update the leave request status to 'approved'
@@ -199,7 +199,6 @@ class LeaveRequestController extends Controller
             $leaveBalance->remaining_days -= $duration;
             $leaveBalance->save();
             Mail::to($leaveRequest->employee->user->email)->send(new LeaveRequestApproved($leaveRequest));
-            // Send notification for approval
             $notificationMessageForApproval = "Demande de congé approuvée.";
             $employeeSubscriptions = DB::table('push_subscriptions')
                 ->where('user_id', $employee->user_id)
@@ -216,12 +215,8 @@ class LeaveRequestController extends Controller
         }
     }
 
-
-
     public function reject(LeaveRequest $leaveRequest)
     {
-
-
         try {
             $leaveRequest->update(['status' => 'rejected']);
             Mail::to($leaveRequest->employee->user->email)->send(new LeaveRequestRejected($leaveRequest));
@@ -239,40 +234,6 @@ class LeaveRequestController extends Controller
                 ->with('error', 'Une erreur est survenue lors du rejet de la demande: ' . $e->getMessage());
         }
     }
-
-    protected function sendOneSignalNotification_($message, array $subscriptionIds, $status)
-    {
-        try {
-            if (empty($subscriptionIds)) {
-                Log::warning('No subscriptions found.');
-                return;
-            }
-
-            // Define the URL to which the user will be redirected when they click the notification
-            $appUrl = config('app.url'); // Fetch the APP_URL from .env
-
-            // Set route based on status
-            $route = $status === 'approved' ? 'leave_requests.show' : 'leave_requests.index'; // Replace with actual route names
-            $notificationUrl = "{$appUrl}/{$route}"; // Construct the full URL
-
-            foreach ($subscriptionIds as $subscriptionId) {
-                $response = OneSignal::sendNotificationToUser(
-                    $message,
-                    $subscriptionId,
-                    $url = $notificationUrl // Add the URL parameter
-                );
-
-                Log::info('Notification sent successfully to subscription ID: ' . $subscriptionId, [
-                    'response' => $response
-                ]);
-            }
-
-        } catch (\Exception $e) {
-            Log::error('Error sending notification: ' . $e->getMessage());
-        }
-    }
-
-
     public function dashboard()
     {
         try {
@@ -380,5 +341,4 @@ class LeaveRequestController extends Controller
             'name' => $name
         ]);
     }
-
 }
