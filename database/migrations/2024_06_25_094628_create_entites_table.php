@@ -15,10 +15,10 @@ class CreateEntitesTable extends Migration
             $table->string('adresse');
             $table->string('pays');
             $table->string('contact');
-            $table->string('numero_siret');
-            $table->string('code_ape_naf');
-            $table->string('convention_collective');
-            $table->string('identifiant_etablissement');
+            $table->string('numero_siret')->nullable(); // Nullable since it's only required for France
+            $table->string('code_ape_naf')->nullable(); // Nullable since it's only required for France
+            $table->string('convention_collective')->nullable();
+            $table->string('identifiant_etablissement')->nullable();
             $table->timestamps();
         });
     }

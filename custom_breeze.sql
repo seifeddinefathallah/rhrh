@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 16 août 2024 à 13:08
+-- Généré le : lun. 19 août 2024 à 08:02
 -- Version du serveur : 8.3.0
 -- Version de PHP : 8.2.18
 
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `departements` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `departements`
@@ -302,7 +302,8 @@ INSERT INTO `departements` (`id`, `nom`, `created_at`, `updated_at`) VALUES
 (1, 'QAD', '2024-07-10 09:27:23', '2024-07-10 09:27:23'),
 (3, 'SAP', '2024-07-18 11:35:01', '2024-07-18 11:35:01'),
 (4, 'tb', '2024-07-24 08:38:23', '2024-07-24 08:38:23'),
-(5, 'rbrgvdf', '2024-07-26 08:27:21', '2024-07-26 08:27:21');
+(5, 'rbrgvdf', '2024-07-26 08:27:21', '2024-07-26 08:27:21'),
+(6, 'arze', '2024-08-19 06:47:09', '2024-08-19 06:47:09');
 
 -- --------------------------------------------------------
 
@@ -320,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `departement_entite` (
   PRIMARY KEY (`id`),
   KEY `departement_entite_departement_id_foreign` (`departement_id`),
   KEY `departement_entite_entite_id_foreign` (`entite_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `departement_entite`
@@ -331,7 +332,8 @@ INSERT INTO `departement_entite` (`id`, `departement_id`, `entite_id`, `created_
 (2, 2, 1, NULL, NULL),
 (3, 5, 1, NULL, NULL),
 (8, 3, 8, NULL, NULL),
-(6, 4, 1, NULL, NULL);
+(6, 4, 1, NULL, NULL),
+(9, 6, 13, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -433,15 +435,15 @@ CREATE TABLE IF NOT EXISTS `entites` (
   `adresse` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `pays` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `contact` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `numero_siret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `code_ape_naf` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `convention_collective` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `identifiant_etablissement` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `numero_siret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code_ape_naf` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `convention_collective` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `identifiant_etablissement` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `entites`
@@ -451,7 +453,10 @@ INSERT INTO `entites` (`id`, `nom`, `numero_fiscal`, `adresse`, `pays`, `contact
 (1, 'Csi_tun', '7', '45', 'tunisie', '856', '7845', '7/845', '7846', '/784', NULL, '2024-07-10 09:27:16', '2024-08-01 08:40:52'),
 (8, 'Csi-fr', 'gbg x', 'f x', 'France', 'gvfd', 'gfv', 'x vc', 'vc', 'fd', NULL, '2024-07-29 10:13:51', '2024-08-01 08:41:05'),
 (9, 'Csi-TNN', 'gbg x', 'f x', 'France', 'gvfd', 'gfv', 'x vc', 'vc', 'BGV X', NULL, '2024-08-01 08:37:09', '2024-08-01 08:37:09'),
-(10, 'cszf', '852485', '4er55zr', 'tunisie', '82131545', '84512', '8465', 'azre', 'sqf', 'entite_images/SLbCdzs4Rs1MwaBFoflpj7xf1VfEMOkjecGGu1FU.png', '2024-08-07 09:04:19', '2024-08-07 09:04:19');
+(10, 'cszf', '852485', '4er55zr', 'tunisie', '82131545', '84512', '8465', 'azre', 'sqf', 'entite_images/SLbCdzs4Rs1MwaBFoflpj7xf1VfEMOkjecGGu1FU.png', '2024-08-07 09:04:19', '2024-08-07 09:04:19'),
+(11, 'zar', 'zera', 'zaer', 'zaer', 'aezr', NULL, NULL, NULL, 'zear', 'entite_images/HxWlPdHkGE8fMtnBQztKU8HvqQJgAbHLnA2XTGBP.png', '2024-08-19 06:34:42', '2024-08-19 06:34:42'),
+(12, 'rzar', 'zear', 'zaer', 'Tunisie', 'zr', 'zera', 'zar', 'zaer', 'zar', 'entite_images/8kGldANCNaKcLqhWwCg0SdXlVX8AswFswdeNEjJV.png', '2024-08-19 06:41:57', '2024-08-19 06:46:56'),
+(13, 'zarqdsqf', 'sqdffxq', 'dsqwf', 'autre', 'fx', NULL, NULL, NULL, 'sqdfx', 'entite_images/rblgDGhSybjB1NMqsARVnwvLNHiwsQZWgJ9nOX3l.png', '2024-08-19 06:42:23', '2024-08-19 06:45:04');
 
 -- --------------------------------------------------------
 
@@ -861,7 +866,7 @@ CREATE TABLE IF NOT EXISTS `loan_requests` (
   PRIMARY KEY (`id`),
   KEY `loan_requests_user_id_foreign` (`user_id`),
   KEY `loan_requests_employee_id_foreign` (`employee_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `loan_requests`
@@ -874,7 +879,8 @@ INSERT INTO `loan_requests` (`id`, `user_id`, `type`, `amount`, `status`, `comme
 (5, 1, 'Prêt', 1.00, 'Approuvé', 'zaeraz', 1, '2024-08-07 07:55:08', '2024-08-07 07:55:08'),
 (6, 1, 'Avances', 542.00, 'Rejeté', 'ezr', 1, '2024-08-16 07:49:10', '2024-08-16 11:07:02'),
 (7, 1, 'Prêt', 50.00, 'Approuvé', 'aezr', 1, '2024-08-16 10:52:46', '2024-08-16 10:52:46'),
-(8, 1, 'Prêt', 50.00, 'Approuvé', 'aezr', 1, '2024-08-16 10:53:06', '2024-08-16 11:06:51');
+(8, 1, 'Prêt', 50.00, 'Approuvé', 'aezr', 1, '2024-08-16 10:53:06', '2024-08-16 11:06:51'),
+(9, 1, 'Prêt', 7852.00, 'Rejeté', '752', 1, '2024-08-19 06:49:08', '2024-08-19 06:49:20');
 
 -- --------------------------------------------------------
 
